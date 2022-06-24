@@ -7,7 +7,7 @@ type BaseboardInterface interface {
 }
 
 type ComputerBaseboard struct {
-	Computer_name     string
+	Computer_name     string `csv:"computer_name"`
 	Caption           string
 	Configoptions     []string
 	Creationclassname string

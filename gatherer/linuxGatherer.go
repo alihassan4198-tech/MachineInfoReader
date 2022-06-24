@@ -5,7 +5,7 @@ import (
 )
 
 type LinuxGatherer struct {
-	Baseboard info.ComputerBaseboard
+	Baseboard info.ComputerBaseboard `csv:"baseboard"`
 }
 
 func (lg *LinuxGatherer) FetchComputerName() {

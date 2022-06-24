@@ -1,0 +1,4 @@
+github.com/jszwec/csvutil v1.7.0 h1:BkoaYsWo6p5Jn5begykUEVyqtTqWeZu64eFFdm5Y25c=
+github.com/jszwec/csvutil v1.7.0/go.mod h1:Rpu7Uu9giO9subDyMCIQfHVDuLrcaC36UA4YcJjGBkg=
+github.com/wildducktheories/go-csv v0.0.0-20210709120223-87450005fe47 h1:Z5m3bhavxhSXe+Kz7kpkZROaINMHhIRLXTX8xM71FlQ=
+github.com/wildducktheories/go-csv v0.0.0-20210709120223-87450005fe47/go.mod h1:DSJlABltQXalRB6r3jCqZH7Vb9tWSqytKWVVNBDsWSU=
