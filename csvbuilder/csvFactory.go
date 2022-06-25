@@ -7,16 +7,8 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
-func CreateLinuxCSVFile(linuxInfo gatherer.LinuxGatherer) {
-	b, err := csvutil.Marshal(linuxInfo.Baseboard)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	fmt.Println(string(b))
-}
-
-func CreateMacCSVFile(macInfo gatherer.MacGatherer) {
-	b, err := csvutil.Marshal(macInfo)
+func CreateCSVFile(info gatherer.BaseGatherer) {
+	b, err := csvutil.Marshal(info)
 	if err != nil {
 		fmt.Println("error:", err)
 	}
