@@ -1,6 +1,7 @@
 package gatherer
 
 import (
+	"fmt"
 	"machine_info_gatherer/model"
 	"os"
 )
@@ -18,5 +19,14 @@ func (bg *BaseGatherer) GetComputerName() (string, error) {
 }
 
 func (bg *BaseGatherer) GatherInfo() model.ComputerInfo {
-	return model.ComputerInfo{}
+
+	m := model.ComputerInfo{}
+
+	cn, err := bg.GetComputerName()
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+	m.Computer_name = cn
+
+	return m
 }

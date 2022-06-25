@@ -9,5 +9,5 @@ func main() {
 	fmt.Println("Launching Machine Info Gatherer...")
 	i := gatherer.GetInstance()
 	m := i.GatherInfo()
-	fmt.Println(m)
+	fmt.Printf("%#v", m)
 }
