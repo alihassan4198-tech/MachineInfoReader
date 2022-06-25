@@ -47,13 +47,13 @@ type ComputerBios struct {
 }
 
 type ComputerCPU struct {
-    caption string
-    device_id string
-    manufacturer string
-    max_clock_speed int
-    name string
-    socket_designation string
-    virtualizationfirmwareenabled bool
+    Caption string
+    Device_id string
+    Manufacturer string
+    Max_clock_speed int
+    Name string
+    Socket_designation string
+    Virtualizationfirmwareenabled bool
 }
 
 // EndpointProtection SUB TYPE

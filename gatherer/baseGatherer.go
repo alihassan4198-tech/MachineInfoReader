@@ -9,24 +9,44 @@ import (
 type BaseGatherer struct {
 }
 
-func (bg *BaseGatherer) GetComputerName() (string, error) {
 
-	cname, err := os.Hostname()
+//--------------------------
+// Baseboard Implementation
+//--------------------------
+
+const (
+	baseboardCaption string = "Base Board"
+)
+
+func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboard {
+	cb := model.ComputerBaseboard{}
+
+	var err error
+	computerName, err := os.Hostname()
 	if err != nil {
-		return "", err
+		fmt.Println(err)
 	}
-	return cname, nil
+	cb.Computer_name = computerName
+
+	return &cb
 }
 
+
+
+
+func (bg *BaseGatherer) GetSystem() string {
+
+}
+
+
+
+//  All Info
 func (bg *BaseGatherer) GatherInfo() model.ComputerInfo {
 
 	m := model.ComputerInfo{}
 
-	cn, err := bg.GetComputerName()
-	if err != nil {
-		fmt.Printf("%v", err)
-	}
-	m.Computer_name = cn
+	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
+	
 
 	return m
 }
