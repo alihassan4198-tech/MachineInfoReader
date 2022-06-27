@@ -17,9 +17,10 @@ type BaseGatherer struct {
 
 const (
 	baseboardCaption string = "Base Board"
+	cpuCaption       string = "CPU"
 )
 
-func doesItNeedRootAccess(arg string) string {
+func rootNeeded(arg string) string {
 	if arg == "None" || arg == "unknown" {
 		return arg + " (need root access)"
 	} else {
@@ -43,27 +44,51 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboard {
 		fmt.Printf("baseboard error : %s", err)
 	}
 
-	cb.Serialnumber = doesItNeedRootAccess(baseboard.SerialNumber)
-	cb.Version = doesItNeedRootAccess(baseboard.Version)
-	cb.Product = doesItNeedRootAccess(baseboard.Product)
-	cb.Manufacturer = doesItNeedRootAccess(baseboard.Vendor)
-	cb.Tag = doesItNeedRootAccess(baseboard.AssetTag)
+	cb.Serialnumber = rootNeeded(baseboard.SerialNumber)
+	cb.Version = rootNeeded(baseboard.Version)
+	cb.Product = rootNeeded(baseboard.Product)
+	cb.Manufacturer = rootNeeded(baseboard.Vendor)
+	cb.Tag = rootNeeded(baseboard.AssetTag)
 
 	return &cb
 }
 
-func (bg *BaseGatherer) GetRawInformation() {
+func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPU {
+	compCpu := model.ComputerCPU{}
 
+	_, err := ghw.CPU()
+	if err != nil {
+		fmt.Printf("Error getting CPU info: %v", err)
+	}
+
+	compCpu.Caption = cpuCaption
+
+	return &compCpu
+}
+
+func (bg *BaseGatherer) GetComputerBios() *model.ComputerBios {
+	cbios := model.ComputerBios{}
+
+	bios, err := ghw.BIOS()
+	if err != nil {
+		fmt.Printf("Error getting BIOS info: %v", err)
+	}
+
+	cbios.Biosversion = rootNeeded(bios.Version)
+	cbios.Manufacturer = rootNeeded(bios.Vendor)
+	cbios.Installdate = rootNeeded(bios.Date)
+
+	return &cbios
 }
 
 //  All Info
-func (bg *BaseGatherer) GatherInfo() model.ComputerInfo {
+func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 
 	m := model.ComputerInfo{}
 
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
+	m.ComputerBios = *(bg.GetComputerBios())
+	m.ComputerCPU = *(bg.GetComputerCPU())
 
-	bg.GetRawInformation()
-
-	return m
+	return &m
 }
