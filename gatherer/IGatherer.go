@@ -7,4 +7,5 @@ type I_Gatherer interface {
 	GetComputerBaseboard() *model.ComputerBaseboard
 	GetComputerBios() *model.ComputerBios
 	GetComputerCPU() *model.ComputerCPU
+	GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtection
 }

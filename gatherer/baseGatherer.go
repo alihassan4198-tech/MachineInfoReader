@@ -53,19 +53,6 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboard {
 	return &cb
 }
 
-func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPU {
-	compCpu := model.ComputerCPU{}
-
-	_, err := ghw.CPU()
-	if err != nil {
-		fmt.Printf("Error getting CPU info: %v", err)
-	}
-
-	compCpu.Caption = cpuCaption
-
-	return &compCpu
-}
-
 func (bg *BaseGatherer) GetComputerBios() *model.ComputerBios {
 	cbios := model.ComputerBios{}
 
@@ -79,6 +66,33 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBios {
 	cbios.Installdate = rootNeeded(bios.Date)
 
 	return &cbios
+}
+
+func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPU {
+	compCpu := model.ComputerCPU{}
+
+	_, err := ghw.CPU()
+	if err != nil {
+		fmt.Printf("Error getting CPU info: %v", err)
+	}
+
+	compCpu.Caption = cpuCaption
+
+	return &compCpu
+}
+
+func (bg *BaseGatherer) GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtection {
+
+	epsoft := model.ComputerEndpointProtection{}
+
+	return &epsoft
+}
+
+func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRules {
+
+	cfwRules := model.ComputerFirewallRules{}
+
+	return &cfwRules
 }
 
 //  All Info
