@@ -144,8 +144,8 @@ type SoftwareInstalled struct {
 // SUB TYPE
 
 type ComputerSoftwaresInstalled struct {
-	Total_software int
-	SoftwareInstalled
+	Total_software     int
+	SoftwaresInstalled []SoftwareInstalled
 }
 
 type ComputerSystem struct {

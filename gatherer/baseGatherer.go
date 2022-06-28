@@ -138,6 +138,24 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNIC {
 	return &comNic
 }
 
+func ReadOSRelease() *map[string]string {
+	ctx := context.Background()
+	var b []byte
+
+	sys := os.DirFS("/")
+
+	// Look for an os-release file.
+	b, err := fs.ReadFile(sys, osrelease.Path)
+	if err != nil {
+		fmt.Printf("error:%#v", err)
+	}
+	m, err := osrelease.Parse(ctx, bytes.NewReader(b))
+	if err != nil {
+		fmt.Printf("error:%#v", err)
+	}
+	return &m
+}
+
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOS {
 
 	comOS := model.ComputerOS{}
@@ -150,20 +168,7 @@ func (bg *BaseGatherer) GetComputerOS() *model.ComputerOS {
 	comOS.Computer_name = cname
 	comOS.Caption = osCaption
 
-	ctx := context.Background()
-	var b []byte
-
-	sys := os.DirFS("/")
-
-	// Look for an os-release file.
-	b, err = fs.ReadFile(sys, osrelease.Path)
-	if err != nil {
-		fmt.Printf("error:%#v", err)
-	}
-	m, err := osrelease.Parse(ctx, bytes.NewReader(b))
-	if err != nil {
-		fmt.Printf("error:%#v", err)
-	}
+	m := *(ReadOSRelease())
 
 	comOS.Os_version = m["VERSION_CODENAME"] + " " + m["VERSION_ID"]
 	comOS.Lts = false
