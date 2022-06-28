@@ -8,4 +8,9 @@ type I_Gatherer interface {
 	GetComputerBios() *model.ComputerBios
 	GetComputerCPU() *model.ComputerCPU
 	GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtection
+	GetComputerFirewallRules() *model.ComputerFirewallRules
+	GetComputerNIC() *[]model.ComputerNIC
+	GetComputerOS() *model.ComputerOS
+	GetComputerServices() *model.ComputerServices
+	GetComputerSoftwaresInstalled() *model.ComputerSoftwaresInstalled
 }

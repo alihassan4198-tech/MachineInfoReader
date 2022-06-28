@@ -97,7 +97,7 @@ type ComputerFirewallRules struct {
 }
 
 type ComputerNIC struct {
-	Caption                 int
+	Caption                 string
 	Model                   string
 	Default_ip_gateway      []string
 	Dhcp_server             string
@@ -131,7 +131,7 @@ type Service struct {
 
 type ComputerServices struct {
 	TotalServciesRunning int
-	Service
+	Services             []Service
 }
 
 // Software Installed SUB TYPE
