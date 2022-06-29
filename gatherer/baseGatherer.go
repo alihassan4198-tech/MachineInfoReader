@@ -161,6 +161,17 @@ func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftware
 	return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
 }
 
+func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalled {
+	// Get Computer Softwares Installed Distro Wise
+	currentDistro := distro.GetInstance()
+	comSoftInstall, err := currentDistro.GetComputerSoftwaresInstalled()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return comSoftInstall
+}
+
 //  All Info
 func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 
@@ -174,15 +185,7 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 	m.ComputerNICS = *(bg.GetComputerNIC())
 	m.ComputerOS = *(bg.GetComputerOS())
 	m.ComputerServices = *(bg.GetComputerServices())
-
-	// Get Computer Softwares Installed Distro Wise
-	currentDistro := distro.GetInstance()
-	comSoftInstall, err := currentDistro.GetComputerSoftwaresInstalled()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		m.ComputerSoftwaresInstalled = *comSoftInstall
-	}
+	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
 
 	return &m
 }

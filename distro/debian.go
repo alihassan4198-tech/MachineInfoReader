@@ -30,8 +30,6 @@ func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwares
 	}
 	splittedInstallSoft := strings.Split(string(installSoft), "\n")
 
-	fmt.Println("before", len(splittedInstallSoft))
-
 	for i, soft := range splittedInstallSoft {
 		if strings.Contains(soft, find0) &&
 			strings.Contains(soft, find1) &&
