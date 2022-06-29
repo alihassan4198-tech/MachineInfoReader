@@ -20,13 +20,17 @@ var (
 	SudoUserPassword = ""
 )
 
+const (
+	rootAccessNeeded = " (need root previliges)"
+)
+
 func SetSudoPassword(pass string) {
 	SudoUserPassword = pass
 }
 
 func RootNeeded(arg string) string {
 	if arg == "None" || arg == "unknown" {
-		return arg + " (need root access)"
+		return arg + rootAccessNeeded
 	} else {
 		return arg
 	}
@@ -80,6 +84,13 @@ func RunFullCommand(command string) (string, error) {
 	}
 
 	return buf.String(), err
+}
+
+func NeedSudoPreviliges(err error) string {
+	if err.Error() == errorslist.ErrCommandTimeOut {
+		return err.Error() + rootAccessNeeded
+	}
+	return err.Error()
 }
 
 func RunFullCommandWithSudo(cmd string) (string, error) {

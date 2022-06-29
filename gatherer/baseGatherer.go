@@ -180,11 +180,22 @@ func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystem {
 	if err != nil {
 		fmt.Println(err)
 	}
-	comSys.Domain = string(domainName)
+	comSys.Domain = strings.TrimSpace(string(domainName))
 
-	_, err = common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
+	manufacturer, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
 	if err != nil {
 		fmt.Println(err)
+		comSys.Manufacturer = common.NeedSudoPreviliges(err)
+	} else {
+		comSys.Manufacturer = manufacturer
+	}
+
+	model, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-product-name")
+	if err != nil {
+		fmt.Println(err)
+		comSys.Model = common.NeedSudoPreviliges(err)
+	} else {
+		comSys.Model = model
 	}
 
 	return &comSys
