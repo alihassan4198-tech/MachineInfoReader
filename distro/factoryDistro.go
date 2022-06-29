@@ -2,12 +2,12 @@ package distro
 
 import (
 	"fmt"
-	"machine_info_gatherer/gatherer"
+	"machine_info_gatherer/common"
 	"strings"
 )
 
 func GetInstance() IDistro {
-	m := *(gatherer.ReadOSRelease())
+	m := *(common.ReadOSRelease())
 
 	linuxBase := strings.ToLower(m["ID_LIKE"])
 
