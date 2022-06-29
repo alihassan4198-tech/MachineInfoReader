@@ -13,4 +13,5 @@ type I_Gatherer interface {
 	GetComputerOS() *model.ComputerOS
 	GetComputerServices() *model.ComputerServices
 	GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error)
+	GetComputerSystem() *model.ComputerSystem
 }

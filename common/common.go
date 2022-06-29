@@ -3,14 +3,26 @@ package common
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io/fs"
+	"machine_info_gatherer/errorslist"
 	"machine_info_gatherer/model"
 	"os"
+	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/quay/claircore/osrelease"
 )
+
+var (
+	SudoUserPassword = ""
+)
+
+func SetSudoPassword(pass string) {
+	SudoUserPassword = pass
+}
 
 func RootNeeded(arg string) string {
 	if arg == "None" || arg == "unknown" {
@@ -34,6 +46,44 @@ func IsServiceRunning(svc string) bool {
 	} else {
 		return false
 	}
+}
+
+func RunFullCommand(command string) (string, error) {
+	cmd := exec.Command("bash", "-c", command)
+
+	// Use a bytes.Buffer to get the output
+	var buf bytes.Buffer
+	cmd.Stdout = &buf
+
+	cmd.Start()
+
+	// Use a channel to signal completion so we can use a select statement
+	done := make(chan error)
+	go func() { done <- cmd.Wait() }()
+
+	// Start a timer
+	timeout := time.After(5 * time.Second)
+
+	// The select statement allows us to execute based on which channel
+	// we get a message from first.
+	var err error
+	select {
+	case <-timeout:
+		// Timeout happened first, kill the process and print a message.
+		cmd.Process.Kill()
+		err = errors.New(errorslist.ErrCommandTimeOut)
+	case err = <-done:
+		// Command completed before timeout. Print output and error if it exists.
+		if err != nil {
+			fmt.Println("Non-zero exit code:", err)
+		}
+	}
+
+	return buf.String(), err
+}
+
+func RunFullCommandWithSudo(cmd string) (string, error) {
+	return RunFullCommand("sudo -S <<< " + SudoUserPassword + " " + cmd)
 }
 
 func ParseService(svc string) *model.Service {

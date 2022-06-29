@@ -172,6 +172,24 @@ func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.Compute
 	return comSoftInstall
 }
 
+func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystem {
+
+	comSys := model.ComputerSystem{}
+
+	domainName, err := exec.Command("domainname").Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	comSys.Domain = string(domainName)
+
+	_, err = common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return &comSys
+}
+
 //  All Info
 func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 
@@ -186,6 +204,7 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 	m.ComputerOS = *(bg.GetComputerOS())
 	m.ComputerServices = *(bg.GetComputerServices())
 	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
+	m.ComputerSystem = *(bg.GetComputerSystem())
 
 	return &m
 }

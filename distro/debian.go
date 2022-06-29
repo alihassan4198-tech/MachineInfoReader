@@ -45,11 +45,10 @@ func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwares
 	splittedInstallSoft = splittedInstallSoft[:len(splittedInstallSoft)-1]
 
 	// Convert to Strcut
-	for i, soft := range splittedInstallSoft {
+	for _, soft := range splittedInstallSoft {
 		soft = strings.Join(strings.Fields(soft), " ")
 		splittedSoft := strings.Split(soft, " ")
 		softInstall := model.SoftwareInstalled{}
-		fmt.Println(i, splittedSoft)
 		softInstall.Display_name = splittedSoft[1]
 		softInstall.Version = splittedSoft[2]
 
