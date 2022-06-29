@@ -27,8 +27,8 @@ const (
 	osCaption        string = "Computer OS"
 )
 
-func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboard {
-	cb := model.ComputerBaseboard{}
+func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
+	cb := model.ComputerBaseboardType{}
 
 	var err error
 	computerName, err := os.Hostname()
@@ -52,8 +52,8 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboard {
 	return &cb
 }
 
-func (bg *BaseGatherer) GetComputerBios() *model.ComputerBios {
-	cbios := model.ComputerBios{}
+func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
+	cbios := model.ComputerBiosType{}
 
 	bios, err := ghw.BIOS()
 	if err != nil {
@@ -67,8 +67,8 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBios {
 	return &cbios
 }
 
-func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPU {
-	compCpu := model.ComputerCPU{}
+func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPUType {
+	compCpu := model.ComputerCPUType{}
 
 	_, err := ghw.CPU()
 	if err != nil {
@@ -80,23 +80,23 @@ func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPU {
 	return &compCpu
 }
 
-func (bg *BaseGatherer) GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtection {
+func (bg *BaseGatherer) GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtectionType {
 
-	epsoft := model.ComputerEndpointProtection{}
+	epsoft := model.ComputerEndpointProtectionType{}
 
 	return &epsoft
 }
 
-func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRules {
+func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesType {
 
-	cfwRules := model.ComputerFirewallRules{}
+	cfwRules := model.ComputerFirewallRulesType{}
 
 	return &cfwRules
 }
 
-func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNIC {
+func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 
-	comNic := []model.ComputerNIC{}
+	comNic := []model.ComputerNICType{}
 	net, err := ghw.Network()
 	if err != nil {
 		fmt.Printf("Error getting network info: %v", err)
@@ -104,7 +104,7 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNIC {
 
 	for _, nic := range net.NICs {
 
-		comNic = append(comNic, model.ComputerNIC{
+		comNic = append(comNic, model.ComputerNICType{
 			Caption:     nic.Name,
 			Mac_address: nic.MacAddress,
 		})
@@ -114,9 +114,9 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNIC {
 	return &comNic
 }
 
-func (bg *BaseGatherer) GetComputerOS() *model.ComputerOS {
+func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 
-	comOS := model.ComputerOS{}
+	comOS := model.ComputerOSType{}
 
 	cname, err := os.Hostname()
 	if err != nil {
@@ -134,9 +134,9 @@ func (bg *BaseGatherer) GetComputerOS() *model.ComputerOS {
 	return &comOS
 }
 
-func (bg *BaseGatherer) GetComputerServices() *model.ComputerServices {
+func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 
-	comServ := model.ComputerServices{}
+	comServ := model.ComputerServicesType{}
 
 	cmd, err := exec.Command("systemctl", "--type=service").Output()
 	if err != nil {
@@ -155,13 +155,13 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServices {
 	return &comServ
 }
 
-func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error) {
-	comInsSoft := model.ComputerSoftwaresInstalled{}
+func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+	comInsSoft := model.ComputerSoftwaresInstalledType{}
 
 	return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
 }
 
-func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalled {
+func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalledType {
 	// Get Computer Softwares Installed Distro Wise
 	currentDistro := distro.GetInstance()
 	comSoftInstall, err := currentDistro.GetComputerSoftwaresInstalled()
@@ -172,9 +172,9 @@ func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.Compute
 	return comSoftInstall
 }
 
-func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystem {
+func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystemType {
 
-	comSys := model.ComputerSystem{}
+	comSys := model.ComputerSystemType{}
 
 	domainName, err := exec.Command("domainname").Output()
 	if err != nil {
@@ -201,10 +201,16 @@ func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystem {
 	return &comSys
 }
 
-//  All Info
-func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
+func (bg *BaseGatherer) GetComputerPatches() *model.ComputerPatchesType {
+	comPatch := model.ComputerPatchesType{}
 
-	m := model.ComputerInfo{}
+	return &comPatch
+}
+
+//  All Info
+func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
+
+	m := model.ComputerInfoType{}
 
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
 	m.ComputerBios = *(bg.GetComputerBios())
@@ -216,6 +222,7 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfo {
 	m.ComputerServices = *(bg.GetComputerServices())
 	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
 	m.ComputerSystem = *(bg.GetComputerSystem())
+	m.ComputerPatches = *(bg.GetComputerPatches())
 
 	return &m
 }

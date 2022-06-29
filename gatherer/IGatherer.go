@@ -3,15 +3,16 @@ package gatherer
 import "machine_info_gatherer/model"
 
 type I_Gatherer interface {
-	GatherInfo() *model.ComputerInfo
-	GetComputerBaseboard() *model.ComputerBaseboard
-	GetComputerBios() *model.ComputerBios
-	GetComputerCPU() *model.ComputerCPU
-	GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtection
-	GetComputerFirewallRules() *model.ComputerFirewallRules
-	GetComputerNIC() *[]model.ComputerNIC
-	GetComputerOS() *model.ComputerOS
-	GetComputerServices() *model.ComputerServices
-	GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error)
-	GetComputerSystem() *model.ComputerSystem
+	GatherInfo() *model.ComputerInfoType
+	GetComputerBaseboard() *model.ComputerBaseboardType
+	GetComputerBios() *model.ComputerBiosType
+	GetComputerCPU() *model.ComputerCPUType
+	GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtectionType
+	GetComputerFirewallRules() *model.ComputerFirewallRulesType
+	GetComputerNIC() *[]model.ComputerNICType
+	GetComputerOS() *model.ComputerOSType
+	GetComputerServices() *model.ComputerServicesType
+	GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error)
+	GetComputerSystem() *model.ComputerSystemType
+	GetComputerPatches() *model.ComputerPatchesType
 }

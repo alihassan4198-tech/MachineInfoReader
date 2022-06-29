@@ -97,8 +97,8 @@ func RunFullCommandWithSudo(cmd string) (string, error) {
 	return RunFullCommand("sudo -S <<< " + SudoUserPassword + " " + cmd)
 }
 
-func ParseService(svc string) *model.Service {
-	service := model.Service{}
+func ParseService(svc string) *model.ServiceType {
+	service := model.ServiceType{}
 
 	svc = strings.ReplaceAll(svc, "●", " ")
 
@@ -129,4 +129,22 @@ func ReadOSRelease() *map[string]string {
 		fmt.Printf("error:%#v", err)
 	}
 	return &m
+}
+
+func RemoveCSVExtras(s string) string {
+	s = strings.ReplaceAll(s, "{", "")
+	s = strings.ReplaceAll(s, "}", "")
+	s = strings.ReplaceAll(s, "\"", "")
+	s = strings.ReplaceAll(s, ",", "")
+	// s = strings.TrimSpace(s)
+	return s
+}
+
+func DoesStringContainAlphaNumeric(str string) bool {
+	for _, charVariable := range str {
+		if (charVariable >= 'a' && charVariable <= 'z') || (charVariable >= 'A' && charVariable <= 'Z') || (charVariable >= '0' && '9' <= charVariable) {
+			return true
+		}
+	}
+	return false
 }

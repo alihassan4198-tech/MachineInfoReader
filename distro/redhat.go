@@ -10,8 +10,8 @@ type RedHatBased struct {
 	LinuxBase
 }
 
-func (rhb *RedHatBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error) {
-	comSoftInst := model.ComputerSoftwaresInstalled{}
+func (rhb *RedHatBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	return &comSoftInst, nil
 }

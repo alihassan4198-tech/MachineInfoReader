@@ -1,6 +1,6 @@
 package model
 
-type ComputerBaseboard struct {
+type ComputerBaseboardType struct {
 	Computer_name     string
 	Caption           string
 	Configoptions     []string
@@ -20,7 +20,7 @@ type ComputerBaseboard struct {
 	Version           string
 }
 
-type ComputerBios struct {
+type ComputerBiosType struct {
 	Manufacturer           string
 	Name                   string
 	Serialnumber           string
@@ -46,7 +46,7 @@ type ComputerBios struct {
 	Targetoperatingsystem  int
 }
 
-type ComputerCPU struct {
+type ComputerCPUType struct {
 	Caption                       string
 	Device_id                     string
 	Manufacturer                  string
@@ -57,7 +57,7 @@ type ComputerCPU struct {
 }
 
 // EndpointProtection SUB TYPE
-type EndpointProtectionSoftware struct {
+type EndpointProtectionSoftwareType struct {
 	Type       string
 	Name       string
 	State      string
@@ -68,12 +68,12 @@ type EndpointProtectionSoftware struct {
 
 // SUB TYPE
 
-type ComputerEndpointProtection struct {
-	Softwares []EndpointProtectionSoftware
+type ComputerEndpointProtectionType struct {
+	Softwares []EndpointProtectionSoftwareType
 }
 
 // FirewallRules SUB TYPE
-type FirewallRule struct {
+type FirewallRuleType struct {
 	Name           string
 	Enabled        string
 	Direction      string
@@ -90,13 +90,13 @@ type FirewallRule struct {
 
 // SUB TYPE
 
-type ComputerFirewallRules struct {
+type ComputerFirewallRulesType struct {
 	Total_rules  int
 	Active_state string
-	FW_rules     []FirewallRule
+	FW_rules     []FirewallRuleType
 }
 
-type ComputerNIC struct {
+type ComputerNICType struct {
 	Caption                 string
 	Model                   string
 	Default_ip_gateway      []string
@@ -108,7 +108,7 @@ type ComputerNIC struct {
 	Ip_enabled              bool
 }
 
-type ComputerOS struct {
+type ComputerOSType struct {
 	Computer_name   string
 	Caption         string
 	Os_architecture string
@@ -118,7 +118,7 @@ type ComputerOS struct {
 }
 
 // Services SUB TYPE
-type Service struct {
+type ServiceType struct {
 	Name         string
 	Display_name string
 	Process_id   int
@@ -129,13 +129,13 @@ type Service struct {
 
 // SUB TYPE
 
-type ComputerServices struct {
+type ComputerServicesType struct {
 	TotalServciesRunning int
-	Services             []Service
+	Services             []ServiceType
 }
 
 // Software Installed SUB TYPE
-type SoftwareInstalled struct {
+type SoftwareInstalledType struct {
 	Display_name string
 	Product_code string
 	Version      string
@@ -143,12 +143,12 @@ type SoftwareInstalled struct {
 
 // SUB TYPE
 
-type ComputerSoftwaresInstalled struct {
+type ComputerSoftwaresInstalledType struct {
 	Total_software     int
-	SoftwaresInstalled []SoftwareInstalled
+	SoftwaresInstalled []SoftwareInstalledType
 }
 
-type ComputerSystem struct {
+type ComputerSystemType struct {
 	Domain               string
 	Manufacturer         string
 	Model                string
@@ -161,7 +161,7 @@ type ComputerSystem struct {
 	Total_phsical_memory int64
 }
 
-type ComputerPatches struct {
+type ComputerPatchesType struct {
 	Total_number_of_upates int
 	SecurityUpdates        int
 	Patches                []string
@@ -169,16 +169,16 @@ type ComputerPatches struct {
 	Patch_version          string
 }
 
-type ComputerInfo struct {
-	ComputerBaseboard
-	ComputerBios
-	ComputerCPU
-	ComputerEndpointProtection
-	ComputerFirewallRules
-	ComputerNICS []ComputerNIC
-	ComputerOS
-	ComputerServices
-	ComputerSoftwaresInstalled
-	ComputerSystem
-	ComputerPatches
+type ComputerInfoType struct {
+	ComputerBaseboard          ComputerBaseboardType
+	ComputerBios               ComputerBiosType
+	ComputerCPU                ComputerCPUType
+	ComputerEndpointProtection ComputerEndpointProtectionType
+	ComputerFirewallRules      ComputerFirewallRulesType
+	ComputerNICS               []ComputerNICType
+	ComputerOS                 ComputerOSType
+	ComputerServices           ComputerServicesType
+	ComputerSoftwaresInstalled ComputerSoftwaresInstalledType
+	ComputerSystem             ComputerSystemType
+	ComputerPatches            ComputerPatchesType
 }

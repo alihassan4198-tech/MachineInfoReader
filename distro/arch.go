@@ -10,8 +10,8 @@ type ArchLinuxBased struct {
 	LinuxBase
 }
 
-func (alb *ArchLinuxBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error) {
-	comSoftInst := model.ComputerSoftwaresInstalled{}
+func (alb *ArchLinuxBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	return &comSoftInst, nil
 }

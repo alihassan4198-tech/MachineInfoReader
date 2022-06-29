@@ -22,6 +22,7 @@ require (
 	github.com/quay/zlog v1.1.0 // indirect
 	github.com/rs/zerolog v1.26.0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/wildducktheories/go-csv v0.0.0-20210709120223-87450005fe47 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect

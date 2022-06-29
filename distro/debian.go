@@ -20,8 +20,8 @@ const (
 	find3 = "Description"
 )
 
-func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error) {
-	comSoftInst := model.ComputerSoftwaresInstalled{}
+func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	installSoft, err := exec.Command("dpkg", "-l").Output()
 	if err != nil {
@@ -48,7 +48,7 @@ func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwares
 	for _, soft := range splittedInstallSoft {
 		soft = strings.Join(strings.Fields(soft), " ")
 		splittedSoft := strings.Split(soft, " ")
-		softInstall := model.SoftwareInstalled{}
+		softInstall := model.SoftwareInstalledType{}
 		softInstall.Display_name = splittedSoft[1]
 		softInstall.Version = splittedSoft[2]
 

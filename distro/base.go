@@ -9,11 +9,11 @@ import (
 // Linux Base Distro
 
 type LinuxBase struct {
-	model.ComputerSoftwaresInstalled
+	model.ComputerSoftwaresInstalledType
 }
 
-func (lb *LinuxBase) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalled, error) {
-	comSoftInst := model.ComputerSoftwaresInstalled{}
+func (lb *LinuxBase) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	return &comSoftInst, errors.New(errorslist.ErrNotImplemented)
 
