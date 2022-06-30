@@ -132,14 +132,26 @@ func ReadOSRelease() *map[string]string {
 }
 
 func RemoveCSVExtras(s string) string {
-	// s = strings.ReplaceAll(s, "{", "")
-	// s = strings.ReplaceAll(s, "}", "")
-	// s = strings.ReplaceAll(s, ",", "")
 	s = strings.ReplaceAll(s, "[", "")
 	s = strings.ReplaceAll(s, "]", "")
 	s = strings.ReplaceAll(s, "\"", "")
 	// s = strings.TrimSpace(s)
 	return s
+}
+
+func RemoveCurlyBraces(s string) string {
+	s = strings.ReplaceAll(s, "{", "")
+	// s = strings.ReplaceAll(s, "}", "")
+	// s = strings.ReplaceAll(s, ",", "")
+	return s
+}
+
+func SkipThisStr(s string) bool {
+	if strings.Contains(s, "}") {
+		return true
+	} else {
+		return false
+	}
 }
 
 func DoesStringContainAlphaNumeric(str string) bool {

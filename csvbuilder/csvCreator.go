@@ -57,6 +57,12 @@ func (cw *CSVWriter) JsonToCSVWriter(prettyJsonInfoStr string) {
 			// clean string
 			str = strings.TrimSpace(str)
 
+			// str = common.RemoveCurlyBraces(str)
+
+			// if common.SkipThisStr(str) {
+			// 	continue
+			// }
+
 			// key-val string
 			key, val, _ := strings.Cut(str, ":")
 			fmt.Println(i, tabs, key, val)
