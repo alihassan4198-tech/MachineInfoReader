@@ -8,7 +8,6 @@ import (
 	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
 	"os"
-	"runtime"
 	"strings"
 
 	"github.com/tidwall/pretty"
@@ -55,16 +54,13 @@ func (cw *CSVWriter) JsonToCSVWriter(prettyJsonInfoStr string) {
 			// count double spaces for csv commas
 			tabs := strings.Count(str, "  ")
 
-			if strings.Contains(str, "Ip_enabled") {
-				runtime.Breakpoint()
-			}
-
 			// clean string
 			str = strings.TrimSpace(str)
-			keyVal := strings.Split(str, ":")
-			key := keyVal[0]
-			val := keyVal[1]
+
+			// key-val string
+			key, val, _ := strings.Cut(str, ":")
 			fmt.Println(i, tabs, key, val)
+
 			var record []string
 			for i := 0; i < tabs; i++ {
 				record = append(record, "  ")

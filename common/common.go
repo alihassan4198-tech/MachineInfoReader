@@ -132,10 +132,12 @@ func ReadOSRelease() *map[string]string {
 }
 
 func RemoveCSVExtras(s string) string {
-	s = strings.ReplaceAll(s, "{", "")
-	s = strings.ReplaceAll(s, "}", "")
+	// s = strings.ReplaceAll(s, "{", "")
+	// s = strings.ReplaceAll(s, "}", "")
+	// s = strings.ReplaceAll(s, ",", "")
+	s = strings.ReplaceAll(s, "[", "")
+	s = strings.ReplaceAll(s, "]", "")
 	s = strings.ReplaceAll(s, "\"", "")
-	s = strings.ReplaceAll(s, ",", "")
 	// s = strings.TrimSpace(s)
 	return s
 }
