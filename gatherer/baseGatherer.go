@@ -50,25 +50,23 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
 	cb.Tag = common.RootNeeded(baseboard.AssetTag)
 
-	// cb.Computer_name = ""
-	// cb.Caption = ""
 	// cb.Configoptions = []string{}
-	// cb.Description = ""
-	// cb.Installdate = 0
-	// cb.Manufacturer = ""
 	// cb.Model = ""
 	// cb.Name = ""
 	// cb.Partnumber = ""
 	// cb.Poweredon = false
-	// cb.Product = ""
-	// cb.Serialnumber = ""
 	// cb.Sku = ""
 	// cb.Status = ""
-	// cb.Tag = ""
-	// cb.Version = ""
 
 	cb.Creationclassname, err = common.RunFullCommand("uname -m")
-	cb.Installdate, err = common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
+	installDate, err := common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
+
+	cb.Installdate = func(str string) string {
+		res := strings.Split(str, "/var")
+		res = strings.Split(res[0], " ")
+		result := strings.Join(res[5:8], " ")
+		return result
+	}(installDate)
 
 	return &cb
 }
