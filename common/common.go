@@ -52,8 +52,15 @@ func IsServiceRunning(svc string) bool {
 	}
 }
 
+func RunFullCommandNoTimeOut(command string) (string, error) {
+	result, err := exec.Command(SudoUserPassword, "&", "sudo", "-S", command).CombinedOutput()
+
+	fmt.Println(string(result), err)
+	return string(result), err
+}
+
 func RunFullCommand(command string) (string, error) {
-	cmd := exec.Command("bash", "-c", command)
+	cmd := exec.Command("/bin/sh", "-c", command)
 
 	// Use a bytes.Buffer to get the output
 	var buf bytes.Buffer
@@ -83,7 +90,10 @@ func RunFullCommand(command string) (string, error) {
 		}
 	}
 
-	return buf.String(), err
+	res := buf.String()
+	res = strings.ReplaceAll(res, "\n", "")
+
+	return res, err
 }
 
 func NeedSudoPreviliges(err error) string {
@@ -94,7 +104,8 @@ func NeedSudoPreviliges(err error) string {
 }
 
 func RunFullCommandWithSudo(cmd string) (string, error) {
-	return RunFullCommand("sudo -S <<< " + SudoUserPassword + " " + cmd)
+	// 786 | sudo -S  dmidecode -s baseboard-manufacturer
+	return RunFullCommandNoTimeOut(cmd)
 }
 
 func ParseService(svc string) *model.ServiceType {

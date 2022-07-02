@@ -42,12 +42,33 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 	if err != nil {
 		fmt.Printf("baseboard error : %s", err)
 	}
+	fmt.Println(baseboard)
 
 	cb.Serialnumber = common.RootNeeded(baseboard.SerialNumber)
 	cb.Version = common.RootNeeded(baseboard.Version)
 	cb.Product = common.RootNeeded(baseboard.Product)
 	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
 	cb.Tag = common.RootNeeded(baseboard.AssetTag)
+
+	// cb.Computer_name = ""
+	// cb.Caption = ""
+	// cb.Configoptions = []string{}
+	// cb.Description = ""
+	// cb.Installdate = 0
+	// cb.Manufacturer = ""
+	// cb.Model = ""
+	// cb.Name = ""
+	// cb.Partnumber = ""
+	// cb.Poweredon = false
+	// cb.Product = ""
+	// cb.Serialnumber = ""
+	// cb.Sku = ""
+	// cb.Status = ""
+	// cb.Tag = ""
+	// cb.Version = ""
+
+	cb.Creationclassname, err = common.RunFullCommand("uname -m")
+	cb.Installdate, err = common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
 
 	return &cb
 }
@@ -213,16 +234,16 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 	m := model.ComputerInfoType{}
 
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
-	m.ComputerBios = *(bg.GetComputerBios())
-	m.ComputerCPU = *(bg.GetComputerCPU())
-	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
-	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
-	m.ComputerNICS = *(bg.GetComputerNIC())
-	m.ComputerOS = *(bg.GetComputerOS())
-	m.ComputerServices = *(bg.GetComputerServices())
-	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
-	m.ComputerSystem = *(bg.GetComputerSystem())
-	m.ComputerPatches = *(bg.GetComputerPatches())
+	// m.ComputerBios = *(bg.GetComputerBios())
+	// m.ComputerCPU = *(bg.GetComputerCPU())
+	// m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
+	// m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
+	// m.ComputerNICS = *(bg.GetComputerNIC())
+	// m.ComputerOS = *(bg.GetComputerOS())
+	// m.ComputerServices = *(bg.GetComputerServices())
+	// m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
+	// m.ComputerSystem = *(bg.GetComputerSystem())
+	// m.ComputerPatches = *(bg.GetComputerPatches())
 
 	return &m
 }

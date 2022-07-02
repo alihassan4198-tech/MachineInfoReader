@@ -6,7 +6,7 @@ type ComputerBaseboardType struct {
 	Configoptions     []string
 	Creationclassname string
 	Description       string
-	Installdate       int64
+	Installdate       string
 	Manufacturer      string
 	Model             string
 	Name              string

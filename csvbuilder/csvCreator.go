@@ -48,7 +48,7 @@ func (cw *CSVWriter) JsonToCSVWriter(prettyJsonInfoStr string) {
 
 	splitted := strings.Split(prettyJsonInfoStr, "\n")
 	splitted = splitted[:len(splitted)-1]
-	for i, str := range splitted {
+	for _, str := range splitted {
 		str = common.RemoveCSVExtras(str)
 		if common.DoesStringContainAlphaNumeric(str) && str != "" {
 			// count double spaces for csv commas
@@ -65,7 +65,7 @@ func (cw *CSVWriter) JsonToCSVWriter(prettyJsonInfoStr string) {
 
 			// key-val string
 			key, val, _ := strings.Cut(str, ":")
-			fmt.Println(i, tabs, key, val)
+			// fmt.Println(i, tabs, key, val)
 
 			var record []string
 			for i := 0; i < tabs; i++ {
