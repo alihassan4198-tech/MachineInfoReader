@@ -3,7 +3,7 @@ module machine_info_gatherer
 go 1.18
 
 require (
-	github.com/alihassan4198-tech/ghw v1.0.2
+	github.com/alihassan4198-tech/ghw v1.0.3
 	github.com/quay/claircore v1.4.2
 	github.com/tidwall/pretty v1.2.0
 )

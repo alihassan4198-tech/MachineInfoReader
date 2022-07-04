@@ -25,50 +25,18 @@ const (
 	baseboardCaption string = "Base Board"
 	cpuCaption       string = "CPU"
 	osCaption        string = "Computer OS"
+	biosCaption      string = "Computer Bios"
 )
 
 func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
-	cb := model.ComputerBaseboardType{}
-
-	var err error
-	computerName, err := os.Hostname()
+	// Get Computer Softwares Installed Distro Wise
+	currentDistro := distro.GetInstance()
+	comBaseBoard, err := currentDistro.GetComputerBaseboard()
 	if err != nil {
 		fmt.Println(err)
 	}
-	cb.Computer_name = computerName
-	cb.Caption = baseboardCaption
 
-	baseboard, err := ghw.Baseboard()
-	if err != nil {
-		fmt.Printf("baseboard error : %s", err)
-	}
-	fmt.Println(baseboard)
-
-	cb.Serialnumber = common.RootNeeded(baseboard.SerialNumber)
-	cb.Version = common.RootNeeded(baseboard.Version)
-	cb.Product = common.RootNeeded(baseboard.Product)
-	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
-	cb.Tag = common.RootNeeded(baseboard.AssetTag)
-
-	// cb.Configoptions = []string{}
-	// cb.Model = ""
-	// cb.Name = ""
-	// cb.Partnumber = ""
-	// cb.Poweredon = false
-	// cb.Sku = ""
-	// cb.Status = ""
-
-	cb.Creationclassname, err = common.RunFullCommand("uname -m")
-	installDate, err := common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
-
-	cb.Installdate = func(str string) string {
-		res := strings.Split(str, "/var")
-		res = strings.Split(res[0], " ")
-		result := strings.Join(res[5:8], " ")
-		return result
-	}(installDate)
-
-	return &cb
+	return comBaseBoard
 }
 
 func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
@@ -79,9 +47,25 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 		fmt.Printf("Error getting BIOS info: %v", err)
 	}
 
+	cbios.Name = bios.Name
 	cbios.Biosversion = common.RootNeeded(bios.Version)
+	cbios.Version = cbios.Biosversion
 	cbios.Manufacturer = common.RootNeeded(bios.Vendor)
 	cbios.Installdate = common.RootNeeded(bios.Date)
+	cbios.Serialnumber = common.RootNeeded(bios.Serialnumber)
+	cbios.Installdate = common.RootNeeded(bios.Installdate)
+	cbios.Primarybios = true
+	cbios.Caption = biosCaption
+	maj, min, found := strings.Cut(cbios.Biosversion, ".")
+
+	if found {
+		cbios.Smbiosmajorversion = maj
+		cbios.Smbiosminorversion = min
+	}
+
+	if cbios.Biosversion != "" {
+		cbios.Status = "Installed"
+	}
 
 	return &cbios
 }
@@ -232,8 +216,8 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 	m := model.ComputerInfoType{}
 
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
-	// m.ComputerBios = *(bg.GetComputerBios())
-	// m.ComputerCPU = *(bg.GetComputerCPU())
+	m.ComputerBios = *(bg.GetComputerBios())
+	m.ComputerCPU = *(bg.GetComputerCPU())
 	// m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
 	// m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
 	// m.ComputerNICS = *(bg.GetComputerNIC())

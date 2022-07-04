@@ -34,9 +34,9 @@ type ComputerBiosType struct {
 	Installdate            string
 	Listoflanguages        []string
 	Primarybios            bool
-	Releasedate            int64
-	Smbiosmajorversion     int
-	Smbiosminorversion     int
+	Releasedate            string
+	Smbiosmajorversion     string
+	Smbiosminorversion     string
 	Smbiospresent          bool
 	Softwareelementid      string
 	Softwareelementstate   int

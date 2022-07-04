@@ -2,9 +2,13 @@ package distro
 
 import (
 	"fmt"
+	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
+	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/alihassan4198-tech/ghw"
 )
 
 // Debian
@@ -14,11 +18,65 @@ type DebianBased struct {
 }
 
 const (
-	find0 = "Name"
-	find1 = "Version"
-	find2 = "Architecture"
-	find3 = "Description"
+	find0                   = "Name"
+	find1                   = "Version"
+	find2                   = "Architecture"
+	find3                   = "Description"
+	baseboardCaption string = "Base Board"
 )
+
+func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, error) {
+	cb := model.ComputerBaseboardType{}
+
+	var err error
+	computerName, err := os.Hostname()
+	if err != nil {
+		fmt.Println(err)
+	}
+	cb.Computer_name = computerName
+	cb.Caption = baseboardCaption
+
+	baseboard, err := ghw.Baseboard()
+	if err != nil {
+		fmt.Printf("baseboard error : %s", err)
+	}
+	fmt.Println(baseboard)
+
+	cb.Serialnumber = common.RootNeeded(baseboard.SerialNumber)
+	cb.Version = common.RootNeeded(baseboard.Version)
+	cb.Product = common.RootNeeded(baseboard.Product)
+	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
+	cb.Tag = common.RootNeeded(baseboard.AssetTag)
+
+	// cb.Configoptions = []string{}
+	// cb.Model = ""
+	// cb.Name = ""
+	// cb.Partnumber = ""
+	// cb.Poweredon = false
+	// cb.Sku = ""
+	// cb.Status = ""
+
+	cb.Creationclassname, err = common.RunFullCommand("uname -m")
+	if err != nil {
+		cb.Creationclassname = ""
+	}
+
+	installDate, err := common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
+	if err != nil {
+		cb.Installdate = ""
+	} else {
+		cb.Installdate = func(str string) string {
+			res := strings.Split(str, "/var")
+			res = strings.Split(res[0], " ")
+			result := strings.Join(res[5:8], " ")
+			return result
+		}(installDate)
+	}
+
+	cb.Poweredon = true
+
+	return &cb, nil
+}
 
 func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comSoftInst := model.ComputerSoftwaresInstalledType{}

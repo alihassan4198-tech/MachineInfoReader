@@ -10,11 +10,19 @@ import (
 
 type LinuxBase struct {
 	model.ComputerSoftwaresInstalledType
+	model.ComputerBaseboardType
 }
 
 func (lb *LinuxBase) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	return &comSoftInst, errors.New(errorslist.ErrNotImplemented)
+
+}
+
+func (lb *LinuxBase) GetComputerBaseboard() (*model.ComputerBaseboardType, error) {
+	comBaseBoard := model.ComputerBaseboardType{}
+
+	return &comBaseBoard, errors.New(errorslist.ErrNotImplemented)
 
 }
