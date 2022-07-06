@@ -73,12 +73,23 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPUType {
 	compCpu := model.ComputerCPUType{}
 
-	_, err := ghw.CPU()
+	cpu, err := ghw.CPU()
 	if err != nil {
 		fmt.Printf("Error getting CPU info: %v", err)
 	}
 
 	compCpu.Caption = cpuCaption
+
+	for _, proc := range cpu.Processors {
+		c := model.ComputerCPU{}
+
+		c.Manufacturer = proc.Vendor
+		c.Max_clock_speed = proc.CPUMhz
+		c.Name = proc.Name
+		c.Device_id = proc.ID
+
+		compCpu.CPUCores = append(compCpu.CPUCores, c)
+	}
 
 	return &compCpu
 }
@@ -218,14 +229,14 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
 	m.ComputerBios = *(bg.GetComputerBios())
 	m.ComputerCPU = *(bg.GetComputerCPU())
-	// m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
-	// m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
-	// m.ComputerNICS = *(bg.GetComputerNIC())
-	// m.ComputerOS = *(bg.GetComputerOS())
-	// m.ComputerServices = *(bg.GetComputerServices())
-	// m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
-	// m.ComputerSystem = *(bg.GetComputerSystem())
-	// m.ComputerPatches = *(bg.GetComputerPatches())
+	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
+	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
+	m.ComputerNICS = *(bg.GetComputerNIC())
+	m.ComputerOS = *(bg.GetComputerOS())
+	m.ComputerServices = *(bg.GetComputerServices())
+	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
+	m.ComputerSystem = *(bg.GetComputerSystem())
+	m.ComputerPatches = *(bg.GetComputerPatches())
 
 	return &m
 }

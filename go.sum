@@ -1,9 +1,9 @@
 github.com/StackExchange/wmi v1.2.1 h1:VIkavFPXSjcnS+O8yTq7NI32k0R5Aj+v39y29VYDOSA=
 github.com/StackExchange/wmi v1.2.1/go.mod h1:rcmrprowKIVzvc+NUiLncP2uuArMWLCbu9SBzvHz7e8=
-github.com/alihassan4198-tech/ghw v1.0.2 h1:ttlhyUsJN+SHi9Kzdk3e2voghzignOhuagdOnBC8gls=
-github.com/alihassan4198-tech/ghw v1.0.2/go.mod h1:gu+eZweWjyO/+z5V4gsxcCjBoY0BCloWjW0phX9kFeE=
 github.com/alihassan4198-tech/ghw v1.0.3 h1:4d689rPP5Wl1/HTFY/fh5Cv6IE71YI7ZXfv2jQYoHLM=
 github.com/alihassan4198-tech/ghw v1.0.3/go.mod h1:gu+eZweWjyO/+z5V4gsxcCjBoY0BCloWjW0phX9kFeE=
+github.com/alihassan4198-tech/ghw v1.0.4 h1:SBee4GlHR1CZF/PdghaFXcnvQWW42iWV+DyFwkoCi8A=
+github.com/alihassan4198-tech/ghw v1.0.4/go.mod h1:gu+eZweWjyO/+z5V4gsxcCjBoY0BCloWjW0phX9kFeE=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
 github.com/coreos/go-systemd/v22 v22.3.2/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=

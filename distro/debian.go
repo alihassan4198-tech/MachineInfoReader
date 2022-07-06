@@ -48,14 +48,6 @@ func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, err
 	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
 	cb.Tag = common.RootNeeded(baseboard.AssetTag)
 
-	// cb.Configoptions = []string{}
-	// cb.Model = ""
-	// cb.Name = ""
-	// cb.Partnumber = ""
-	// cb.Poweredon = false
-	// cb.Sku = ""
-	// cb.Status = ""
-
 	cb.Creationclassname, err = common.RunFullCommand("uname -m")
 	if err != nil {
 		cb.Creationclassname = ""

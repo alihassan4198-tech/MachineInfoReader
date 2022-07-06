@@ -46,14 +46,19 @@ type ComputerBiosType struct {
 	Targetoperatingsystem  int
 }
 
-type ComputerCPUType struct {
-	Caption                       string
-	Device_id                     string
+// ComputerCPU SUB TYPE
+type ComputerCPU struct {
+	Device_id                     int
 	Manufacturer                  string
-	Max_clock_speed               int
+	Max_clock_speed               string
 	Name                          string
 	Socket_designation            string
 	Virtualizationfirmwareenabled bool
+}
+
+type ComputerCPUType struct {
+	Caption  string
+	CPUCores []ComputerCPU
 }
 
 // EndpointProtection SUB TYPE
