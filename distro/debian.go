@@ -40,7 +40,6 @@ func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, err
 	if err != nil {
 		fmt.Printf("baseboard error : %s", err)
 	}
-	fmt.Println(baseboard)
 
 	cb.Serialnumber = common.RootNeeded(baseboard.SerialNumber)
 	cb.Version = common.RootNeeded(baseboard.Version)
@@ -52,6 +51,7 @@ func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, err
 	if err != nil {
 		cb.Creationclassname = ""
 	}
+	cb.Creationclassname = strings.ReplaceAll(cb.Creationclassname, "\n", "")
 
 	installDate, err := common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
 	if err != nil {

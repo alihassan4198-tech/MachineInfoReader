@@ -44,7 +44,6 @@ func (cw *CSVWriter) WriteStructInCsv(info *model.ComputerInfoType) {
 }
 
 func (cw *CSVWriter) JsonToCSVWriter(prettyJsonInfoStr string) {
-	fmt.Println(prettyJsonInfoStr)
 
 	splitted := strings.Split(prettyJsonInfoStr, "\n")
 	splitted = splitted[:len(splitted)-1]

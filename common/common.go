@@ -55,7 +55,6 @@ func IsServiceRunning(svc string) bool {
 func RunFullCommandNoTimeOut(command string) (string, error) {
 	result, err := exec.Command(SudoUserPassword, "&", "sudo", "-S", command).CombinedOutput()
 
-	fmt.Println(string(result), err)
 	return string(result), err
 }
 
@@ -64,7 +63,9 @@ func RunFullCommand(command string) (string, error) {
 
 	// Use a bytes.Buffer to get the output
 	var buf bytes.Buffer
+	var bufErr bytes.Buffer
 	cmd.Stdout = &buf
+	cmd.Stderr = &bufErr
 
 	cmd.Start()
 
@@ -82,17 +83,15 @@ func RunFullCommand(command string) (string, error) {
 	case <-timeout:
 		// Timeout happened first, kill the process and print a message.
 		cmd.Process.Kill()
-		err = errors.New(errorslist.ErrCommandTimeOut)
+		err = errors.New(bufErr.String())
 	case err = <-done:
 		// Command completed before timeout. Print output and error if it exists.
 		if err != nil {
-			fmt.Println("Non-zero exit code:", err)
+			err = errors.New(bufErr.String())
 		}
 	}
 
 	res := buf.String()
-	res = strings.ReplaceAll(res, "\n", "")
-
 	return res, err
 }
 
@@ -172,4 +171,15 @@ func DoesStringContainAlphaNumeric(str string) bool {
 		}
 	}
 	return false
+}
+
+func IsStringInSlice(ss *[]string, substr string) (int, string) {
+
+	for i, s := range *ss {
+		if strings.Contains(s, substr) {
+			return i, s
+		}
+	}
+
+	return -1, ""
 }
