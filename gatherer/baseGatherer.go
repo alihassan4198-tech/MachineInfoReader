@@ -106,89 +106,42 @@ func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesT
 
 	cfwRules := model.ComputerFirewallRulesType{}
 
+	tables := []string{"filter", "mangle", "nat", "raw"}
+
 	ipt, err := iptables.New()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println("-------------------------------------")
-	fmt.Println("Filter Chains")
-	filterChains, err := ipt.ListChains("filter")
-	if err != nil {
-		fmt.Println(err)
+	for _, table := range tables {
+		chains, err := ipt.ListChains(table)
+		if err != nil {
+			fmt.Println(err)
+		}
+		for _, chain := range chains {
+			structStat, err := ipt.StructuredStats(table, chain)
+			if err != nil {
+				fmt.Println("parsing error: ", err)
+				continue
+			}
+			for _, s := range structStat {
+				cfwRule := model.FirewallRuleType{}
+
+				cfwRule.TableName = table
+				cfwRule.ChainName = chain
+				cfwRule.Action = s.Target
+				cfwRule.Enabled = "enable"
+				cfwRule.Local_ip = s.Source.IP.String()
+				cfwRule.Local_port = s.Input
+				cfwRule.Remote_ip = s.Destination.IP.String()
+				cfwRule.Remote_port = s.Output
+				cfwRule.Protocol = s.Protocol
+				cfwRule.Direction = chain
+				// fmt.Printf("%#v\n", cfwRule)
+				cfwRules.FW_rules = append(cfwRules.FW_rules, cfwRule)
+			}
+		}
 	}
-
-	for _, chain := range filterChains {
-		fmt.Println(chain)
-	}
-
-	fmt.Println("-------------------------------------")
-	fmt.Println("Mangle Chains")
-	mangleChains, err := ipt.ListChains("mangle")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, chain := range mangleChains {
-		fmt.Println(chain)
-	}
-
-	fmt.Println("-------------------------------------")
-	fmt.Println("NAT Chains")
-	natChains, err := ipt.ListChains("nat")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, chain := range natChains {
-		fmt.Println(chain)
-	}
-
-	fmt.Println("-------------------------------------")
-	fmt.Println("RAW Chains")
-	rawChains, err := ipt.ListChains("raw")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, chain := range rawChains {
-		fmt.Println(chain)
-	}
-
-	// ufw, err := common.RunFullCommand("ufw status")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// ufwSplitted := strings.Split(ufw, "\n")
-
-	// i, statusString := common.IsStringInSlice(&ufwSplitted, "Status")
-	// if i != -1 {
-	// 	cfwRules.Active_state = statusString
-	// }
-
-	// i, _ = common.IsStringInSlice(&ufwSplitted, "To                         Action      From")
-	// if i != -1 {
-	// 	ufwSplitted = ufwSplitted[i+1:]
-	// 	cfwRules.Total_rules = len(ufwSplitted)
-	// 	for _, l := range ufwSplitted {
-	// 		r := model.FirewallRuleType{}
-
-	// 		rule := strings.Split(l, "   ")
-	// 		to := strings.TrimSpace(rule[0])
-	// 		action := strings.TrimSpace(rule[1])
-	// 		from := strings.TrimSpace(rule[2])
-
-	// 		r.Action = action
-	// 		r.Direction = to
-	// 		r.
-
-	// 		cfwRules.FW_rules = append(cfwRules.FW_rules)
-	// 	}
-
-	// }
-
-	// fmt.Println(len(ufwSplitted))
 
 	return &cfwRules
 }
@@ -311,17 +264,17 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 
 	m := model.ComputerInfoType{}
 
-	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
-	m.ComputerBios = *(bg.GetComputerBios())
-	m.ComputerCPU = *(bg.GetComputerCPU())
-	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
+	// m.ComputerBaseboard = *(bg.GetComputerBaseboard())
+	// m.ComputerBios = *(bg.GetComputerBios())
+	// m.ComputerCPU = *(bg.GetComputerCPU())
+	// m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
 	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
-	m.ComputerNICS = *(bg.GetComputerNIC())
-	m.ComputerOS = *(bg.GetComputerOS())
-	m.ComputerServices = *(bg.GetComputerServices())
-	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
-	m.ComputerSystem = *(bg.GetComputerSystem())
-	m.ComputerPatches = *(bg.GetComputerPatches())
+	// m.ComputerNICS = *(bg.GetComputerNIC())
+	// m.ComputerOS = *(bg.GetComputerOS())
+	// m.ComputerServices = *(bg.GetComputerServices())
+	// m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
+	// m.ComputerSystem = *(bg.GetComputerSystem())
+	// m.ComputerPatches = *(bg.GetComputerPatches())
 
 	return &m
 }

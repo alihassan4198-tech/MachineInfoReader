@@ -79,7 +79,8 @@ type ComputerEndpointProtectionType struct {
 
 // FirewallRules SUB TYPE
 type FirewallRuleType struct {
-	Name           string
+	TableName      string
+	ChainName      string
 	Enabled        string
 	Direction      string
 	Profiles       string

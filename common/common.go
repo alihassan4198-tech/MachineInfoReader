@@ -145,6 +145,7 @@ func RemoveCSVExtras(s string) string {
 	s = strings.ReplaceAll(s, "[", "")
 	s = strings.ReplaceAll(s, "]", "")
 	s = strings.ReplaceAll(s, "\"", "")
+	s = strings.ReplaceAll(s, ",", "")
 	// s = strings.TrimSpace(s)
 	return s
 }
@@ -166,7 +167,7 @@ func SkipThisStr(s string) bool {
 
 func DoesStringContainAlphaNumeric(str string) bool {
 	for _, charVariable := range str {
-		if (charVariable >= 'a' && charVariable <= 'z') || (charVariable >= 'A' && charVariable <= 'Z') || (charVariable >= '0' && '9' <= charVariable) {
+		if charVariable == '*' || (charVariable >= 'a' && charVariable <= 'z') || (charVariable >= 'A' && charVariable <= 'Z') || (charVariable >= '0' && '9' >= charVariable) {
 			return true
 		}
 	}
