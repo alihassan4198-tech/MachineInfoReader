@@ -264,17 +264,17 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 
 	m := model.ComputerInfoType{}
 
-	// m.ComputerBaseboard = *(bg.GetComputerBaseboard())
-	// m.ComputerBios = *(bg.GetComputerBios())
-	// m.ComputerCPU = *(bg.GetComputerCPU())
-	// m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
+	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
+	m.ComputerBios = *(bg.GetComputerBios())
+	m.ComputerCPU = *(bg.GetComputerCPU())
+	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
 	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
-	// m.ComputerNICS = *(bg.GetComputerNIC())
-	// m.ComputerOS = *(bg.GetComputerOS())
-	// m.ComputerServices = *(bg.GetComputerServices())
-	// m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
-	// m.ComputerSystem = *(bg.GetComputerSystem())
-	// m.ComputerPatches = *(bg.GetComputerPatches())
+	m.ComputerNICS = *(bg.GetComputerNIC())
+	m.ComputerOS = *(bg.GetComputerOS())
+	m.ComputerServices = *(bg.GetComputerServices())
+	m.ComputerSoftwaresInstalled = *(bg.GetDistroBasedComputerSoftwareInstalled())
+	m.ComputerSystem = *(bg.GetComputerSystem())
+	m.ComputerPatches = *(bg.GetComputerPatches())
 
 	return &m
 }
