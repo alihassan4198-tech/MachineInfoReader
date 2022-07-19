@@ -4,13 +4,13 @@ go 1.18
 
 require (
 	github.com/alihassan4198-tech/ghw v1.0.4
+	github.com/coreos/go-iptables v0.6.0
 	github.com/quay/claircore v1.4.2
 	github.com/tidwall/pretty v1.2.0
 )
 
 require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
-	github.com/coreos/go-iptables v0.6.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/golang/mock v1.6.0 // indirect
