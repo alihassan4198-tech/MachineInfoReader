@@ -20,6 +20,8 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/quay/zlog v1.1.0 // indirect
 	github.com/rs/zerolog v1.26.0 // indirect
+	github.com/urfave/cli v1.20.0 // indirect
+github.com/yukithm/json2csv v0.1.2 // indirect
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
 	golang.org/x/mod v0.5.1 // indirect

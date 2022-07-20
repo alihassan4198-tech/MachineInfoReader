@@ -102,6 +102,13 @@ type ComputerFirewallRulesType struct {
 	FW_rules     []FirewallRuleType
 }
 
+// func (cgrt *ComputerFirewallRulesType) CreateCSVFile(filename string) {
+// 	json2csv.JSON2CSV(cgrt.FW_rules)
+// 	file := readCSV()
+// 	file.append("Active_state", cgrt.Active_state)
+// 	file.append("Total_rules", cgrt.Total_rules)
+// }
+
 type ComputerNICType struct {
 	Caption                 string
 	Model                   string
