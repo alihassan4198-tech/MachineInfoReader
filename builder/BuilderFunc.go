@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"machine_info_gatherer/model"
 	"os"
-	"strconv"
 
 	"github.com/tidwall/pretty"
 	"github.com/yukithm/json2csv"
@@ -56,7 +56,7 @@ func readJSONFile(filename string) (interface{}, error) {
 	return readJSON(f)
 }
 
-func CreateCSVFile(JsonFileName string, args ...interface{}) {
+func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 
 	data, err := readJSONFile("./" + JsonFileName + ".json")
 	if err != nil {
@@ -65,13 +65,14 @@ func CreateCSVFile(JsonFileName string, args ...interface{}) {
 
 	r, err := json2csv.JSON2CSV(data)
 	if err != nil {
-		fmt.Println(err.Error())
-	}
-	if len(r) == 0 {
-		return
+		fmt.Println(err)
 	}
 
-	headerStyle := headerStyleTable["dot-bracket"]
+	// if len(r) == 0 {
+	// 	return
+	// }
+
+	headerStyle := headerStyleTable["jsonpointer"]
 	myscvfile, err := os.Create("" + JsonFileName + ".csv")
 	if err != nil {
 		log.Fatal(err)
@@ -81,23 +82,21 @@ func CreateCSVFile(JsonFileName string, args ...interface{}) {
 		log.Fatal(err)
 	}
 
-	if JsonFileName == "ComputerSoftwaresInstalled" {
-
-		mycswriter := csv.NewWriter(myscvfile)
-		arg := args[0]
-		numOfSoft := arg.(int)
-		if err != nil {
-			log.Fatal(err)
-		}
-		str := strconv.Itoa(numOfSoft)
-		vals := []string{"Total Softwares Installed", str}
-		_ = mycswriter.Write([]string{})
-		_ = mycswriter.Write(vals)
-		mycswriter.Flush()
-		myscvfile.Close()
-
+	switch JsonFileName {
+	case "ComputerCPU":
+		Info.ComputerCPU.AppendAllMapsInCSV(myscvfile)
+	case "ComputerSoftwaresInstalled":
+		Info.ComputerSoftwaresInstalled.AppendAllMapsInCSV(myscvfile)
+	case "ComputerFirewallRules":
+		Info.ComputerFirewallRules.AppendAllMapsInCSV(myscvfile)
+	case "ComputerServices":
+		Info.ComputerServices.AppendAllMapsInCSV(myscvfile)
 	}
 
+	e := os.Remove("" + JsonFileName + ".json")
+	if e != nil {
+		fmt.Println(e)
+	}
 }
 
 func readJSON(r io.Reader) (interface{}, error) {

@@ -96,8 +96,8 @@ func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPUType {
 }
 
 func (bg *BaseGatherer) GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtectionType {
-
 	epsoft := model.ComputerEndpointProtectionType{}
+	// soft , err := ghw.
 
 	return &epsoft
 }
