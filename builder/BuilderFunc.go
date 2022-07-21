@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/tidwall/pretty"
 	"github.com/yukithm/json2csv"
@@ -70,7 +71,7 @@ func CreateCSVFile(JsonFileName string, args ...interface{}) {
 		return
 	}
 
-	headerStyle := headerStyleTable["jsonpointer"]
+	headerStyle := headerStyleTable["dot-bracket"]
 	myscvfile, err := os.Create("" + JsonFileName + ".csv")
 	if err != nil {
 		log.Fatal(err)
@@ -79,10 +80,17 @@ func CreateCSVFile(JsonFileName string, args ...interface{}) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	if JsonFileName == "ComputerSoftwaresInstalled" {
 
 		mycswriter := csv.NewWriter(myscvfile)
-		vals := []string{"total", "500"}
+		arg := args[0]
+		numOfSoft := arg.(int)
+		if err != nil {
+			log.Fatal(err)
+		}
+		str := strconv.Itoa(numOfSoft)
+		vals := []string{"Total Softwares Installed", str}
 		_ = mycswriter.Write([]string{})
 		_ = mycswriter.Write(vals)
 		mycswriter.Flush()
