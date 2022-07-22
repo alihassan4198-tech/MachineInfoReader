@@ -13,6 +13,7 @@ import (
 
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
+	"github.com/zcalusic/sysinfo"
 )
 
 type BaseGatherer struct {
@@ -169,18 +170,21 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 
 	comOS := model.ComputerOSType{}
-
+	var si sysinfo.SysInfo
+	si.GetSysInfo()
+	Os := si.OS
 	cname, err := os.Hostname()
 	if err != nil {
 		fmt.Printf("error:%#v", err)
 	}
 
 	comOS.Computer_name = cname
+	comOS.Os_name = Os.Name
+	comOS.Vendor = Os.Vendor
 	comOS.Caption = osCaption
-
-	m := *(common.ReadOSRelease())
-
-	comOS.Os_version = m["VERSION_CODENAME"] + " " + m["VERSION_ID"]
+	comOS.Os_architecture = Os.Architecture
+	comOS.Os_version = Os.Version
+	comOS.Release = Os.Release
 	comOS.Lts = false
 
 	return &comOS

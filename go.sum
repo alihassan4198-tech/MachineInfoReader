@@ -76,6 +76,8 @@ github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1
 github.com/yuin/goldmark v1.4.0/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yukithm/json2csv v0.1.2 h1:b2aIY9+TOY5Wss9lCku4wjqnQrENv5Ix1G0ZHN1FE2Q=
 github.com/yukithm/json2csv v0.1.2/go.mod h1:Ul6ZenFV94YeUm08AqppOd+/hB9JsmiU4KXPs9ZvgwQ=
+github.com/zcalusic/sysinfo v0.9.5 h1:ivoHyj9aIAYkwzo1+8QgJ5s4oeE6Etx9FmZtqa4wJjQ=
+github.com/zcalusic/sysinfo v0.9.5/go.mod h1:Z/gPVufBrFc8X5sef3m6kkw3r3nlNFp+I6bvASfvBZQ=
 go.opentelemetry.io/otel v1.1.0/go.mod h1:7cww0OW51jQ8IaZChIEdqLwgh+44+7uiTdWsAL0wQpA=
 go.opentelemetry.io/otel v1.3.0 h1:APxLf0eiBwLl+SOXiJJCVYzA1OOJNyAoV8C5RNRyy7Y=
 go.opentelemetry.io/otel v1.3.0/go.mod h1:PWIKzi6JCp7sM0k9yZ43VX+T345uNbAkDKwHVjb2PTs=
