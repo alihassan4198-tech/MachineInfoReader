@@ -116,9 +116,12 @@ type ComputerNICType struct {
 
 type ComputerOSType struct {
 	Computer_name   string
+	Os_name         string
+	Vendor          string
 	Caption         string
 	Os_architecture string
 	Os_version      string
+	Release         string
 	Lastbootuptime  int
 	Lts             bool
 }
