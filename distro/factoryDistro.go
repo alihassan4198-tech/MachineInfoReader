@@ -17,10 +17,13 @@ func GetInstance() IDistro {
 	} else if strings.Contains(linuxBase, "arch") {
 		archBaseDistro := ArchLinuxBased{}
 		return &archBaseDistro
-	} else if strings.Contains(linuxBase, "rehl") {
-		redHatBaseDistro := RedHatBased{}
-		return &redHatBaseDistro
-	} else {
+		} else if strings.Contains(linuxBase, "rehl") {
+			redHatBaseDistro := RedHatBased{}
+			return &redHatBaseDistro
+		} else if strings.Contains(linuxBase, "darwin") {
+			redHatBaseDistro := MacBased{}
+			return &redHatBaseDistro
+		} else {
 		fmt.Println("Warning: debian is using because this distro is not supported, contact admin")
 		debianBaseDistro := DebianBased{}
 		return &debianBaseDistro

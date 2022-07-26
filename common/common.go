@@ -126,18 +126,35 @@ func ParseService(svc string) *model.ServiceType {
 func ReadOSRelease() *map[string]string {
 	ctx := context.Background()
 	var b []byte
+    var isAnyError bool = false
 
 	sys := os.DirFS("/")
 
 	// Look for an os-release file.
 	b, err := fs.ReadFile(sys, osrelease.Path)
 	if err != nil {
+		isAnyError = true
 		fmt.Printf("error:%#v", err)
 	}
 	m, err := osrelease.Parse(ctx, bytes.NewReader(b))
 	if err != nil {
+		isAnyError = true
 		fmt.Printf("error:%#v", err)
 	}
+
+	if isAnyError {
+		// Mac Detection Method
+		result, err := exec.Command("sw_vers").CombinedOutput()
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		if strings.Contains(strings.ToLower(string(result)),strings.ToLower("Mac")) {
+			m["ID_LIKE"] = "darwin"
+			return &m
+		}
+	}
+
 	return &m
 }
 

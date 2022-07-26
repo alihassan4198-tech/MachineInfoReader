@@ -10,10 +10,10 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-
+	"github.com/ochapman/godmi"
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
-	"github.com/zcalusic/sysinfo"
+	// "github.com/zcalusic/sysinfo"
 )
 
 type BaseGatherer struct {
@@ -43,7 +43,11 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 
 func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 	cbios := model.ComputerBiosType{}
-
+	fmt.Println("********************************")
+godmi.Init()
+macBios := godmi.GetBIOSInformation()
+fmt.Println(macBios)
+fmt.Println("********************************")
 	bios, err := ghw.BIOS()
 	if err != nil {
 		fmt.Printf("Error getting BIOS info: %v", err)
@@ -170,21 +174,24 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 
 	comOS := model.ComputerOSType{}
-	var si sysinfo.SysInfo
-	si.GetSysInfo()
-	Os := si.OS
+	// var si sysinfo.SysInfo
+	// si.GetSysInfo()
+	// Os := si.OS
 	cname, err := os.Hostname()
 	if err != nil {
 		fmt.Printf("error:%#v", err)
 	}
 
 	comOS.Computer_name = cname
-	comOS.Os_name = Os.Name
-	comOS.Vendor = Os.Vendor
+	m := *(common.ReadOSRelease())
+
+	comOS.Os_version = m["VERSION_CODENAME"] + " " + m["VERSION_ID"]
+	// comOS.Os_name = Os.Name
+	// comOS.Vendor = Os.Vendor
 	comOS.Caption = osCaption
-	comOS.Os_architecture = Os.Architecture
-	comOS.Os_version = Os.Version
-	comOS.Release = Os.Release
+	// comOS.Os_architecture = Os.Architecture
+	// comOS.Os_version = Os.Version
+	// comOS.Release = Os.Release
 	comOS.Lts = false
 
 	return &comOS
@@ -213,8 +220,7 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 
 func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comInsSoft := model.ComputerSoftwaresInstalledType{}
-
-	return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
+return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
 }
 
 func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalledType {
