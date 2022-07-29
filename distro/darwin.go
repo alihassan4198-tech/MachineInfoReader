@@ -307,34 +307,22 @@ func (mb *MacBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, 
 	cb.Computer_name = computerName
 	cb.Caption = baseboardCaption
 
-	baseboard, err := ghw.Baseboard()
-	if err != nil {
-		fmt.Printf("baseboard error : %s", err)
+	systemProfiler, err := common.RunFullCommand("system_profiler SPHardwareDataType")
+	if err == nil {
+		m := common.MakeMapOfLines(systemProfiler)
+		fmt.Println(m)
 	}
 
-	cb.Serialnumber = common.RootNeeded(baseboard.SerialNumber)
-	cb.Version = common.RootNeeded(baseboard.Version)
-	cb.Product = common.RootNeeded(baseboard.Product)
-	cb.Manufacturer = common.RootNeeded(baseboard.Vendor)
-	cb.Tag = common.RootNeeded(baseboard.AssetTag)
+	cb.Creationclassname = ""
+	cb.Serialnumber = common.RootNeeded("")
+	cb.Version = common.RootNeeded("")
+	cb.Product = common.RootNeeded("")
+	cb.Manufacturer = common.RootNeeded("")
+	cb.Tag = common.RootNeeded("")
 
-	cb.Creationclassname, err = common.RunFullCommand("uname -m")
-	if err != nil {
-		cb.Creationclassname = ""
-	}
-	cb.Creationclassname = strings.ReplaceAll(cb.Creationclassname, "\n", "")
+	cb.Creationclassname = ""
 
-	installDate, err := common.RunFullCommand("ls -ld --time-style=full-iso /var/log/installer")
-	if err != nil {
-		cb.Installdate = ""
-	} else {
-		cb.Installdate = func(str string) string {
-			res := strings.Split(str, "/var")
-			res = strings.Split(res[0], " ")
-			result := strings.Join(res[5:8], " ")
-			return result
-		}(installDate)
-	}
+	cb.Installdate = ""
 
 	cb.Poweredon = true
 

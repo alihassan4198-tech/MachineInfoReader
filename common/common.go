@@ -126,7 +126,7 @@ func ParseService(svc string) *model.Service {
 func ReadOSRelease() *map[string]string {
 	ctx := context.Background()
 	var b []byte
-    var isAnyError bool = false
+	var isAnyError bool = false
 
 	sys := os.DirFS("/")
 
@@ -149,13 +149,28 @@ func ReadOSRelease() *map[string]string {
 			fmt.Println(err)
 			return nil
 		}
-		if strings.Contains(strings.ToLower(string(result)),strings.ToLower("Mac")) {
+		if strings.Contains(strings.ToLower(string(result)), strings.ToLower("Mac")) {
 			m["ID_LIKE"] = "darwin"
 			return &m
 		}
 	}
 
 	return &m
+}
+
+func MakeMapOfLines(input string) map[string]string {
+	lines := strings.Split(input, "\n")
+
+	var infoMap = make(map[string]string)
+
+	for _, line := range lines {
+		if strings.Contains(line, ":") {
+			mapKeyVal := strings.Split(line, ":")
+			infoMap[strings.TrimSpace(mapKeyVal[0])] = strings.TrimSpace(mapKeyVal[1])
+		}
+	}
+
+	return infoMap
 }
 
 func RemoveCSVExtras(s string) string {
