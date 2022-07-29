@@ -9,18 +9,18 @@ import (
 func GetInstance() IDistro {
 	m := *(common.ReadOSRelease())
 
-	linuxBase := strings.ToLower(m["ID_LIKE"])
+	base := strings.ToLower(m["ID_LIKE"])
 
-	if linuxBase == "debian" {
+	if base == "debian" {
 		debianBaseDistro := DebianBased{}
 		return &debianBaseDistro
-	//} else if strings.Contains(linuxBase, "arch") {
+	//} else if strings.Contains(base, "arch") {
 	// 	archBaseDistro := ArchLinuxBased{}
 	// 	return &archBaseDistro
-	// } else if strings.Contains(linuxBase, "rehl") {
+	// } else if strings.Contains(base, "rehl") {
 	// 	redHatBaseDistro := RedHatBased{}
 	// 	return &redHatBaseDistro
-	} else if strings.Contains(linuxBase, "darwin") {
+	} else if strings.Contains(base, "darwin") {
 		macBaseDistro := MacBased{}
 		return &macBaseDistro
 	} else {
