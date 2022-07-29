@@ -26,6 +26,56 @@ const (
 	find3 = "Description"
 )
 
+func (db *DebianBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
+	// var info model.ComputerInfoType
+
+	// var err error
+
+	// info.ComputerBaseboard , err =  db.DistroGetComputerBaseboard()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerBios, err = db.DistroGetComputerBios()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerCPU, err = db.DistroGetComputerCPU()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerEndpointProtection, err = db.DistroGetComputerEndpointProtectionSoftwares()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerFirewallRules, err = db.DistroGetComputerFirewallRules()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerNICS, err = db.DistroGetComputerNIC() 
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerOS, err = db.DistroGetComputerOS()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerServices, err = db.DistroGetComputerServices()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerSoftwaresInstalled, err = db.DistroGetComputerSoftwaresInstalled()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// info.ComputerPatches, err = db.DistroGetComputerPatches()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	return &model.ComputerInfoType{} , nil
+}
+
+
 func (db *DebianBased) DistroGetComputerBios() (*model.ComputerBiosType,error) {
 	cbios := model.ComputerBiosType{}
 	// fmt.Println("********************************")
@@ -203,15 +253,11 @@ func (db *DebianBased) DistroGetComputerServices() (*model.ComputerServicesType,
 	return &comServ , nil
 }
 
-func (db *DebianBased) DistroGetDistroBasedComputerSoftwareInstalled() (*model.ComputerSoftwaresInstalledType,error) {
+func (db *DebianBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType,error) {
 	// Get Computer Softwares Installed Distro Wise
-	currentDistro := GetInstance()
-	comSoftInstall, err := currentDistro.DistroGetComputerSoftwaresInstalled()
-	if err != nil {
-		fmt.Println(err)
-	}
 
-	return comSoftInstall , nil
+
+	return &model.ComputerSoftwaresInstalledType{} , nil
 }
 
 func (db *DebianBased) DistroGetComputerSystem() (*model.ComputerSystemType,error) {
@@ -249,7 +295,7 @@ func (db *DebianBased) DistroGetComputerPatches() (*model.ComputerPatchesType,er
 	return &comPatch , nil
 }
 
-func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, error) {
+func (db *DebianBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, error) {
 	cb := model.ComputerBaseboardType{}
 
 	var err error
@@ -294,7 +340,7 @@ func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, err
 	return &cb, nil
 }
 
-func (lb *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+func (db *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	installSoft, err := exec.Command("dpkg", "-l").Output()

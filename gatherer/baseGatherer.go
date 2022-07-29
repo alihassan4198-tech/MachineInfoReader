@@ -62,7 +62,6 @@ func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesT
 		fmt.Println(err)
 	}
 
-
 	return cfwRules
 }
 
@@ -95,7 +94,6 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 
 	return comServ
 }
