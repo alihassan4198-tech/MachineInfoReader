@@ -1,28 +1,20 @@
 package distro
 
 import (
-	"errors"
-	"machine_info_gatherer/errorslist"
 	"machine_info_gatherer/model"
 )
 
 // Linux Base Distro
 
+const (
+	baseboardCaption string = "Base Board"
+	cpuCaption       string = "CPU"
+	osCaption        string = "Computer OS"
+	biosCaption      string = "Computer Bios"
+)
+
 type LinuxBase struct {
-	model.ComputerSoftwaresInstalledType
 	model.ComputerBaseboardType
-}
 
-func (lb *LinuxBase) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
-	comSoftInst := model.ComputerSoftwaresInstalledType{}
-
-	return &comSoftInst, errors.New(errorslist.ErrNotImplemented)
-
-}
-
-func (lb *LinuxBase) GetComputerBaseboard() (*model.ComputerBaseboardType, error) {
-	comBaseBoard := model.ComputerBaseboardType{}
-
-	return &comBaseBoard, errors.New(errorslist.ErrNotImplemented)
-
+	model.ComputerSoftwaresInstalledType
 }

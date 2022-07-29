@@ -10,10 +10,10 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"github.com/ochapman/godmi"
+
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
-	// "github.com/zcalusic/sysinfo"
+	"github.com/zcalusic/sysinfo"
 )
 
 type BaseGatherer struct {
@@ -22,13 +22,6 @@ type BaseGatherer struct {
 //--------------------------
 // Baseboard Implementation
 //--------------------------
-
-const (
-	baseboardCaption string = "Base Board"
-	cpuCaption       string = "CPU"
-	osCaption        string = "Computer OS"
-	biosCaption      string = "Computer Bios"
-)
 
 func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 	// Get Computer Softwares Installed Distro Wise
@@ -43,34 +36,10 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 
 func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 	cbios := model.ComputerBiosType{}
-	fmt.Println("********************************")
-godmi.Init()
-macBios := godmi.GetBIOSInformation()
-fmt.Println(macBios)
-fmt.Println("********************************")
-	bios, err := ghw.BIOS()
+	currentDistro := distro.GetInstance()
+	cbios, err := currentDistro.GetComputerBaseboard()
 	if err != nil {
-		fmt.Printf("Error getting BIOS info: %v", err)
-	}
-
-	cbios.Name = bios.Name
-	cbios.Biosversion = common.RootNeeded(bios.Version)
-	cbios.Version = cbios.Biosversion
-	cbios.Manufacturer = common.RootNeeded(bios.Vendor)
-	cbios.Installdate = common.RootNeeded(bios.Date)
-	cbios.Serialnumber = common.RootNeeded(bios.Serialnumber)
-	cbios.Installdate = common.RootNeeded(bios.Installdate)
-	cbios.Primarybios = true
-	cbios.Caption = biosCaption
-	maj, min, found := strings.Cut(cbios.Biosversion, ".")
-
-	if found {
-		cbios.Smbiosmajorversion = maj
-		cbios.Smbiosminorversion = min
-	}
-
-	if cbios.Biosversion != "" {
-		cbios.Status = "Installed"
+		fmt.Println(err)
 	}
 
 	return &cbios
@@ -174,9 +143,9 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 
 	comOS := model.ComputerOSType{}
-	// var si sysinfo.SysInfo
-	// si.GetSysInfo()
-	// Os := si.OS
+	var si sysinfo.SysInfo
+	si.GetSysInfo()
+	Os := si.OS
 	cname, err := os.Hostname()
 	if err != nil {
 		fmt.Printf("error:%#v", err)
@@ -186,12 +155,12 @@ func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 	m := *(common.ReadOSRelease())
 
 	comOS.Os_version = m["VERSION_CODENAME"] + " " + m["VERSION_ID"]
-	// comOS.Os_name = Os.Name
-	// comOS.Vendor = Os.Vendor
+	comOS.Os_name = Os.Name
+	comOS.Vendor = Os.Vendor
 	comOS.Caption = osCaption
-	// comOS.Os_architecture = Os.Architecture
-	// comOS.Os_version = Os.Version
-	// comOS.Release = Os.Release
+	comOS.Os_architecture = Os.Architecture
+	comOS.Os_version = Os.Version
+	comOS.Release = Os.Release
 	comOS.Lts = false
 
 	return &comOS
@@ -220,7 +189,7 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 
 func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comInsSoft := model.ComputerSoftwaresInstalledType{}
-return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
+	return &comInsSoft, errors.New(errorslist.ErrNotImplemented)
 }
 
 func (bg *BaseGatherer) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalledType {
