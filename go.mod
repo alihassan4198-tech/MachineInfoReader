@@ -18,7 +18,7 @@ require (
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/jaypipes/pcidb v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
-	github.com/ochapman/godmi v0.0.0-20140902235245-2527e2081a16 // indirect
+	github.com/ochapman/godmi v0.0.0-20140902235245-2527e2081a16
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/quay/zlog v1.1.0 // indirect
 	github.com/rs/zerolog v1.26.0 // indirect

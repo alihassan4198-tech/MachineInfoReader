@@ -10,7 +10,6 @@ import (
 
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
-	"github.com/ochapman/godmi"
 	"github.com/zcalusic/sysinfo"
 )
 
@@ -27,13 +26,13 @@ const (
 	find3 = "Description"
 )
 
-func (db *DebianBased) GetComputerBios() *model.ComputerBiosType {
+func (db *DebianBased) DistroGetComputerBios() (*model.ComputerBiosType,error) {
 	cbios := model.ComputerBiosType{}
-	fmt.Println("********************************")
-	godmi.Init()
-	macBios := godmi.GetBIOSInformation()
-	fmt.Println(macBios)
-	fmt.Println("********************************")
+	// fmt.Println("********************************")
+	// godmi.Init()
+	// macBios := godmi.GetBIOSInformation()
+	// fmt.Println(macBios)
+	// fmt.Println("********************************")
 	bios, err := ghw.BIOS()
 	if err != nil {
 		fmt.Printf("Error getting BIOS info: %v", err)
@@ -59,10 +58,10 @@ func (db *DebianBased) GetComputerBios() *model.ComputerBiosType {
 		cbios.Status = "Installed"
 	}
 
-	return &cbios
+	return &cbios , nil
 }
 
-func (db *DebianBased) GetComputerCPU() *model.ComputerCPUType {
+func (db *DebianBased) DistroGetComputerCPU() (*model.ComputerCPUType,error) {
 	compCpu := model.ComputerCPUType{}
 
 	cpu, err := ghw.CPU()
@@ -83,17 +82,17 @@ func (db *DebianBased) GetComputerCPU() *model.ComputerCPUType {
 		compCpu.CPUCores = append(compCpu.CPUCores, c)
 	}
 
-	return &compCpu
+	return &compCpu, nil
 }
 
-func (db *DebianBased) GetComputerEndpointProtectionSoftwares() *model.ComputerEndpointProtectionType {
+func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType,error) {
 	epsoft := model.ComputerEndpointProtectionType{}
 	// soft , err := ghw.
 
-	return &epsoft
+	return &epsoft , nil
 }
 
-func (db *DebianBased) GetComputerFirewallRules() *model.ComputerFirewallRulesType {
+func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRulesType,error) {
 
 	cfwRules := model.ComputerFirewallRulesType{}
 
@@ -116,7 +115,7 @@ func (db *DebianBased) GetComputerFirewallRules() *model.ComputerFirewallRulesTy
 				continue
 			}
 			for _, s := range structStat {
-				cfwRule := model.FirewallRuleType{}
+				cfwRule := model.FirewallRule{}
 
 				cfwRule.TableName = table
 				cfwRule.ChainName = chain
@@ -134,10 +133,10 @@ func (db *DebianBased) GetComputerFirewallRules() *model.ComputerFirewallRulesTy
 		}
 	}
 
-	return &cfwRules
+	return &cfwRules , nil
 }
 
-func (db *DebianBased) GetComputerNIC() *[]model.ComputerNICType {
+func (db *DebianBased) DistroGetComputerNIC() (*[]model.ComputerNICType,error) {
 
 	comNic := []model.ComputerNICType{}
 	net, err := ghw.Network()
@@ -154,10 +153,10 @@ func (db *DebianBased) GetComputerNIC() *[]model.ComputerNICType {
 
 	}
 
-	return &comNic
+	return &comNic , nil
 }
 
-func (db *DebianBased) GetComputerOS() *model.ComputerOSType {
+func (db *DebianBased) DistroGetComputerOS() (*model.ComputerOSType,error) {
 
 	comOS := model.ComputerOSType{}
 	var si sysinfo.SysInfo
@@ -180,10 +179,10 @@ func (db *DebianBased) GetComputerOS() *model.ComputerOSType {
 	comOS.Release = Os.Release
 	comOS.Lts = false
 
-	return &comOS
+	return &comOS , nil
 }
 
-func (db *DebianBased) GetComputerServices() *model.ComputerServicesType {
+func (db *DebianBased) DistroGetComputerServices() (*model.ComputerServicesType,error) {
 
 	comServ := model.ComputerServicesType{}
 
@@ -201,21 +200,21 @@ func (db *DebianBased) GetComputerServices() *model.ComputerServicesType {
 
 	comServ.TotalServciesRunning = len(comServ.Services)
 
-	return &comServ
+	return &comServ , nil
 }
 
-func (db *DebianBased) GetDistroBasedComputerSoftwareInstalled() *model.ComputerSoftwaresInstalledType {
+func (db *DebianBased) DistroGetDistroBasedComputerSoftwareInstalled() (*model.ComputerSoftwaresInstalledType,error) {
 	// Get Computer Softwares Installed Distro Wise
-	currentDistro := distro.GetInstance()
-	comSoftInstall, err := currentDistro.GetComputerSoftwaresInstalled()
+	currentDistro := GetInstance()
+	comSoftInstall, err := currentDistro.DistroGetComputerSoftwaresInstalled()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return comSoftInstall
+	return comSoftInstall , nil
 }
 
-func (db *DebianBased) GetComputerSystem() *model.ComputerSystemType {
+func (db *DebianBased) DistroGetComputerSystem() (*model.ComputerSystemType,error) {
 
 	comSys := model.ComputerSystemType{}
 
@@ -241,13 +240,13 @@ func (db *DebianBased) GetComputerSystem() *model.ComputerSystemType {
 		comSys.Model = model
 	}
 
-	return &comSys
+	return &comSys , nil
 }
 
-func (db *DebianBased) GetComputerPatches() *model.ComputerPatchesType {
+func (db *DebianBased) DistroGetComputerPatches() (*model.ComputerPatchesType,error) {
 	comPatch := model.ComputerPatchesType{}
 
-	return &comPatch
+	return &comPatch , nil
 }
 
 func (lb *DebianBased) GetComputerBaseboard() (*model.ComputerBaseboardType, error) {

@@ -15,6 +15,16 @@ const (
 
 type LinuxBase struct {
 	model.ComputerBaseboardType
-
+	model.ComputerBiosType
+	model.ComputerCPUType
+	model.ComputerEndpointProtectionType
+	model.ComputerFirewallRulesType
+	model.ComputerNICType
+	model.ComputerOSType
+	model.ComputerServicesType
+	model.SoftwareInstalledType
 	model.ComputerSoftwaresInstalledType
+	model.ComputerSystemType
+	model.ComputerPatchesType
+	model.ComputerInfoType
 }

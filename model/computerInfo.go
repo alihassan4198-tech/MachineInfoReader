@@ -78,7 +78,7 @@ type ComputerEndpointProtectionType struct {
 }
 
 // FirewallRules SUB TYPE
-type FirewallRuleType struct {
+type FirewallRule struct {
 	TableName      string
 	ChainName      string
 	Enabled        string
@@ -99,7 +99,7 @@ type FirewallRuleType struct {
 type ComputerFirewallRulesType struct {
 	Total_rules  int
 	Active_state string
-	FW_rules     []FirewallRuleType
+	FW_rules     []FirewallRule
 }
 
 type ComputerNICType struct {
@@ -127,7 +127,7 @@ type ComputerOSType struct {
 }
 
 // Services SUB TYPE
-type ServiceType struct {
+type Service struct {
 	Name         string
 	Display_name string
 	Process_id   int
@@ -140,7 +140,7 @@ type ServiceType struct {
 
 type ComputerServicesType struct {
 	TotalServciesRunning int
-	Services             []ServiceType
+	Services             []Service
 }
 
 // Software Installed SUB TYPE

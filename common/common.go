@@ -107,8 +107,8 @@ func RunFullCommandWithSudo(cmd string) (string, error) {
 	return RunFullCommandNoTimeOut(cmd)
 }
 
-func ParseService(svc string) *model.ServiceType {
-	service := model.ServiceType{}
+func ParseService(svc string) *model.Service {
+	service := model.Service{}
 
 	svc = strings.ReplaceAll(svc, "●", " ")
 

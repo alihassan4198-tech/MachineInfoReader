@@ -12,7 +12,7 @@ type I_Gatherer interface {
 	GetComputerNIC() *[]model.ComputerNICType
 	GetComputerOS() *model.ComputerOSType
 	GetComputerServices() *model.ComputerServicesType
-	GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error)
+	GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType)
 	GetComputerSystem() *model.ComputerSystemType
 	GetComputerPatches() *model.ComputerPatchesType
 }
