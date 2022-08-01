@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"machine_info_gatherer/distro"
 	"machine_info_gatherer/model"
+	"reflect"
+	"strings"
 )
 
 type BaseGatherer struct {
@@ -98,7 +100,7 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 	return comServ
 }
 
-func (bg *BaseGatherer) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType) {
+func (bg *BaseGatherer) GetComputerSoftwaresInstalled() *model.ComputerSoftwaresInstalledType {
 
 	currentDistro := distro.GetInstance()
 	comInsSoft, err := currentDistro.DistroGetComputerSoftwaresInstalled()
@@ -134,6 +136,11 @@ func (bg *BaseGatherer) GetComputerPatches() *model.ComputerPatchesType {
 func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 
 	m := model.ComputerInfoType{}
+
+	currentDistro := distro.GetInstance()
+	if strings.Contains(reflect.TypeOf(currentDistro).String(), "MacBased") {
+		distro.MacGetAllInfoInMap()
+	}
 
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
 	m.ComputerBios = *(bg.GetComputerBios())

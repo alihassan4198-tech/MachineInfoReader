@@ -158,19 +158,28 @@ func ReadOSRelease() *map[string]string {
 	return &m
 }
 
-func MakeMapOfLines(input string) map[string]string {
+func LinesToArray(linesInString string, skipFirstLines int) []string {
+
+	lines := strings.Split(linesInString, "\n")
+
+	lines = lines[skipFirstLines : len(lines)-1]
+
+	return lines
+}
+
+func MakeMapOfLines(m map[string]string, input string) map[string]string {
 	lines := strings.Split(input, "\n")
 
-	var infoMap = make(map[string]string)
+	// var infoMap = make(map[string]string)
 
 	for _, line := range lines {
 		if strings.Contains(line, ":") {
 			mapKeyVal := strings.Split(line, ":")
-			infoMap[strings.TrimSpace(mapKeyVal[0])] = strings.TrimSpace(mapKeyVal[1])
+			m[strings.TrimSpace(mapKeyVal[0])] = strings.TrimSpace(mapKeyVal[1])
 		}
 	}
 
-	return infoMap
+	return m
 }
 
 func RemoveCSVExtras(s string) string {

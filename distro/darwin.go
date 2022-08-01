@@ -6,6 +6,7 @@ package distro
 import (
 	"fmt"
 	"machine_info_gatherer/common"
+	distro "machine_info_gatherer/distro/darwin_system_profiler"
 	"machine_info_gatherer/model"
 	"os"
 	"os/exec"
@@ -28,62 +29,21 @@ type MacBased struct {
 	LinuxBase
 }
 
+var infoMap distro.DarwinSystemProfilerInfo
+
+func MacGetAllInfoInMap() {
+
+	infoMap = distro.DarwinSystemProfiler()
+
+}
+
 func (mb *MacBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
-	// var info model.ComputerInfoType
-
-	// var err error
-
-	// info.ComputerBaseboard , err =  db.DistroGetComputerBaseboard()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerBios, err = db.DistroGetComputerBios()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerCPU, err = db.DistroGetComputerCPU()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerEndpointProtection, err = db.DistroGetComputerEndpointProtectionSoftwares()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerFirewallRules, err = db.DistroGetComputerFirewallRules()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerNICS, err = db.DistroGetComputerNIC()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerOS, err = db.DistroGetComputerOS()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerServices, err = db.DistroGetComputerServices()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerSoftwaresInstalled, err = db.DistroGetComputerSoftwaresInstalled()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerPatches, err = db.DistroGetComputerPatches()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
 
 	return &model.ComputerInfoType{}, nil
 }
 
 func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	cbios := model.ComputerBiosType{}
-	// fmt.Println("********************************")
-	// godmi.Init()
-	// macBios := godmi.GetBIOSInformation()
-	// fmt.Println(macBios)
-	// fmt.Println("********************************")
 
 	bios, err := ghw.BIOS()
 	if err != nil {
@@ -304,14 +264,11 @@ func (mb *MacBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, 
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	fmt.Println(infoMap)
+
 	cb.Computer_name = computerName
 	cb.Caption = baseboardCaption
-
-	systemProfiler, err := common.RunFullCommand("system_profiler SPHardwareDataType")
-	if err == nil {
-		m := common.MakeMapOfLines(systemProfiler)
-		fmt.Println(m)
-	}
 
 	cb.Creationclassname = ""
 	cb.Serialnumber = common.RootNeeded("")
