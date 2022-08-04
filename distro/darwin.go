@@ -46,9 +46,12 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	hw := len(infoMap.SPHardware.SpHardwareDataType) > 0
 	sw := len(infoMap.SPSoftware.SpSoftwareDataType) > 0
 
+	if hw {
 
-	cbios.Name = infoMap.SPHardware.SpHardwareDataType[]
-	cbios.Biosversion = common.RootNeeded(bios.Version)
+	}
+
+	cbios.Name = 
+	cbios.Biosversion = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].BootRomVersion)
 	cbios.Version = cbios.Biosversion
 	cbios.Manufacturer = common.RootNeeded(bios.Vendor)
 	cbios.Installdate = common.RootNeeded(bios.Date)
