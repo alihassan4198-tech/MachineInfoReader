@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"machine_info_gatherer/distro/systemprofiler"
 	"machine_info_gatherer/model"
 	"os"
 
@@ -46,19 +47,19 @@ func CreateJsonFile(info interface{}, fileName string) {
 
 }
 
-func readJSONFile(filename string) (interface{}, error) {
+func ReadJSONFile[T systemprofiler.DarwinSystemProfilerInfo](filename string) (T, error) {
 	f, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return T{}, err
 	}
 	defer f.Close()
 
-	return readJSON(f)
+	return readJSON[T](f)
 }
 
 func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 
-	data, err := readJSONFile("./" + JsonFileName + ".json")
+	data, err := ReadJSONFile("./" + JsonFileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -99,13 +100,13 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 	}
 }
 
-func readJSON(r io.Reader) (interface{}, error) {
+func readJSON[T systemprofiler.DarwinSystemProfilerInfo](r io.Reader) (T, error) {
 	decoder := json.NewDecoder(r)
 	decoder.UseNumber()
 
-	var data interface{}
+	var data T
 	if err := decoder.Decode(&data); err != nil {
-		return nil, err
+		return T{}, err
 	}
 
 	return data, nil

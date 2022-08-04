@@ -74,7 +74,7 @@ func RunFullCommand(command string) (string, error) {
 	go func() { done <- cmd.Wait() }()
 
 	// Start a timer
-	timeout := time.After(5 * time.Second)
+	timeout := time.After(100 * time.Second)
 
 	// The select statement allows us to execute based on which channel
 	// we get a message from first.

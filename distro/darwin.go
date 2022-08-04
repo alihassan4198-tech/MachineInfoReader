@@ -6,7 +6,7 @@ package distro
 import (
 	"fmt"
 	"machine_info_gatherer/common"
-	distro "machine_info_gatherer/distro/darwin_system_profiler"
+	"machine_info_gatherer/distro/systemprofiler"
 	"machine_info_gatherer/model"
 	"os"
 	"os/exec"
@@ -29,12 +29,10 @@ type MacBased struct {
 	LinuxBase
 }
 
-var infoMap distro.DarwinSystemProfilerInfo
+var infoMap systemprofiler.DarwinSystemProfilerInfo
 
 func MacGetAllInfoInMap() {
-
-	infoMap = distro.DarwinSystemProfiler()
-
+	infoMap = systemprofiler.DarwinSystemProfiler()
 }
 
 func (mb *MacBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
@@ -45,12 +43,11 @@ func (mb *MacBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
 func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	cbios := model.ComputerBiosType{}
 
-	bios, err := ghw.BIOS()
-	if err != nil {
-		fmt.Printf("Error getting BIOS info: %v", err)
-	}
+	hw := len(infoMap.SPHardware.SpHardwareDataType) > 0
+	sw := len(infoMap.SPSoftware.SpSoftwareDataType) > 0
 
-	cbios.Name = bios.Name
+
+	cbios.Name = infoMap.SPHardware.SpHardwareDataType[]
 	cbios.Biosversion = common.RootNeeded(bios.Version)
 	cbios.Version = cbios.Biosversion
 	cbios.Manufacturer = common.RootNeeded(bios.Vendor)
@@ -259,27 +256,47 @@ func (mb *MacBased) DistroGetComputerPatches() (*model.ComputerPatchesType, erro
 func (mb *MacBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, error) {
 	cb := model.ComputerBaseboardType{}
 
+	hw := len(infoMap.SPHardware.SpHardwareDataType) > 0
+	sw := len(infoMap.SPSoftware.SpSoftwareDataType) > 0
+
 	var err error
 	computerName, err := os.Hostname()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(infoMap)
-
 	cb.Computer_name = computerName
 	cb.Caption = baseboardCaption
 
 	cb.Creationclassname = ""
-	cb.Serialnumber = common.RootNeeded("")
-	cb.Version = common.RootNeeded("")
-	cb.Product = common.RootNeeded("")
-	cb.Manufacturer = common.RootNeeded("")
-	cb.Tag = common.RootNeeded("")
+
+	if hw {
+		cb.Serialnumber = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].SerialNumber)
+		cb.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
+		cb.Tag = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].PlatformUuid)
+		cb.Model = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineModel)
+	}
+
+	if sw {
+		cb.Version = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].OSVersion)
+		cb.Product = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].KernelVersion)
+		cb.Name = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].LocalHostName)
+		cb.Status = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].BootMode)
+	}
 
 	cb.Creationclassname = ""
 
-	cb.Installdate = ""
+	date, err := common.RunFullCommand("ls -l /var/db/.AppleSetupDone")
+	if err != nil {
+		date = ""
+	} else {
+		split := strings.Split(date, " ")
+		date = strings.Join(split[8:12], " ")
+	}
+
+	cb.Installdate = date
+
+	cb.Description = "Baseboard Info"
 
 	cb.Poweredon = true
 

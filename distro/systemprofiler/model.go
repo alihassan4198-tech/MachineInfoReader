@@ -1,7 +1,7 @@
 //go:build darwin
 // +build darwin
 
-package distro
+package systemprofiler
 
 import "time"
 
