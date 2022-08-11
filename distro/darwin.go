@@ -71,17 +71,21 @@ func (mb *MacBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, 
 		cb.Status = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].BootMode)
 	}
 
-	cb.Creationclassname = ""
+	// date, err := common.RunFullCommand("ls -l /var/db/.AppleSetupDone")
+	// if err != nil {
+	// 	date = ""
+	// } else {
+	// 	var split string
+	// 	if date < split[8:12] {
+	// 		split := strings.Split(date, " ")
+	// 		date = strings.Join(split[0:7], " ")
+	// 	} else {
+	// 		split := strings.Split(date, " ")
+	// 		date = strings.Join(split[8:12], " ")
+	// 	}
+	// }
 
-	date, err := common.RunFullCommand("ls -l /var/db/.AppleSetupDone")
-	if err != nil {
-		date = ""
-	} else {
-		split := strings.Split(date, " ")
-		date = strings.Join(split[8:12], " ")
-	}
-
-	cb.Installdate = date
+	// cb.Installdate = date
 
 	cb.Description = "Baseboard Info"
 
@@ -97,22 +101,32 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	sw := len(infoMap.SPSoftware.SpSoftwareDataType) > 0
 
 	if hw {
-
+		cbios.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
+		cbios.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
+		cbios.Serialnumber = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].SerialNumber)
+		cbios.Smbiosbiosversion = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].SmcVersionSystem)
+		cbios.Biosversion = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].BootRomVersion)
 	}
 
 	if sw {
-
+		cbios.Version = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].SmcVersionSystem)
 	}
 
-	cbios.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
-	cbios.Biosversion = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].BootRomVersion)
-	cbios.Version = cbios.Biosversion
-	cbios.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
-	cbios.Installdate = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Date)
-	cbios.Serialnumber = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].SerialNumber)
+	cbios.Currentlanguage = infoMap.SPInternational.SpInternationalDataType[1].SystemLanguages[0]
+	cbios.Listoflanguages = infoMap.SPInternational.SpInternationalDataType[1].SystemInterfaceLanguages
+	cbios.Status = ""
+	cbios.Releasedate = ""
+	cbios.Softwareelementid = ""
+	cbios.Softwareelementstate = 0
+	cbios.Targetoperatingsystem = 0
+	cbios.Systembiosmajorversion = 0
+	cbios.Systembiosminorversion = 0
+	cbios.Smbiospresent = true
+	cbios.Installablelanguages = 40
+	cbios.Description = "Bios Info"
 	cbios.Primarybios = true
 	cbios.Caption = biosCaption
-	maj, min, found := strings.Cut(cbios.Biosversion, ".")
+	maj, min, found := strings.Cut(cbios.Smbiosbiosversion, ".")
 
 	if found {
 		cbios.Smbiosmajorversion = maj
@@ -129,23 +143,26 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 	compCpu := model.ComputerCPUType{}
 
-	cpu, err := ghw.CPU()
-	if err != nil {
-		fmt.Printf("Error getting CPU info: %v", err)
-	}
+	// cpu, err := ghw.CPU()
+	// if err != nil {
+	// 	fmt.Printf("Error getting CPU info: %v", err)
+	// }
 
 	compCpu.Caption = cpuCaption
 
-	for _, proc := range cpu.Processors {
-		c := model.ComputerCPU{}
+	// for _, proc := range cpu.Processors {
 
-		c.Manufacturer = proc.Vendor
-		c.Max_clock_speed = proc.CPUMhz
-		c.Name = proc.Name
-		c.Device_id = proc.ID
+	c := model.ComputerCPU{}
+	c.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
+	c.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
+	c.Max_clock_speed = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].CurrentProcessorSpeed)
+	// c.Manufacturer = proc.Vendor
+	// c.Max_clock_speed = proc.CPUMhz
+	// c.Name = proc.Name
+	// c.Device_id = proc.ID
 
-		compCpu.CPUCores = append(compCpu.CPUCores, c)
-	}
+	compCpu.CPUCores = append(compCpu.CPUCores, c)
+	// }
 
 	return &compCpu, nil
 }
@@ -153,6 +170,8 @@ func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 func (mb *MacBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
 	// soft , err := ghw.
+	// hw := len(infoMap.SPHardware.SpHardwareDataType) > 0
+	// sw := len(infoMap.SPSoftware.SpSoftwareDataType) > 0
 
 	return &epsoft, nil
 }
@@ -204,6 +223,7 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
 
 	comNic := []model.ComputerNICType{}
+
 	net, err := ghw.Network()
 	if err != nil {
 		fmt.Printf("Error getting network info: %v", err)
