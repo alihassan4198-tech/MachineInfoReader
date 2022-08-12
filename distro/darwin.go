@@ -12,7 +12,6 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
 )
 
@@ -71,21 +70,19 @@ func (mb *MacBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardType, 
 		cb.Status = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].BootMode)
 	}
 
-	// date, err := common.RunFullCommand("ls -l /var/db/.AppleSetupDone")
-	// if err != nil {
-	// 	date = ""
-	// } else {
-	// 	var split string
-	// 	if date < split[8:12] {
-	// 		split := strings.Split(date, " ")
-	// 		date = strings.Join(split[0:7], " ")
-	// 	} else {
-	// 		split := strings.Split(date, " ")
-	// 		date = strings.Join(split[8:12], " ")
-	// 	}
-	// }
+	date, err := common.RunFullCommand("ls -l /var/db/.AppleSetupDone")
+	if err != nil {
+		date = ""
+	} else {
+		split := strings.Split(date, " ")
+		if len(split) < 8 {
+			date = " "
+		} else {
+			date = strings.Join(split[8:12], " ")
+		}
+	}
 
-	// cb.Installdate = date
+	cb.Installdate = date
 
 	cb.Description = "Baseboard Info"
 
@@ -122,7 +119,7 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	cbios.Systembiosmajorversion = 0
 	cbios.Systembiosminorversion = 0
 	cbios.Smbiospresent = true
-	cbios.Installablelanguages = 40
+	cbios.Installablelanguages = len(cbios.Listoflanguages) + 1
 	cbios.Description = "Bios Info"
 	cbios.Primarybios = true
 	cbios.Caption = biosCaption
@@ -141,31 +138,32 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 }
 
 func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
+
 	compCpu := model.ComputerCPUType{}
-
-	// cpu, err := ghw.CPU()
-	// if err != nil {
-	// 	fmt.Printf("Error getting CPU info: %v", err)
-	// }
-
 	compCpu.Caption = cpuCaption
 
-	// for _, proc := range cpu.Processors {
+	hw := len(infoMap.SPHardware.SpHardwareDataType) > 0
+	processor := len(infoMap.SPHardware.SpHardwareDataType)
 
 	c := model.ComputerCPU{}
-	c.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
-	c.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
-	c.Max_clock_speed = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].CurrentProcessorSpeed)
-	// c.Manufacturer = proc.Vendor
-	// c.Max_clock_speed = proc.CPUMhz
-	// c.Name = proc.Name
-	// c.Device_id = proc.ID
+	if hw {
+		c.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
+		c.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
+		c.Max_clock_speed = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].CurrentProcessorSpeed)
+		c.No_of_cores = infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors
+	}
 
-	compCpu.CPUCores = append(compCpu.CPUCores, c)
-	// }
-
+	if hw && processor < infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors {
+		for p := 0; p < c.No_of_cores; p++ {
+			compCpu.CPUCores = append(compCpu.CPUCores, c)
+		}
+	} else {
+		compCpu.CPUCores = append(compCpu.CPUCores, c)
+	}
 	return &compCpu, nil
 }
+
+// THIS FUNCTION IS PENDING---------------------------------------------
 
 func (mb *MacBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
@@ -176,6 +174,7 @@ func (mb *MacBased) DistroGetComputerEndpointProtectionSoftwares() (*model.Compu
 	return &epsoft, nil
 }
 
+// THIS FUNCTION IS PENDING------------------------------------------
 func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRulesType, error) {
 
 	cfwRules := model.ComputerFirewallRulesType{}
@@ -220,23 +219,11 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 	return &cfwRules, nil
 }
 
-func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
+func (mb *MacBased) DistroGetComputerNIC() (*model.ComputerNICType, error) {
+	comNic := model.ComputerNICType{}
 
-	comNic := []model.ComputerNICType{}
-
-	net, err := ghw.Network()
-	if err != nil {
-		fmt.Printf("Error getting network info: %v", err)
-	}
-
-	for _, nic := range net.NICs {
-
-		comNic = append(comNic, model.ComputerNICType{
-			Caption:     nic.Name,
-			Mac_address: nic.MacAddress,
-		})
-
-	}
+	comNic.Caption = nicCaption
+	comNic.Model = common.RootNeeded(infoMap.SPNetworkLocation.SpNetworkLocationDataType[0].Name)
 
 	return &comNic, nil
 }

@@ -7,8 +7,8 @@ const (
 	cpuCaption       string = "CPU"
 	osCaption        string = "Computer OS"
 	biosCaption      string = "Computer Bios"
+	nicCaption       string = "Computer Nic"
 )
 
 type LinuxBase struct {
 }
-

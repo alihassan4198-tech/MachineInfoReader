@@ -54,6 +54,7 @@ type ComputerCPU struct {
 	Name                          string
 	Socket_designation            string
 	Virtualizationfirmwareenabled bool
+	No_of_cores                   int
 }
 
 type ComputerCPUType struct {
@@ -184,7 +185,8 @@ type ComputerInfoType struct {
 	ComputerCPU                ComputerCPUType
 	ComputerEndpointProtection ComputerEndpointProtectionType
 	ComputerFirewallRules      ComputerFirewallRulesType
-	ComputerNICS               []ComputerNICType
+	// ComputerNICS               []ComputerNICType
+	ComputerNICS               ComputerNICType
 	ComputerOS                 ComputerOSType
 	ComputerServices           ComputerServicesType
 	ComputerSoftwaresInstalled ComputerSoftwaresInstalledType
