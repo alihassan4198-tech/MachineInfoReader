@@ -67,8 +67,7 @@ func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesT
 	return cfwRules
 }
 
-// func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
-func (bg *BaseGatherer) GetComputerNIC() *model.ComputerNICType {
+func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 
 	currentDistro := distro.GetInstance()
 	comNic, err := currentDistro.DistroGetComputerNIC()
@@ -148,7 +147,6 @@ func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 	m.ComputerCPU = *(bg.GetComputerCPU())
 	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
 	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
-	// m.ComputerNICS = *[](bg.GetComputerNIC())
 	m.ComputerNICS = *(bg.GetComputerNIC())
 	m.ComputerOS = *(bg.GetComputerOS())
 	m.ComputerServices = *(bg.GetComputerServices())

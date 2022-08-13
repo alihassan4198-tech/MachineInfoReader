@@ -185,8 +185,7 @@ type ComputerInfoType struct {
 	ComputerCPU                ComputerCPUType
 	ComputerEndpointProtection ComputerEndpointProtectionType
 	ComputerFirewallRules      ComputerFirewallRulesType
-	// ComputerNICS               []ComputerNICType
-	ComputerNICS               ComputerNICType
+	ComputerNICS               []ComputerNICType
 	ComputerOS                 ComputerOSType
 	ComputerServices           ComputerServicesType
 	ComputerSoftwaresInstalled ComputerSoftwaresInstalledType

@@ -10,9 +10,8 @@ import (
 	"machine_info_gatherer/model"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
-
-	"github.com/coreos/go-iptables/iptables"
 )
 
 // Mac
@@ -116,13 +115,14 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	cbios.Softwareelementid = ""
 	cbios.Softwareelementstate = 0
 	cbios.Targetoperatingsystem = 0
-	cbios.Systembiosmajorversion = 0
+	// cbios.Systembiosmajorversion = i
 	cbios.Systembiosminorversion = 0
 	cbios.Smbiospresent = true
-	cbios.Installablelanguages = len(cbios.Listoflanguages) + 1
+	cbios.Installablelanguages = len(cbios.Listoflanguages)
 	cbios.Description = "Bios Info"
 	cbios.Primarybios = true
 	cbios.Caption = biosCaption
+
 	maj, min, found := strings.Cut(cbios.Smbiosbiosversion, ".")
 
 	if found {
@@ -133,6 +133,19 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	if cbios.Biosversion != "" {
 		cbios.Status = "Installed"
 	}
+
+	imaj, err := strconv.Atoi(maj)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		cbios.Systembiosmajorversion = imaj
+	}
+	// imin, err := strconv.Atoi(min)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// } else {
+	// 	cbios.Systembiosminorversion = imin
+	// }
 
 	return &cbios, nil
 }
@@ -179,51 +192,93 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 
 	cfwRules := model.ComputerFirewallRulesType{}
 
-	tables := []string{"filter", "mangle", "nat", "raw"}
+	// tables := []string{"filter", "mangle", "nat", "raw"}
 
-	ipt, err := iptables.New()
-	if err != nil {
-		fmt.Println(err)
-	}
+	// ipt, err := iptables.New()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	for _, table := range tables {
-		chains, err := ipt.ListChains(table)
-		if err != nil {
-			fmt.Println(err)
-		}
-		for _, chain := range chains {
-			structStat, err := ipt.StructuredStats(table, chain)
-			if err != nil {
-				fmt.Println("parsing error: ", err)
-				continue
-			}
-			for _, s := range structStat {
-				cfwRule := model.FirewallRule{}
+	// for _, table := range tables {
+	// 	chains, err := ipt.ListChains(table)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// 	for _, chain := range chains {
+	// 		structStat, err := ipt.StructuredStats(table, chain)
+	// 		if err != nil {
+	// 			fmt.Println("parsing error: ", err)
+	// 			continue
+	// 		}
+	// 		for _, s := range structStat {
+	// 			cfwRule := model.FirewallRule{}
 
-				cfwRule.TableName = table
-				cfwRule.ChainName = chain
-				cfwRule.Action = s.Target
-				cfwRule.Enabled = "enable"
-				cfwRule.Local_ip = s.Source.IP.String()
-				cfwRule.Local_port = s.Input
-				cfwRule.Remote_ip = s.Destination.IP.String()
-				cfwRule.Remote_port = s.Output
-				cfwRule.Protocol = s.Protocol
-				cfwRule.Direction = chain
-				// fmt.Printf("%#v\n", cfwRule)
-				cfwRules.FW_rules = append(cfwRules.FW_rules, cfwRule)
-			}
-		}
-	}
+	// 			cfwRule.TableName = table
+	// 			cfwRule.ChainName = chain
+	// 			cfwRule.Action = s.Target
+	// 			cfwRule.Enabled = "enable"
+	// 			cfwRule.Local_ip = s.Source.IP.String()
+	// 			cfwRule.Local_port = s.Input
+	// 			cfwRule.Remote_ip = s.Destination.IP.String()
+	// 			cfwRule.Remote_port = s.Output
+	// 			cfwRule.Protocol = s.Protocol
+	// 			cfwRule.Direction = chain
+	// 			// fmt.Printf("%#v\n", cfwRule)
+	// 			cfwRules.FW_rules = append(cfwRules.FW_rules, cfwRule)
+	// 		}
+	// 	}
+	// }
 
 	return &cfwRules, nil
 }
 
-func (mb *MacBased) DistroGetComputerNIC() (*model.ComputerNICType, error) {
-	comNic := model.ComputerNICType{}
+func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
+	comNic := []model.ComputerNICType{}
 
-	comNic.Caption = nicCaption
-	comNic.Model = common.RootNeeded(infoMap.SPNetworkLocation.SpNetworkLocationDataType[0].Name)
+	var networkNic model.ComputerNICType
+	networkNic.Caption = "NetworkNic"
+	networkNic.Model = infoMap.SPNetwork.SpNetworkDataType[0].Name
+	comNic = append(comNic, networkNic)
+
+	var ipv4Nic model.ComputerNICType
+	ipv4Nic.Caption = "IPv4"
+	ipv4Nic.Default_ip_gateway = []string{infoMap.SPNetwork.SpNetworkDataType[0].IPv4.ArpResolvedIpAddress}
+	ipv4Nic.Mac_address = infoMap.SPNetwork.SpNetworkDataType[0].IPv4.ArpResolvedHardwareAddress
+	ipv4Nic.Ipaddress = []string{infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[0].DestinationAddress}
+	ipv4Nic.Ipaddress = []string{infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[0].SubnetMask}
+	ipv4Nic.Ipaddress = []string{infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[1].DestinationAddress}
+	ipv4Nic.Ipaddress = []string{infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[1].SubnetMask}
+	ipv4Nic.Ip_subnet = infoMap.SPNetwork.SpNetworkDataType[0].IPv4.SubnetMasks
+	comNic = append(comNic, ipv4Nic)
+
+	var dhcpNic model.ComputerNICType
+	dhcpNic.Caption = "Dhcp"
+	dhcpNic.Dhcp_server = infoMap.SPNetwork.SpNetworkDataType[0].Dhcp.DhcpDomainNameServers
+	comNic = append(comNic, ipv4Nic)
+
+	var dnsNic model.ComputerNICType
+	dnsNic.Caption = "DNS"
+	dnsNic.Ipaddress = infoMap.SPNetwork.SpNetworkDataType[0].Dns.ServerAddresses
+	comNic = append(comNic, dnsNic)
+
+	var etherNic model.ComputerNICType
+	etherNic.Caption = "Ethernet"
+	comNic = append(comNic, etherNic)
+
+	// fmt.Println(net)
+
+	// var nic model.ComputerNICType
+
+	// for _, nic := range append(comNic, nic) {
+
+	// 	// comNic.Caption = nicCaption
+	// 	nic.Model = common.RootNeeded(infoMap.SPNetwork.SpNetworkDataType[0].Name)
+	// 	// nic.Dhcp_server = common.RootNeeded(infoMap.SPNetwork.SpNetworkDataType[1].Dhcp.DhcpDomainNameServers)
+	// 	nic.Ipaddress = infoMap.SPNetwork.SpNetworkDataType[0].IpAddress
+	// 	// nic.Ip_subnet = infoMap.SPNetwork.SpNetworkDataType[3].IPv4[0].SubnetMasks[0]
+
+	// 	comNic = append(comNic, nic)
+	// }
 
 	return &comNic, nil
 }
