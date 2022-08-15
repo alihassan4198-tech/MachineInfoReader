@@ -123,7 +123,7 @@ type ComputerOSType struct {
 	Os_architecture string
 	Os_version      string
 	Release         string
-	Lastbootuptime  int
+	Lastbootuptime  string
 	Lts             bool
 }
 
