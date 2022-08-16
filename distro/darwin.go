@@ -260,10 +260,12 @@ func (mb *MacBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwa
 	sit := model.ComputerSoftwaresInstalledType{}
 	si := model.SoftwareInstalledType{}
 	for _, a := range infoMap.SPApplications.SpApplicationsDataType {
+		// a = append(a, si.Display_name, si.Version)
 		si.Display_name = a.Name
 		si.Version = a.Version
+		sit.SoftwaresInstalled = append(sit.SoftwaresInstalled, si)
 	}
-	sit.SoftwaresInstalled = append(sit.SoftwaresInstalled, si)
+
 	return &sit, nil
 }
 
