@@ -170,6 +170,7 @@ func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 
 	if hw && processor < infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors {
 		for p := 0; p < c.No_of_cores; p++ {
+			c.Device_id = p
 			compCpu.CPUCores = append(compCpu.CPUCores, c)
 		}
 	} else {
@@ -192,10 +193,10 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 	cfwRules := model.ComputerFirewallRulesType{}
 	cfwRules.Active_state = common.RootNeeded(infoMap.SPFirewall.SpFirewallDataType[0].SpfirewallGlobalstate)
 
-	cfw := model.FirewallRule{}
-	cfw.Enabled = common.RootNeeded(infoMap.SPFirewall.SpFirewallDataType[0].SpfirewallStealthenabled)
+	// cfw := model.FirewallRule{}
+	// cfw.Enabled = common.RootNeeded(infoMap.SPFirewall.SpFirewallDataType[0].SpfirewallStealthenabled)
 
-	cfwRules.FW_rules = append(cfwRules.FW_rules, cfw)
+	// cfwRules.FW_rules = append(cfwRules.FW_rules, cfw)
 	return &cfwRules, nil
 }
 
@@ -214,21 +215,28 @@ func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
 	ipv4Nic.Mac_address = infoMap.SPNetwork.SpNetworkDataType[0].IPv4.ArpResolvedHardwareAddress
 	ipv4Nic.Ipaddress = append(ipv4Nic.Ipaddress, infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[0].DestinationAddress, infoMap.SPNetwork.SpNetworkDataType[0].IPv4.AdditionalRoutes[1].DestinationAddress)
 	ipv4Nic.Ip_subnet = infoMap.SPNetwork.SpNetworkDataType[0].IPv4.SubnetMasks
+	if len(ipv4Nic.Ipaddress) > 0 {
+		ipv4Nic.Ip_enabled = true
+	}
 	comNic = append(comNic, ipv4Nic)
 
 	var dhcpNic model.ComputerNICType
 	dhcpNic.Caption = "Dhcp"
 	dhcpNic.Dhcp_server = infoMap.SPNetwork.SpNetworkDataType[0].Dhcp.DhcpDomainNameServers
+	dhcpNic.Ipaddress = []string{infoMap.SPNetwork.SpNetworkDataType[0].Dhcp.DhcpRouters}
+	dhcpNic.Ip_subnet = []string{infoMap.SPNetwork.SpNetworkDataType[0].Dhcp.DhcpSubnetMask}
+	if len(dhcpNic.Ipaddress) > 0 {
+		dhcpNic.Ip_enabled = true
+	}
 	comNic = append(comNic, dhcpNic)
 
 	var dnsNic model.ComputerNICType
 	dnsNic.Caption = "DNS"
 	dnsNic.Ipaddress = infoMap.SPNetwork.SpNetworkDataType[0].Dns.ServerAddresses
+	if len(dhcpNic.Ipaddress) > 0 {
+		dnsNic.Ip_enabled = true
+	}
 	comNic = append(comNic, dnsNic)
-
-	var etherNic model.ComputerNICType
-	etherNic.Caption = "Ethernet"
-	comNic = append(comNic, etherNic)
 
 	return &comNic, nil
 }
@@ -238,7 +246,8 @@ func (mb *MacBased) DistroGetComputerOS() (*model.ComputerOSType, error) {
 	comOS := model.ComputerOSType{}
 
 	comOS.Computer_name = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].LocalHostName)
-	comOS.Os_name = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].Name)
+	comOS.Os_name = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].OSVersion)
+	comOS.Vendor = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
 	comOS.Caption = osCaption
 	comOS.Os_version = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].OSVersion)
 	comOS.Lastbootuptime = common.RootNeeded(infoMap.SPSoftware.SpSoftwareDataType[0].Uptime)
@@ -246,25 +255,59 @@ func (mb *MacBased) DistroGetComputerOS() (*model.ComputerOSType, error) {
 	return &comOS, nil
 }
 
-//--------THIS FUNCTION IS PENDING---------------------
 func (mb *MacBased) DistroGetComputerServices() (*model.ComputerServicesType, error) {
 
 	comServ := model.ComputerServicesType{}
+	comS := model.Service{}
 
-	comServ.TotalServciesRunning = len(comServ.Services)
+	cmd, err := common.RunFullCommand("launchctl list")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		cmdOutput := strings.Split(string(cmd), "\n")
 
+		for i, svc := range cmdOutput {
+
+			if i == 0 {
+				continue
+			}
+
+			svc = strings.ReplaceAll(svc, "\t", "  ")
+			splitedSvc := strings.Split(svc, "  ")
+			fmt.Println(splitedSvc)
+			// comServ = append(comServ, splitedSvc)
+			// fmt.Println(splitedSvc[1])
+			// fmt.Println(splitedSvc[2])
+			// if common.IsService(svc) && common.IsServiceRunning(svc) {
+			comS.Name = splitedSvc[2]
+			// comS.Process_id = strconv.Atoi(splitedSvc[0])
+			comS.Status = splitedSvc[1]
+			comServ.Services = append(comServ.Services, comS)
+			// }
+			// comServ.Services = append(comServ.Services, *common.ParseService(svc))
+
+			// comServ.Services = append(comServ.Services, comS)
+		}
+
+		// comServ = append(comServ, splitedSvc)
+		// comServ.TotalServciesRunning = len(comServ.Services)
+	}
+	// comServ.Services = append(comServ.Services, comS)
 	return &comServ, nil
 }
 
 func (mb *MacBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+
 	sit := model.ComputerSoftwaresInstalledType{}
 	si := model.SoftwareInstalledType{}
 	for _, a := range infoMap.SPApplications.SpApplicationsDataType {
-		// a = append(a, si.Display_name, si.Version)
 		si.Display_name = a.Name
 		si.Version = a.Version
 		sit.SoftwaresInstalled = append(sit.SoftwaresInstalled, si)
 	}
+	totalsit := len(sit.SoftwaresInstalled)
+	sit.Total_software = totalsit
+	sit.SoftwaresInstalled = append(sit.SoftwaresInstalled, si)
 
 	return &sit, nil
 }
