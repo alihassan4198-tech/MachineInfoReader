@@ -9,7 +9,6 @@ import (
 	"machine_info_gatherer/distro/systemprofiler"
 	"machine_info_gatherer/model"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -165,11 +164,11 @@ func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 		c.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
 		c.Name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].Name)
 		c.Max_clock_speed = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].CurrentProcessorSpeed)
-		c.No_of_cores = infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors
+		compCpu.No_of_cores = infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors
 	}
 
 	if hw && processor < infoMap.SPHardware.SpHardwareDataType[0].NumberProcessors {
-		for p := 0; p < c.No_of_cores; p++ {
+		for p := 0; p < compCpu.No_of_cores; p++ {
 			c.Device_id = p
 			compCpu.CPUCores = append(compCpu.CPUCores, c)
 		}
@@ -178,8 +177,6 @@ func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 	}
 	return &compCpu, nil
 }
-
-// THIS FUNCTION IS PENDING---------------------------------------------
 
 func (mb *MacBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 
@@ -259,40 +256,29 @@ func (mb *MacBased) DistroGetComputerServices() (*model.ComputerServicesType, er
 
 	comServ := model.ComputerServicesType{}
 	comS := model.Service{}
-
 	cmd, err := common.RunFullCommand("launchctl list")
 	if err != nil {
 		fmt.Println(err)
 	} else {
 		cmdOutput := strings.Split(string(cmd), "\n")
-
 		for i, svc := range cmdOutput {
-
 			if i == 0 {
 				continue
 			}
-
+			if svc == "" {
+				break
+			}
 			svc = strings.ReplaceAll(svc, "\t", "  ")
 			splitedSvc := strings.Split(svc, "  ")
-			fmt.Println(splitedSvc)
-			// comServ = append(comServ, splitedSvc)
-			// fmt.Println(splitedSvc[1])
-			// fmt.Println(splitedSvc[2])
-			// if common.IsService(svc) && common.IsServiceRunning(svc) {
 			comS.Name = splitedSvc[2]
-			// comS.Process_id = strconv.Atoi(splitedSvc[0])
+			comS.Process_id, _ = strconv.Atoi(splitedSvc[0])
 			comS.Status = splitedSvc[1]
+			if comS.Process_id != 0 {
+				comServ.TotalServciesRunning++
+			}
 			comServ.Services = append(comServ.Services, comS)
-			// }
-			// comServ.Services = append(comServ.Services, *common.ParseService(svc))
-
-			// comServ.Services = append(comServ.Services, comS)
 		}
-
-		// comServ = append(comServ, splitedSvc)
-		// comServ.TotalServciesRunning = len(comServ.Services)
 	}
-	// comServ.Services = append(comServ.Services, comS)
 	return &comServ, nil
 }
 
@@ -316,28 +302,21 @@ func (mb *MacBased) DistroGetComputerSystem() (*model.ComputerSystemType, error)
 
 	comSys := model.ComputerSystemType{}
 
-	domainName, err := exec.Command("domainname").Output()
-	if err != nil {
-		fmt.Println(err)
-	}
-	comSys.Domain = strings.TrimSpace(string(domainName))
+	comSys.Manufacturer = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
+	comSys.Model = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineModel)
+	comSys.Total_phsical_memory = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].PhysicalMemory)
+	comSys.Primary_owner_name = common.RootNeeded(infoMap.SPHardware.SpHardwareDataType[0].MachineName)
 
-	manufacturer, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
+	cmd, err := common.RunFullCommand("scutil --dns | grep domain")
 	if err != nil {
 		fmt.Println(err)
-		comSys.Manufacturer = common.NeedSudoPreviliges(err)
 	} else {
-		comSys.Manufacturer = manufacturer
+		s := strings.ReplaceAll(cmd, "  domain   :", ",")
+		s1 := strings.ReplaceAll(s, "\n", "")
+		s2 := strings.Replace(s1, ",", "", 1)
+		s2 = strings.TrimSpace(s2)
+		comSys.Domain = s2
 	}
-
-	model, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-product-name")
-	if err != nil {
-		fmt.Println(err)
-		comSys.Model = common.NeedSudoPreviliges(err)
-	} else {
-		comSys.Model = model
-	}
-
 	return &comSys, nil
 }
 
@@ -345,44 +324,4 @@ func (mb *MacBased) DistroGetComputerPatches() (*model.ComputerPatchesType, erro
 	comPatch := model.ComputerPatchesType{}
 
 	return &comPatch, nil
-}
-
-func (mb *MacBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
-	comSoftInst := model.ComputerSoftwaresInstalledType{}
-
-	installSoft, err := exec.Command("dpkg", "-l").Output()
-	if err != nil {
-		fmt.Println(err)
-		return &comSoftInst, err
-	}
-	splittedInstallSoft := strings.Split(string(installSoft), "\n")
-
-	for i, soft := range splittedInstallSoft {
-		if strings.Contains(soft, find0) &&
-			strings.Contains(soft, find1) &&
-			strings.Contains(soft, find2) &&
-			strings.Contains(soft, find3) {
-			// Remove first 2 useless record strings
-			splittedInstallSoft = splittedInstallSoft[i+2:]
-			break
-		}
-	}
-
-	// Remove last \n record string
-	splittedInstallSoft = splittedInstallSoft[:len(splittedInstallSoft)-1]
-
-	// Convert to Strcut
-	for _, soft := range splittedInstallSoft {
-		soft = strings.Join(strings.Fields(soft), " ")
-		splittedSoft := strings.Split(soft, " ")
-		softInstall := model.SoftwareInstalledType{}
-		softInstall.Display_name = splittedSoft[1]
-		softInstall.Version = splittedSoft[2]
-
-		comSoftInst.SoftwaresInstalled = append(comSoftInst.SoftwaresInstalled, softInstall)
-	}
-
-	comSoftInst.Total_software = len(comSoftInst.SoftwaresInstalled)
-
-	return &comSoftInst, nil
 }

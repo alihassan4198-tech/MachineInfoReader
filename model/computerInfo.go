@@ -54,12 +54,12 @@ type ComputerCPU struct {
 	Name                          string
 	Socket_designation            string
 	Virtualizationfirmwareenabled bool
-	No_of_cores                   int
 }
 
 type ComputerCPUType struct {
-	Caption  string
-	CPUCores []ComputerCPU
+	Caption     string
+	No_of_cores int
+	CPUCores    []ComputerCPU
 }
 
 // EndpointProtection SUB TYPE
@@ -168,15 +168,15 @@ type ComputerSystemType struct {
 	System_sku_number    string
 	System_type          string
 	Primary_owner_name   string
-	Total_phsical_memory int64
+	Total_phsical_memory string
 }
 
 type ComputerPatchesType struct {
-	Total_number_of_upates int
-	SecurityUpdates        int
-	Patches                []string
-	Patch_name             string
-	Patch_version          string
+	Total_number_of_updates int
+	SecurityUpdates         int
+	Patches                 []string
+	Patch_name              string
+	Patch_version           string
 }
 
 type ComputerInfoType struct {
