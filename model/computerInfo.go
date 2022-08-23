@@ -32,7 +32,7 @@ type ComputerBiosType struct {
 	Description            string
 	Installablelanguages   int
 	Installdate            string
-	Listoflanguages        []string
+	Listoflanguages        string
 	Primarybios            bool
 	Releasedate            string
 	Smbiosmajorversion     string
@@ -57,8 +57,9 @@ type ComputerCPU struct {
 }
 
 type ComputerCPUType struct {
-	Caption  string
-	CPUCores []ComputerCPU
+	Caption     string
+	No_of_cores int
+	CPUCores    []ComputerCPU
 }
 
 // EndpointProtection SUB TYPE
@@ -122,7 +123,7 @@ type ComputerOSType struct {
 	Os_architecture string
 	Os_version      string
 	Release         string
-	Lastbootuptime  int
+	Lastbootuptime  string
 	Lts             bool
 }
 
@@ -167,15 +168,15 @@ type ComputerSystemType struct {
 	System_sku_number    string
 	System_type          string
 	Primary_owner_name   string
-	Total_phsical_memory int64
+	Total_phsical_memory string
 }
 
 type ComputerPatchesType struct {
-	Total_number_of_upates int
-	SecurityUpdates        int
-	Patches                []string
-	Patch_name             string
-	Patch_version          string
+	Total_number_of_updates int
+	SecurityUpdates         int
+	Patches                 []string
+	Patch_name              string
+	Patch_version           string
 }
 
 type ComputerInfoType struct {
