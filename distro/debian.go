@@ -29,6 +29,9 @@ const (
 	find3 = "Description"
 )
 
+func MacGetAllInfoInMap() {
+}
+
 func (db *DebianBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
 	// var info model.ComputerInfoType
 
