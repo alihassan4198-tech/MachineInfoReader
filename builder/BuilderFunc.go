@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+
+	// "machine_info_gatherer/distro/systemprofiler"
+
 	"machine_info_gatherer/model"
 	"os"
 
@@ -46,7 +49,7 @@ func CreateJsonFile(info interface{}, fileName string) {
 
 }
 
-func readJSONFile(filename string) (interface{}, error) {
+func ReadJSONFile(filename string) (interface{}, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -58,7 +61,7 @@ func readJSONFile(filename string) (interface{}, error) {
 
 func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 
-	data, err := readJSONFile("./" + JsonFileName + ".json")
+	data, err := ReadJSONFile("./" + JsonFileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}

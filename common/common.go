@@ -74,7 +74,7 @@ func RunFullCommand(command string) (string, error) {
 	go func() { done <- cmd.Wait() }()
 
 	// Start a timer
-	timeout := time.After(5 * time.Second)
+	timeout := time.After(100 * time.Second)
 
 	// The select statement allows us to execute based on which channel
 	// we get a message from first.
@@ -107,8 +107,8 @@ func RunFullCommandWithSudo(cmd string) (string, error) {
 	return RunFullCommandNoTimeOut(cmd)
 }
 
-func ParseService(svc string) *model.ServiceType {
-	service := model.ServiceType{}
+func ParseService(svc string) *model.Service {
+	service := model.Service{}
 
 	svc = strings.ReplaceAll(svc, "●", " ")
 
@@ -126,19 +126,60 @@ func ParseService(svc string) *model.ServiceType {
 func ReadOSRelease() *map[string]string {
 	ctx := context.Background()
 	var b []byte
+	var isAnyError bool = false
 
 	sys := os.DirFS("/")
 
 	// Look for an os-release file.
 	b, err := fs.ReadFile(sys, osrelease.Path)
 	if err != nil {
+		isAnyError = true
 		fmt.Printf("error:%#v", err)
 	}
 	m, err := osrelease.Parse(ctx, bytes.NewReader(b))
 	if err != nil {
+		isAnyError = true
 		fmt.Printf("error:%#v", err)
 	}
+
+	if isAnyError {
+		// Mac Detection Method
+		result, err := exec.Command("sw_vers").CombinedOutput()
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
+		if strings.Contains(strings.ToLower(string(result)), strings.ToLower("Mac")) {
+			m["ID_LIKE"] = "darwin"
+			return &m
+		}
+	}
+
 	return &m
+}
+
+func LinesToArray(linesInString string, skipFirstLines int) []string {
+
+	lines := strings.Split(linesInString, "\n")
+
+	lines = lines[skipFirstLines : len(lines)-1]
+
+	return lines
+}
+
+func MakeMapOfLines(m map[string]string, input string) map[string]string {
+	lines := strings.Split(input, "\n")
+
+	// var infoMap = make(map[string]string)
+
+	for _, line := range lines {
+		if strings.Contains(line, ":") {
+			mapKeyVal := strings.Split(line, ":")
+			m[strings.TrimSpace(mapKeyVal[0])] = strings.TrimSpace(mapKeyVal[1])
+		}
+	}
+
+	return m
 }
 
 func RemoveCSVExtras(s string) string {

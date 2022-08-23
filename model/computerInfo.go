@@ -32,7 +32,7 @@ type ComputerBiosType struct {
 	Description            string
 	Installablelanguages   int
 	Installdate            string
-	Listoflanguages        []string
+	Listoflanguages        string
 	Primarybios            bool
 	Releasedate            string
 	Smbiosmajorversion     string
@@ -57,8 +57,9 @@ type ComputerCPU struct {
 }
 
 type ComputerCPUType struct {
-	Caption  string
-	CPUCores []ComputerCPU
+	Caption     string
+	No_of_cores int
+	CPUCores    []ComputerCPU
 }
 
 // EndpointProtection SUB TYPE
@@ -78,7 +79,7 @@ type ComputerEndpointProtectionType struct {
 }
 
 // FirewallRules SUB TYPE
-type FirewallRuleType struct {
+type FirewallRule struct {
 	TableName      string
 	ChainName      string
 	Enabled        string
@@ -99,7 +100,7 @@ type FirewallRuleType struct {
 type ComputerFirewallRulesType struct {
 	Total_rules  int
 	Active_state string
-	FW_rules     []FirewallRuleType
+	FW_rules     []FirewallRule
 }
 
 type ComputerNICType struct {
@@ -122,12 +123,12 @@ type ComputerOSType struct {
 	Os_architecture string
 	Os_version      string
 	Release         string
-	Lastbootuptime  int
+	Lastbootuptime  string
 	Lts             bool
 }
 
 // Services SUB TYPE
-type ServiceType struct {
+type Service struct {
 	Name         string
 	Display_name string
 	Process_id   int
@@ -140,7 +141,7 @@ type ServiceType struct {
 
 type ComputerServicesType struct {
 	TotalServciesRunning int
-	Services             []ServiceType
+	Services             []Service
 }
 
 // Software Installed SUB TYPE
@@ -167,15 +168,15 @@ type ComputerSystemType struct {
 	System_sku_number    string
 	System_type          string
 	Primary_owner_name   string
-	Total_phsical_memory int64
+	Total_phsical_memory string
 }
 
 type ComputerPatchesType struct {
-	Total_number_of_upates int
-	SecurityUpdates        int
-	Patches                []string
-	Patch_name             string
-	Patch_version          string
+	Total_number_of_updates int
+	SecurityUpdates         int
+	Patches                 []string
+	Patch_name              string
+	Patch_version           string
 }
 
 type ComputerInfoType struct {
