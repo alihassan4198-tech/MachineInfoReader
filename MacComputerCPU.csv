@@ -1,0 +1,8 @@
+/Device_id,/Manufacturer,/Max_clock_speed,/Name,/Socket_designation,/Virtualizationfirmwareenabled
+0,Apple device,3.52 GHz,hardware_overview,,false
+1,Apple device,3.52 GHz,hardware_overview,,false
+2,Apple device,3.52 GHz,hardware_overview,,false
+3,Apple device,3.52 GHz,hardware_overview,,false
+
+/Caption
+CPU
