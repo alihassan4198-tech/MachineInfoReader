@@ -1,11 +1,13 @@
 package jsoncreator
 
 import (
+	"fmt"
 	"machine_info_gatherer/builder"
 	"machine_info_gatherer/model"
 )
 
 func JsonFilesCreator(info *model.ComputerInfoType) {
+	fmt.Println("Creating JSON files...")
 	builder.CreateJsonFile(info.ComputerBaseboard, "ComputerBaseboard")
 	builder.CreateJsonFile(info.ComputerBios, "ComputerBios")
 	builder.CreateJsonFile(info.ComputerCPU.CPUCores, "ComputerCPU")

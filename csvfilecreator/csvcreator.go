@@ -1,11 +1,13 @@
 package csvfilecreator
 
 import (
+	"fmt"
 	"machine_info_gatherer/builder"
 	"machine_info_gatherer/model"
 )
 
 func CsvFilesCreator(info *model.ComputerInfoType) {
+	fmt.Println("Creating CSV files...")
 	builder.CreateCSVFile("ComputerBaseboard", info)
 	builder.CreateCSVFile("ComputerBios", info)
 	builder.CreateCSVFile("ComputerCPU", info)
