@@ -32,7 +32,7 @@ type ComputerBiosType struct {
 	Description            string
 	Installablelanguages   int
 	Installdate            string
-	Listoflanguages        []string
+	Listoflanguages        string
 	Primarybios            bool
 	Releasedate            string
 	Smbiosmajorversion     string

@@ -15,12 +15,12 @@ import (
 
 // Mac
 
-const (
-	find0 = "Name"
-	find1 = "Version"
-	find2 = "Architecture"
-	find3 = "Description"
-)
+// const (
+// 	find0 = "Name"
+// 	find1 = "Version"
+// 	find2 = "Architecture"
+// 	find3 = "Description"
+// )
 
 type MacBased struct {
 	LinuxBase
@@ -28,8 +28,11 @@ type MacBased struct {
 
 var infoMap systemprofiler.DarwinSystemProfilerInfo
 
+// var infoMap model.ComputerInfoType
+
 func MacGetAllInfoInMap() {
 	infoMap = systemprofiler.DarwinSystemProfiler()
+	// infoMap = model.ComputerInfoType
 }
 
 func (mb *MacBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
@@ -110,7 +113,15 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	}
 
 	cbios.Currentlanguage = infoMap.SPInternational.SpInternationalDataType[1].SystemLanguages[0]
-	cbios.Listoflanguages = infoMap.SPInternational.SpInternationalDataType[1].SystemInterfaceLanguages
+
+	output := infoMap.SPInternational.SpInternationalDataType[1].SystemInterfaceLanguages
+	var a string
+	for index, i := range output {
+		concatenated := fmt.Sprint(index, ") ", i, "  ")
+		a += concatenated
+	}
+	cbios.Listoflanguages = strings.ReplaceAll(a, "  ", "\n")
+
 	cbios.Status = ""
 	cbios.Releasedate = ""
 	cbios.Softwareelementid = ""
@@ -140,12 +151,6 @@ func (mb *MacBased) DistroGetComputerBios() (*model.ComputerBiosType, error) {
 	} else {
 		cbios.Systembiosmajorversion = imaj
 	}
-	// imin, err := strconv.Atoi(min)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// } else {
-	// 	cbios.Systembiosminorversion = imin
-	// }
 
 	return &cbios, nil
 }
@@ -189,11 +194,6 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 
 	cfwRules := model.ComputerFirewallRulesType{}
 	cfwRules.Active_state = common.RootNeeded(infoMap.SPFirewall.SpFirewallDataType[0].SpfirewallGlobalstate)
-
-	// cfw := model.FirewallRule{}
-	// cfw.Enabled = common.RootNeeded(infoMap.SPFirewall.SpFirewallDataType[0].SpfirewallStealthenabled)
-
-	// cfwRules.FW_rules = append(cfwRules.FW_rules, cfw)
 	return &cfwRules, nil
 }
 
