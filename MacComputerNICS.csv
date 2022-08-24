@@ -1,5 +1,0 @@
-/Caption,/Dhcp_server,/Ip_enabled,/Mac_address,/Model,/Default_ip_gateway/0,/Ip_subnet/0,/Ipaddress/0,/Ipaddress/1
-NetworkNic,,false,,Ethernet,,,,
-IPv4,,true,54:48:e6:9c:8c:32,,192.168.31.1,255.255.255.0,192.168.31.129,169.254.0.0
-Dhcp,192.168.31.1,true,,,,255.255.255.0,192.168.31.1,
-DNS,,true,,,,,192.168.31.1,

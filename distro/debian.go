@@ -142,8 +142,14 @@ func (db *DebianBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 
 func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
-	// soft , err := ghw.
-
+	e := model.EndpointProtectionSoftwareType{}
+	e.Type = ""
+	e.Name = ""
+	e.State = ""
+	e.Db_status = ""
+	e.Time_stamp = 0
+	e.Is_default = ""
+	epsoft.Softwares = append(epsoft.Softwares, e)
 	return &epsoft, nil
 }
 
@@ -163,6 +169,7 @@ func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewall
 		if err != nil {
 			fmt.Println(err)
 		}
+		fmt.Println("Chains Length", len(chains))
 		for _, chain := range chains {
 			structStat, err := ipt.StructuredStats(table, chain)
 			if err != nil {
@@ -258,12 +265,6 @@ func (db *DebianBased) DistroGetComputerServices() (*model.ComputerServicesType,
 	return &comServ, nil
 }
 
-func (db *DebianBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
-	// Get Computer Softwares Installed Distro Wise
-
-	return &model.ComputerSoftwaresInstalledType{}, nil
-}
-
 func (db *DebianBased) DistroGetComputerSystem() (*model.ComputerSystemType, error) {
 
 	comSys := model.ComputerSystemType{}
@@ -274,27 +275,49 @@ func (db *DebianBased) DistroGetComputerSystem() (*model.ComputerSystemType, err
 	}
 	comSys.Domain = strings.TrimSpace(string(domainName))
 
-	manufacturer, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
+	comSys.Total_phsical_memory, err = common.RunFullCommand("grep MemTotal /proc/meminfo | awk '{print $2}'")
 	if err != nil {
 		fmt.Println(err)
-		comSys.Manufacturer = common.NeedSudoPreviliges(err)
-	} else {
-		comSys.Manufacturer = manufacturer
 	}
 
-	model, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-product-name")
+	// a, _ := common.RunFullCommand("uname")
+	// comSys.Pc_system_type, err = strconv.ParseInt(a, 10, 64)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	baseboard, err := ghw.Baseboard()
 	if err != nil {
 		fmt.Println(err)
-		comSys.Model = common.NeedSudoPreviliges(err)
-	} else {
-		comSys.Model = model
 	}
+	comSys.Manufacturer = common.RootNeeded(baseboard.Vendor)
+	comSys.Model = common.RootNeeded(baseboard.Product)
+	// manufacturer, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-manufacturer")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	comSys.Manufacturer = common.NeedSudoPreviliges(err)
+	// } else {
+	// 	comSys.Manufacturer = manufacturer
+	// }
+
+	// model, err := common.RunFullCommandWithSudo("dmidecode -s baseboard-product-name")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	comSys.Model = common.NeedSudoPreviliges(err)
+	// } else {
+	// 	comSys.Model = model
+	// }
 
 	return &comSys, nil
 }
 
 func (db *DebianBased) DistroGetComputerPatches() (*model.ComputerPatchesType, error) {
 	comPatch := model.ComputerPatchesType{}
+	comPatch.Total_number_of_updates = 0
+	comPatch.SecurityUpdates = 0
+	comPatch.Patches = []string{}
+	comPatch.Patch_name = ""
+	comPatch.Patch_version = ""
 
 	return &comPatch, nil
 }
@@ -344,7 +367,7 @@ func (db *DebianBased) DistroGetComputerBaseboard() (*model.ComputerBaseboardTyp
 	return &cb, nil
 }
 
-func (db *DebianBased) GetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
+func (db *DebianBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error) {
 	comSoftInst := model.ComputerSoftwaresInstalledType{}
 
 	installSoft, err := exec.Command("dpkg", "-l").Output()

@@ -10,7 +10,7 @@ import (
 func main() {
 	fmt.Println("Launching Machine Info Gatherer...")
 
-	// common.SetSudoPassword("786")
+	// common.SetSudoPassword("123456")
 
 	i := gatherer.GetInstance()
 	info := i.GatherInfo()

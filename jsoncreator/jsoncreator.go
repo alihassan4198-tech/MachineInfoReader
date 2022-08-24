@@ -11,7 +11,7 @@ func JsonFilesCreator(info *model.ComputerInfoType) {
 	builder.CreateJsonFile(info.ComputerBaseboard, "ComputerBaseboard")
 	builder.CreateJsonFile(info.ComputerBios, "ComputerBios")
 	builder.CreateJsonFile(info.ComputerCPU.CPUCores, "ComputerCPU")
-	builder.CreateJsonFile(info.ComputerEndpointProtection, "ComputerEndpointProtection")
+	builder.CreateJsonFile(info.ComputerEndpointProtection.Softwares, "ComputerEndpointProtection")
 	builder.CreateJsonFile(info.ComputerFirewallRules.FW_rules, "ComputerFirewallRules")
 	builder.CreateJsonFile(info.ComputerNICS, "ComputerNICS")
 	builder.CreateJsonFile(info.ComputerOS, "ComputerOS")
