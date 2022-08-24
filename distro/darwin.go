@@ -186,7 +186,14 @@ func (mb *MacBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 func (mb *MacBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 
 	epsoft := model.ComputerEndpointProtectionType{}
-
+	e := model.EndpointProtectionSoftwareType{}
+	e.Type = ""
+	e.Name = ""
+	e.State = ""
+	e.Db_status = ""
+	e.Time_stamp = 0
+	e.Is_default = ""
+	epsoft.Softwares = append(epsoft.Softwares, e)
 	return &epsoft, nil
 }
 
@@ -322,6 +329,10 @@ func (mb *MacBased) DistroGetComputerSystem() (*model.ComputerSystemType, error)
 
 func (mb *MacBased) DistroGetComputerPatches() (*model.ComputerPatchesType, error) {
 	comPatch := model.ComputerPatchesType{}
-
+	comPatch.Total_number_of_updates = 0
+	comPatch.SecurityUpdates = 0
+	comPatch.Patches = []string{}
+	comPatch.Patch_name = ""
+	comPatch.Patch_version = ""
 	return &comPatch, nil
 }
