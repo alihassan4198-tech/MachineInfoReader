@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"machine_info_gatherer/csvfilecreator"
+	"machine_info_gatherer/csvfileuploader"
 	"machine_info_gatherer/gatherer"
 	"machine_info_gatherer/jsoncreator"
 )
@@ -16,5 +17,5 @@ func main() {
 	info := i.GatherInfo()
 	jsoncreator.JsonFilesCreator(info)
 	csvfilecreator.CsvFilesCreator(info)
-
+	csvfileuploader.CsvFilesUploader(info)
 }
