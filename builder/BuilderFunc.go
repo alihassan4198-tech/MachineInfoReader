@@ -9,7 +9,6 @@ import (
 
 	// "machine_info_gatherer/distro/systemprofiler"
 
-	"machine_info_gatherer/csvfilecreator"
 	"machine_info_gatherer/model"
 	"os"
 
@@ -77,7 +76,7 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 	// }
 
 	headerStyle := headerStyleTable["jsonpointer"]
-	myscvfile, err := os.Create("" + JsonFileName + ".csv")
+	myscvfile, err := os.Create(info.ComputerBaseboard.Computer_name + "" + JsonFileName + ".csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -103,17 +102,15 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 	}
 }
 
-
-
 func readJSON(r io.Reader) (interface{}, error) {
 	decoder := json.NewDecoder(r)
 	decoder.UseNumber()
-	
+
 	var data interface{}
 	if err := decoder.Decode(&data); err != nil {
 		return nil, err
 	}
-	
+
 	return data, nil
 }
 
@@ -125,14 +122,4 @@ func printCSV(w io.Writer, results []json2csv.KeyValue, headerStyle json2csv.Key
 		return err
 	}
 	return nil
-}
-
-func UploadCSVFile(Info *model.ComputerInfoType) {
-	usf , err := printCSV(w io.Writer, results []json2csv.KeyValue, headerStyle json2csv.KeyStyle, transpose bool)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(usf)
-	// a := csvfilecreator.CsvFilesCreator(Info)
-	// fmt.Println(a)
 }
