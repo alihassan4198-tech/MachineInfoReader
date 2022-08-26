@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"machine_info_gatherer/model"
 
 	// "machine_info_gatherer/distro/systemprofiler"
 
-	"machine_info_gatherer/model"
 	"os"
 
 	"github.com/tidwall/pretty"
@@ -76,7 +76,7 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
 	// }
 
 	headerStyle := headerStyleTable["jsonpointer"]
-	myscvfile, err := os.Create(info.ComputerBaseboard.Computer_name + "" + JsonFileName + ".csv")
+	myscvfile, err := os.Create(Info.ComputerBaseboard.Computer_name + "_" + "" + JsonFileName + ".csv")
 	if err != nil {
 		log.Fatal(err)
 	}

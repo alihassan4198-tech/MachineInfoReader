@@ -1,9 +1,0 @@
-/Caption,/Dhcp_server,/Ip_enabled,/Mac_address,/Model
-br-90e8a2e06259,,false,02:42:95:9d:88:10,
-br-d1014726901f,,false,02:42:85:d0:93:fc,
-docker0,,false,02:42:23:39:9a:01,
-ens38,,false,00:0c:29:7f:41:87,
-veth1a105a0,,false,66:5f:0b:73:84:c9,
-vetha2e7df3,,false,3a:2f:1e:d3:65:ae,
-vethe268fcf,,false,b6:d3:d2:e9:f5:72,
-vethee912ab,,false,9a:37:96:e6:d4:27,
