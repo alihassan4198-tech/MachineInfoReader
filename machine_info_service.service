@@ -1,0 +1,20 @@
+[Unit]
+Description=Running service
+ConditionPathExists="/home/$USER/Desktop/machine-info-selector/MachineInfoReader/machine_info_gatherer"
+ 
+[Service]
+Type=simple
+
+Restart=on-failure
+RestartSec=5
+WorkingDirectory=/home/$USER/Desktop/machine-info-selector/MachineInfoReader
+ExecStart=/home/$USER/Desktop/machine-info-selector/MachineInfoReader/machine_info_gatherer
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=runningservice
+ 
+[Install]
+WantedBy=multi-user.target
