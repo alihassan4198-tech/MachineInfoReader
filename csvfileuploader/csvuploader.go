@@ -10,12 +10,15 @@ import (
 	"os"
 )
 
-func UploadCSVFile(fieldName, fileName string, url string) {
-	b, w := CSVFileToBytes(fieldName, fileName)
+func UploadCSVFile(fieldName, fileName string, url string) error {
+	b, w, err := CSVFileToBytes(fieldName, fileName)
+	if err != nil {
+		return err
+	}
 	req, err := http.NewRequest("POST", url, &b)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	client := &http.Client{}
@@ -23,17 +26,22 @@ func UploadCSVFile(fieldName, fileName string, url string) {
 
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	defer resp.Body.Close()
+	return nil
 }
 
-func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer) {
+func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer, error) {
 	var b bytes.Buffer
 	var err error
 	w := multipart.NewWriter(&b)
 	var fw io.Writer
-	file := mustOpen(fileName)
+	file, err := mustOpen(fileName)
+	if err != nil {
+		return b,nil,err
+	}
+
 
 	if fw, err = w.CreateFormFile(fieldName, file.Name()); err != nil {
 		fmt.Println(err)
@@ -42,21 +50,21 @@ func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer
 		fmt.Println(err)
 	}
 	w.Close()
-	return b, w
+	return b, w, err
 }
 
-func mustOpen(f string) *os.File {
+func mustOpen(f string) (*os.File, error) {
 	pwd, _ := os.Getwd()
 	path := pwd + "/" + f
 	r, err := os.Open(path)
 	if err != nil {
 		fmt.Println("PWD: ", pwd)
-		panic(err)
+		return nil, err
 	}
-	return r
+	return r, nil
 }
 
-func CsvFilesUploader(info *model.ComputerInfoType) {
+func CsvFilesUploader(info *model.ComputerInfoType) error {
 	fmt.Println("Uploading CSV files...")
 	UploadCSVFile("ComputerBaseboard", info.ComputerBaseboard.Computer_name+"_"+"ComputerBaseboard.csv", "http://localhost:3010/uploadfile")
 	UploadCSVFile("ComputerBios", info.ComputerBaseboard.Computer_name+"_"+"ComputerBios.csv", "http://localhost:3010/uploadfile")
@@ -69,4 +77,5 @@ func CsvFilesUploader(info *model.ComputerInfoType) {
 	UploadCSVFile("ComputerServices", info.ComputerBaseboard.Computer_name+"_"+"ComputerServices.csv", "http://localhost:3010/uploadfile")
 	UploadCSVFile("ComputerSoftwaresInstalled", info.ComputerBaseboard.Computer_name+"_"+"ComputerSoftwaresInstalled.csv", "http://localhost:3010/uploadfile")
 	UploadCSVFile("ComputerSystem", info.ComputerBaseboard.Computer_name+"_"+"ComputerSystem.csv", "http://localhost:3010/uploadfile")
-}
+	return nil
+}	
