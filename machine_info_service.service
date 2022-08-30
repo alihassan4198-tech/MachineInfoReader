@@ -1,20 +1,29 @@
 [Unit]
 Description=Running service
-# ConditionPathExists=/home/abdul/Desktop/machine-info-selector/MachineInfoReader/machine_info_gatherer
+ConditionPathExists=/usr/bin/machine_info_gatherer
  
 [Service]
 Type=simple
-
+#User=root
 Restart=on-failure
 RestartSec=5
-WorkingDirectory=/home/abdul/Desktop/machine-info-selector/MachineInfoReader
-ExecStart=/home/abdul/Desktop/machine-info-selector/MachineInfoReader/machine_info_gatherer
+#WorkingDirectory=/home/abdul/Desktop/machine-info-selector/MachineInfoReader
+#ExecStart=/home/abdul/Desktop/machine-info-selector/MachineInfoReader/machine_info_gatherer
+WorkingDirectory=/usr/bin
+ExecStart=/usr/bin/machine_info_gatherer
+#ExecStart=
 
 # make sure log directory exists and owned by syslog
 PermissionsStartOnly=true
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=runningservice
+SyslogIdentifier=machine_info_running
+
+#[Timer]
+#OnCalender= *-*-* 18:00:00
+#OnCalender= *-*-* *:*:00
+
+
  
 [Install]
 WantedBy=multi-user.target
