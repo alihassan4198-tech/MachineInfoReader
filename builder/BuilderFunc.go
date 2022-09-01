@@ -37,8 +37,9 @@ func (cw *CSVWriter) WriteStructInJson(info interface{}) string {
 	return prettyJsonInfoStr
 }
 
-func CreateJsonFile(info interface{}, fileName string) {
-	jsonFile, err := os.Create("" + fileName + ".json")
+func CreateJsonFile(info interface{}, fileName string, path string) {
+	// jsonFile, err := os.Create("" + fileName + ".json")
+	jsonFile, err := os.Create(path + fileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -59,9 +60,10 @@ func ReadJSONFile(filename string) (interface{}, error) {
 	return readJSON(f)
 }
 
-func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
+func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType, path string) {
 
-	data, err := ReadJSONFile("./" + JsonFileName + ".json")
+	// data, err := ReadJSONFile("./" + JsonFileName + ".json")
+	data, err := ReadJSONFile(path + JsonFileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}
