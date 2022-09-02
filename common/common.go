@@ -18,11 +18,20 @@ import (
 
 var (
 	SudoUserPassword = ""
+	path             = ""
 )
 
 const (
 	rootAccessNeeded = " (need root previliges)"
 )
+
+func PathSetter(argPath string) {
+	path = argPath
+}
+
+func PathGetter() string {
+	return path
+}
 
 func SetSudoPassword(pass string) {
 	SudoUserPassword = pass

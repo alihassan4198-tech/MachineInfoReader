@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
 
 	// "machine_info_gatherer/distro/systemprofiler"
@@ -37,9 +38,8 @@ func (cw *CSVWriter) WriteStructInJson(info interface{}) string {
 	return prettyJsonInfoStr
 }
 
-func CreateJsonFile(info interface{}, fileName string, path string) {
-	// jsonFile, err := os.Create("" + fileName + ".json")
-	jsonFile, err := os.Create(path + fileName + ".json")
+func CreateJsonFile(info interface{}, fileName string) {
+	jsonFile, err := os.Create(common.PathGetter() + "/" + fileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -60,10 +60,9 @@ func ReadJSONFile(filename string) (interface{}, error) {
 	return readJSON(f)
 }
 
-func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType, path string) {
+func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType) {
+	data, err := ReadJSONFile(common.PathGetter() + "/" + JsonFileName + ".json")
 
-	// data, err := ReadJSONFile("./" + JsonFileName + ".json")
-	data, err := ReadJSONFile(path + JsonFileName + ".json")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -78,7 +77,7 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType, path strin
 	// }
 
 	headerStyle := headerStyleTable["jsonpointer"]
-	myscvfile, err := os.Create(Info.ComputerBaseboard.Computer_name + "_" + "" + JsonFileName + ".csv")
+	myscvfile, err := os.Create(common.PathGetter() + Info.ComputerBaseboard.Computer_name + "_" + "" + JsonFileName + ".csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,7 +97,7 @@ func CreateCSVFile(JsonFileName string, Info *model.ComputerInfoType, path strin
 		Info.ComputerServices.AppendAllMapsInCSV(myscvfile)
 	}
 
-	e := os.Remove("" + JsonFileName + ".json")
+	e := os.Remove(common.PathGetter() + "" + JsonFileName + ".json")
 	if e != nil {
 		fmt.Println(e)
 	}
