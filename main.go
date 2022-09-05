@@ -15,8 +15,7 @@ func main() {
 
 	// common.SetSudoPassword("123456")
 
-	args := os.Args
-	common.PathSetter(args[1])
+	common.PathSetter(os.Args[1])
 	i := gatherer.GetInstance()
 	info := i.GatherInfo()
 	jsoncreator.JsonFilesCreator(info)

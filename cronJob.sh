@@ -4,6 +4,7 @@ then
     echo "Directory Already Exists Can't Create Again"
 else
     mkdir /tmp/machineinfocsv
+    chmod 777 /tmp/machineinfocsv #ADD FOR PERMISSIONS
 fi
 
 if [ -e /tmp/cron.txt ]
@@ -11,7 +12,7 @@ then
     echo "Cron Already Installed"
     crontab -l | grep -v '/MachineInfoReader/machine_info_gatherer'  | crontab -
     crontab -l > mycron
-    echo "* 18 * * *" /MachineInfoReader/machine_info_gatherer >> mycron
+    echo "* * * * *" /MachineInfoReader/machine_info_gatherer >> mycron
     crontab mycron
     rm mycron
     

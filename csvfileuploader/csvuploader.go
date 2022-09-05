@@ -21,6 +21,8 @@ func UploadCSVFile(fieldName, fileName string, url string) error {
 		fmt.Println(err)
 		return err
 	}
+
+	// ERROR DOWN
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -38,7 +40,7 @@ func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer
 	var err error
 	w := multipart.NewWriter(&b)
 	var fw io.Writer
-	file, err := mustOpen(common.PathGetter() + fileName) // For Test
+	file, err := mustOpen(common.PathGetter() + fileName)
 	if err != nil {
 		return b, nil, err
 	}
@@ -56,7 +58,8 @@ func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer
 func mustOpen(f string) (*os.File, error) {
 	// pwd, _ := os.Getwd()
 	pwd := common.PathGetter()
-	path := pwd + "/" + f
+	// path := pwd + "/" + f
+	path := f
 	r, err := os.Open(path)
 	if err != nil {
 		fmt.Println("PWD: ", pwd)
