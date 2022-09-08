@@ -7,6 +7,7 @@ import (
 	"machine_info_gatherer/csvfileuploader"
 	"machine_info_gatherer/gatherer"
 	"machine_info_gatherer/jsoncreator"
+	// "machine_info_gatherer/logsexplore"
 	"os"
 )
 
@@ -14,7 +15,7 @@ func main() {
 	fmt.Println("Launching Machine Info Gatherer...")
 
 	// common.SetSudoPassword("123456")
-
+	// logsexplore.MyLogger()
 	common.PathSetter(os.Args[1])
 	i := gatherer.GetInstance()
 	info := i.GatherInfo()
