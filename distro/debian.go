@@ -159,6 +159,11 @@ func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewall
 
 	tables := []string{"filter", "mangle", "nat", "raw"}
 
+	if !strings.Contains(os.Getenv("PATH"), ":/sbin") {
+		os.Setenv("PATH", os.Getenv("PATH")+":/sbin")
+		fmt.Println("PATH : ", os.Getenv("PATH"))
+	}
+
 	ipt, err := iptables.New()
 	if err != nil {
 		fmt.Println(err)
