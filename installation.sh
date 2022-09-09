@@ -20,7 +20,7 @@ then
     echo "Cron Already Installed, Now Overriding"
     crontab -l | grep -v '/bin/trigger.sh' | crontab -
     crontab -l > mycron
-    echo "* 18 * * *" /bin/trigger.sh >> mycron
+    echo "* 6 * * *" /bin/trigger.sh >> mycron
     crontab mycron
     rm mycron
     
@@ -28,7 +28,7 @@ else
     echo "Cron Not Installed, Installing"
     touch /home/cron.txt
     crontab -l > mycron
-    echo "* 18 * * *" /bin/trigger.sh >> mycron
+    echo "* 6 * * *" /bin/trigger.sh >> mycron
     crontab mycron
     rm mycron
 fi
