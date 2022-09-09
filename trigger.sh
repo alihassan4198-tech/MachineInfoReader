@@ -1,1 +1,1 @@
-/bin/machine_info_gatherer /tmp/machineinfocsv/
+/bin/machine_info_gatherer /home/machineinfocsv/

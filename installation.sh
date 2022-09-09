@@ -3,19 +3,19 @@ cp tc-uploader /bin/
 cp trigger.sh /bin/
 
 
-
-
 echo "Installing Cron Job"
-if [ -d /tmp/machineinfocsv ]
+if [ -d /home/machineinfocsv ]
 then 
     echo "Directory Already Exists, Can't Create Again"
 else
     echo "Directory Creating..."
-    mkdir /tmp/machineinfocsv
-    chmod 777 /tmp/machineinfocsv   
+    mkdir /home/machineinfocsv
+    chmod 777 /home/machineinfocsv
+    mkdir /home/machineinfoserver
+    chmod 777 /home/machineinfoserver
 fi
 
-if [ -e /tmp/cron.txt ]
+if [ -e /home/cron.txt ]
 then 
     echo "Cron Already Installed, Now Overriding"
     crontab -l | grep -v '/bin/trigger.sh' | crontab -
@@ -26,7 +26,7 @@ then
     
 else
     echo "Cron Not Installed, Installing"
-    touch /tmp/cron.txt
+    touch /home/cron.txt
     crontab -l > mycron
     echo "* * * * *" /bin/trigger.sh >> mycron
     crontab mycron
