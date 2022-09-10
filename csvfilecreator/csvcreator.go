@@ -8,6 +8,7 @@ import (
 
 func CsvFilesCreator(info *model.ComputerInfoType) {
 	fmt.Println("Creating CSV files...")
+
 	builder.CreateCSVFile("ComputerBaseboard", info)
 	builder.CreateCSVFile("ComputerBios", info)
 	builder.CreateCSVFile("ComputerCPU", info)

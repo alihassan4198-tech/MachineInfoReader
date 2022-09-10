@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
 	"mime/multipart"
 	"net/http"
@@ -20,6 +21,8 @@ func UploadCSVFile(fieldName, fileName string, url string) error {
 		fmt.Println(err)
 		return err
 	}
+
+	// ERROR DOWN
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -37,11 +40,10 @@ func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer
 	var err error
 	w := multipart.NewWriter(&b)
 	var fw io.Writer
-	file, err := mustOpen(fileName)
+	file, err := mustOpen(common.PathGetter() + fileName)
 	if err != nil {
-		return b,nil,err
+		return b, nil, err
 	}
-
 
 	if fw, err = w.CreateFormFile(fieldName, file.Name()); err != nil {
 		fmt.Println(err)
@@ -54,8 +56,10 @@ func CSVFileToBytes(fieldName, fileName string) (bytes.Buffer, *multipart.Writer
 }
 
 func mustOpen(f string) (*os.File, error) {
-	pwd, _ := os.Getwd()
-	path := pwd + "/" + f
+	// pwd, _ := os.Getwd()
+	pwd := common.PathGetter()
+	// path := pwd + "/" + f
+	path := f
 	r, err := os.Open(path)
 	if err != nil {
 		fmt.Println("PWD: ", pwd)
@@ -78,4 +82,4 @@ func CsvFilesUploader(info *model.ComputerInfoType) error {
 	UploadCSVFile("ComputerSoftwaresInstalled", info.ComputerBaseboard.Computer_name+"_"+"ComputerSoftwaresInstalled.csv", "http://localhost:3010/uploadfile")
 	UploadCSVFile("ComputerSystem", info.ComputerBaseboard.Computer_name+"_"+"ComputerSystem.csv", "http://localhost:3010/uploadfile")
 	return nil
-}	
+}
