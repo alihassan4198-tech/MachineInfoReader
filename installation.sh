@@ -1,18 +1,29 @@
-
-# Variables
-MACHINE_INFO_OUTPUT=/home/machineinfocsv
-MACHINE_INFO_SERVER=/home/machineinfoserver
-MACHINE_INFO_LOG=/home/machineinfolog
-CRON_FLAG=/home/cron.txt
-SERVICE_INSTALLED=/lib/systemd/system
-BINARY_INSTALLED_PATH=/bin
+if [[ "$OSTYPE" == "Linux"* ]];
+then
+    # --------------------FOR LINUX----------------------
+    # Variables
+    MACHINE_INFO_OUTPUT=/home/machineinfocsv
+    MACHINE_INFO_SERVER=/home/machineinfoserver
+    MACHINE_INFO_LOG=/home/machineinfolog
+    CRON_FLAG=/home/cron.txt
+    BINARY_INSTALLED_PATH=/bin
+    SERVICE_INSTALLED=/lib/systemd/system
+else
+    #------------------ FOR MacOX------------------------
+    # Variables
+    SERVICE_INSTALLED=/System/Library/Services
+    MACHINE_INFO_OUTPUT=/Users/$USER/machineinfocsv
+    MACHINE_INFO_SERVER=/Users/$USER/machineinfoserver
+    MACHINE_INFO_LOG=/Users/$USER/machineinfolog
+    CRON_FLAG=/Users/$USER/cron.txt
+    BINARY_INSTALLED_PATH=/bin
+fi
 
 
 # Copy Binaries
 cp machine_info_gatherer $BINARY_INSTALLED_PATH/
 cp tc-uploader $BINARY_INSTALLED_PATH/
 cp trigger.sh $BINARY_INSTALLED_PATH/
-
 
 # Cron Installation
 echo "Installing Cron Job"
@@ -69,3 +80,4 @@ echo "Starting Service"
 systemctl enable machine_info_server.service
 systemctl start machine_info_server.service
 systemctl status machine_info_server.service
+
