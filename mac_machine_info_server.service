@@ -1,0 +1,19 @@
+[Unit]
+Description=Running service
+ 
+[Service]
+Type=simple
+
+
+Restart=always
+RestartSec=5
+WorkingDirectory=/Users/abdulrehman
+ExecStart=/Users/abdulrehman/tc-uploader
+
+PermissionsStartOnly=true
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=runningservice
+ 
+[Install]
+WantedBy=multi-user.target
