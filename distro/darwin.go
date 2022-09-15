@@ -13,6 +13,11 @@ import (
 	"strings"
 )
 
+type MacBased struct {
+	DarwinBase
+	// LinuxBase
+}
+
 // Mac
 
 // const (
@@ -21,10 +26,6 @@ import (
 // 	find2 = "Architecture"
 // 	find3 = "Description"
 // )
-
-type MacBased struct {
-	LinuxBase
-}
 
 var infoMap systemprofiler.DarwinSystemProfilerInfo
 

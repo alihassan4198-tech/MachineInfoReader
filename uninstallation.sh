@@ -76,6 +76,7 @@ else
         rm -rf $MACHINE_INFO_OUTPUT
         rm -rf $MACHINE_INFO_SERVER
         rm -rf $MACHINE_INFO_LOG
+        rm -rf $SERVICE_INSTALLED
     else
         echo "Directory Doesn't Exist..., Can't Delete"
     fi

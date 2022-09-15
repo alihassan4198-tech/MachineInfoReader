@@ -1,6 +1,6 @@
 package distro
 
-// Linux Base Distro
+// Linux & Mac Base Distro
 
 const (
 	baseboardCaption string = "Base Board"
@@ -11,4 +11,7 @@ const (
 )
 
 type LinuxBase struct {
+}
+
+type DarwinBase struct {
 }

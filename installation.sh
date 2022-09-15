@@ -77,13 +77,14 @@ else
     MACHINE_INFO_LOG=/Users/abdulrehman/machineinfolog
     CRON_FLAG=/Users/abdulrehman/cron.txt
     BINARY_INSTALLED_PATH=/Users/abdulrehman
-    # SERVICE_INSTALLED=/System/Library/Services
-    SERVICE_INSTALLED=/Users/abdulrehman
+    SERVICE_INSTALLED=/Library/Services
+    # SERVICE_INSTALLED=/Users/abdulrehman
 
     # Copy Binaries
     cp machine_info_gatherer $BINARY_INSTALLED_PATH/
     cp tc-uploader $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
+
 
     # Cron Installation
     echo "Installing Cron Job in MacOS"
@@ -93,11 +94,19 @@ else
     else
         echo "Directory Creating in MacOS..."
         mkdir $MACHINE_INFO_OUTPUT
+        # echo "hello start 0"
         chmod 777 $MACHINE_INFO_OUTPUT
         mkdir $MACHINE_INFO_SERVER
+        # echo "hello start 1"
         chmod 777 $MACHINE_INFO_SERVER
         mkdir $MACHINE_INFO_LOG
+        # echo "hello start"
         chmod 777 $MACHINE_INFO_LOG
+        # echo "hello start"
+        echo $USER
+        mkdir $SERVICE_INSTALLED
+        chmod 777 $SERVICE_INSTALLED
+        # echo "hello start"
     fi
 
     if [ -e $CRON_FLAG ]
@@ -105,7 +114,7 @@ else
         echo "Cron Already Installed in MacOS, Now Overriding"
         crontab -l | grep -v "$BINARY_INSTALLED_PATH/trigger.sh" | crontab -
         crontab -l > mycron
-        echo "*/2 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "* * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
         

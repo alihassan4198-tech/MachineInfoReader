@@ -5,6 +5,7 @@ package systemprofiler
 
 import (
 	"encoding/json"
+	"fmt"
 	"machine_info_gatherer/common"
 	"sync"
 )
@@ -32,6 +33,8 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 
 	var darwinSPInfo DarwinSystemProfilerInfo = DarwinSystemProfilerInfo{}
 
+	fmt.Println(1)
+
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
 		defer wg.Done()
@@ -39,6 +42,7 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 		dspi.SPNetwork = DarwinGetSystemProfilerInfo[SpNetworkType]("SPNetworkDataType")
 
 	}(&darwinSPInfo)
+	fmt.Println(2)
 
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
@@ -47,6 +51,7 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 		dspi.SPNetworkVolume = DarwinGetSystemProfilerInfo[SpNetworkVolumeType]("SPNetworkVolumeDataType")
 
 	}(&darwinSPInfo)
+	fmt.Println(3)
 
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
@@ -246,5 +251,6 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 	}(&darwinSPInfo)
 
 	wg.Wait()
+	fmt.Println("All Routines Finished")
 	return darwinSPInfo
 }
