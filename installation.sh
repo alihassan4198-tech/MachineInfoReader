@@ -114,7 +114,7 @@ else
         echo "Cron Already Installed in MacOS, Now Overriding"
         crontab -l | grep -v "$BINARY_INSTALLED_PATH/trigger.sh" | crontab -
         crontab -l > mycron
-        echo "* * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "*/3 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
         
