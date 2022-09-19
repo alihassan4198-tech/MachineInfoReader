@@ -72,13 +72,14 @@ then
 else
     #------------------ FOR MacOX------------------------
     # Variables
-    MACHINE_INFO_OUTPUT=/Users/abdulrehman/machineinfocsv
-    MACHINE_INFO_SERVER=/Users/abdulrehman/machineinfoserver
-    MACHINE_INFO_LOG=/Users/abdulrehman/machineinfolog
-    CRON_FLAG=/Users/abdulrehman/cron.txt
-    BINARY_INSTALLED_PATH=/Users/abdulrehman
-    SERVICE_INSTALLED=/Library/Services
-    # SERVICE_INSTALLED=/Users/abdulrehman
+    MACHINE_INFO_OUTPUT=/Users/Shared/machineinfocsv
+    MACHINE_INFO_SERVER=/Users/Shared/machineinfoserver
+    MACHINE_INFO_LOG=/Users/Shared/machineinfolog
+    CRON_FLAG=/Users/Shared/cron.txt
+    # BINARY_INSTALLED_PATH=/Users/Shared
+    BINARY_INSTALLED_PATH=/Applications
+    # SERVICE_INSTALLED=/Library/Services
+    SERVICE_INSTALLED=/Users/Shared
 
     # Copy Binaries
     cp machine_info_gatherer $BINARY_INSTALLED_PATH/
@@ -94,19 +95,17 @@ else
     else
         echo "Directory Creating in MacOS..."
         mkdir $MACHINE_INFO_OUTPUT
-        # echo "hello start 0"
         chmod 777 $MACHINE_INFO_OUTPUT
+
         mkdir $MACHINE_INFO_SERVER
-        # echo "hello start 1"
         chmod 777 $MACHINE_INFO_SERVER
+
         mkdir $MACHINE_INFO_LOG
-        # echo "hello start"
         chmod 777 $MACHINE_INFO_LOG
-        # echo "hello start"
-        echo $USER
+        
         mkdir $SERVICE_INSTALLED
         chmod 777 $SERVICE_INSTALLED
-        # echo "hello start"
+        
     fi
 
     if [ -e $CRON_FLAG ]
@@ -114,7 +113,7 @@ else
         echo "Cron Already Installed in MacOS, Now Overriding"
         crontab -l | grep -v "$BINARY_INSTALLED_PATH/trigger.sh" | crontab -
         crontab -l > mycron
-        echo "*/3 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "*/5 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
         
@@ -122,7 +121,7 @@ else
         echo "Cron Not Installed in MacOS, Now Installing"
         touch $CRON_FLAG
         crontab -l > mycron
-        echo "*/3 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "*/5 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
     fi

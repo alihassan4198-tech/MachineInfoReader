@@ -55,13 +55,13 @@ else
     # ----------------------------- FOR MACOS -------------------------------------
     
     # Variables
-    MACHINE_INFO_OUTPUT=/Users/abdulrehman/machineinfocsv
-    MACHINE_INFO_SERVER=/Users/abdulrehman/machineinfoserver
-    MACHINE_INFO_LOG=/Users/abdulrehman/machineinfolog
-    CRON_FLAG=/Users/abdulrehman/cron.txt
-    BINARY_INSTALLED_PATH=/Users/abdulrehman
+    MACHINE_INFO_OUTPUT=/Users/Shared/machineinfocsv
+    MACHINE_INFO_SERVER=/Users/Shared/machineinfoserver
+    MACHINE_INFO_LOG=/Users/Shared/machineinfolog
+    CRON_FLAG=/Users/Shared/cron.txt
+    BINARY_INSTALLED_PATH=/Users/Shared
     # SERVICE_INSTALLED=/System/Library/Services
-    SERVICE_INSTALLED=/Users/abdulrehman
+    SERVICE_INSTALLED=/Users/Shared
 
     # Deleting Binaries
     rm $BINARY_INSTALLED_PATH/machine_info_gatherer

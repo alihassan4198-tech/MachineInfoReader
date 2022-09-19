@@ -24,10 +24,10 @@ func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
 	// fmt.Println("in GetComputerBaseboard start")//ok
 
 	currentDistro := distro.GetInstance()
-	fmt.Println(" in GetComputerBaseboard check data : ", currentDistro)
+	fmt.Println(" in GetComputerBaseboard check data : ", currentDistro) //ok
 
 	comBaseBoard, err := currentDistro.DistroGetComputerBaseboard()
-	// fmt.Println(" in GetComputerBaseboard check data : ", comBaseBoard)//ok
+	fmt.Println(" in GetComputerBaseboard check data : ", comBaseBoard) //ok
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -40,7 +40,6 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 	// defer debug.TimeTrack(time.Now(), debug.FileFunctionLine())
 
 	fmt.Println("in GetComputerBios start")
-
 	currentDistro := distro.GetInstance()
 	fmt.Println(" in GetComputerBios  check data current distro : ", currentDistro) //ok
 	cbios, err := currentDistro.DistroGetComputerBios()
