@@ -76,8 +76,8 @@ else
     MACHINE_INFO_SERVER=/Users/Shared/machineinfoserver
     MACHINE_INFO_LOG=/Users/Shared/machineinfolog
     CRON_FLAG=/Users/Shared/cron.txt
-    # BINARY_INSTALLED_PATH=/Users/Shared
-    BINARY_INSTALLED_PATH=/Applications
+    BINARY_INSTALLED_PATH=/Users/Shared
+    # BINARY_INSTALLED_PATH=/Applications
     # SERVICE_INSTALLED=/Library/Services
     SERVICE_INSTALLED=/Users/Shared
 
@@ -113,7 +113,7 @@ else
         echo "Cron Already Installed in MacOS, Now Overriding"
         crontab -l | grep -v "$BINARY_INSTALLED_PATH/trigger.sh" | crontab -
         crontab -l > mycron
-        echo "*/5 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "*/3 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
         
@@ -121,7 +121,7 @@ else
         echo "Cron Not Installed in MacOS, Now Installing"
         touch $CRON_FLAG
         crontab -l > mycron
-        echo "*/5 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
+        echo "*/3 * * * *" $BINARY_INSTALLED_PATH/trigger.sh >> mycron
         crontab mycron
         rm mycron
     fi

@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"machine_info_gatherer/common"
+	"os"
+	"strings"
 	"sync"
 )
 
@@ -14,6 +16,11 @@ func DarwinGetSystemProfilerInfo[T SpParallelATAType |
 	SpUniversalAccessType | SpSecureElementType | SpApplicationsType | SpAudioType | SpBluetoothType | SpCameraType | SpCardReaderType | SpiBridgeType | SpDeveloperToolsType | SpDiagnosticsType | SpDisabledSoftwareType | SpDiscBurningType | SpEthernetType | SpExtensionsType | SpFibreChannelType | SpFireWireType | SpFirewallType | SpFontsType | SpDisplaysType | SpFrameworksType | SpHardwareType | SpInstallHistoryType | SpInternationalType | SpLegacySoftwareType | SpNetworkLocationType | SpLogsType | SpManagedClientType | SpMemoryType | SpnvMeType | SpNetworkType | SppciType | SpParallelScsiType | SpPowerType | SpPrefPaneType | SpPrintersSoftwareType | SpPrintersType | SpConfigurationProfileType | SpRawCameraType | SpsasType | SpSerialAtaType | SpspiType | SpSmartCardsType | SPSoftwareType | SpStartupItemType | SpStorageType | SpSyncServicesType | SpThunderboltType | SpusbType | SpNetworkVolumeType | SpwwanType | SpAirPortType](
 	command string) T {
 	var jsonObj T
+
+	if !strings.Contains(os.Getenv("PATH"), ":/usr/sbin") {
+		os.Setenv("PATH", os.Getenv("PATH")+":/usr/sbin")
+		fmt.Println("PATH : ", os.Getenv("PATH"))
+	}
 
 	systemProfiler, err := common.RunFullCommand("system_profiler " + command + " -json")
 	if err == nil {
