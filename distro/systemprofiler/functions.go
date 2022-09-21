@@ -19,7 +19,6 @@ func DarwinGetSystemProfilerInfo[T SpParallelATAType |
 
 	if !strings.Contains(os.Getenv("PATH"), ":/usr/sbin") {
 		os.Setenv("PATH", os.Getenv("PATH")+":/usr/sbin")
-		fmt.Println("PATH : ", os.Getenv("PATH"))
 	}
 
 	systemProfiler, err := common.RunFullCommand("system_profiler " + command + " -json")
@@ -40,8 +39,6 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 
 	var darwinSPInfo DarwinSystemProfilerInfo = DarwinSystemProfilerInfo{}
 
-	fmt.Println(1)
-
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
 		defer wg.Done()
@@ -49,7 +46,6 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 		dspi.SPNetwork = DarwinGetSystemProfilerInfo[SpNetworkType]("SPNetworkDataType")
 
 	}(&darwinSPInfo)
-	fmt.Println(2)
 
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
@@ -58,7 +54,6 @@ func DarwinSystemProfiler() DarwinSystemProfilerInfo {
 		dspi.SPNetworkVolume = DarwinGetSystemProfilerInfo[SpNetworkVolumeType]("SPNetworkVolumeDataType")
 
 	}(&darwinSPInfo)
-	fmt.Println(3)
 
 	wg.Add(1)
 	go func(dspi *DarwinSystemProfilerInfo) {
