@@ -3,13 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.example.touchsomefile</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>touch</string>
-        <string>/tmp/helloworld</string>
-    </array>
-    <key>Minutes</key>
-    <integer>3</integer>
+    <string>com.mac_machine_info_server</string>
+    <key>/User/Shared/machineinfoserver/</key>
+    <key>KeepAlive</key>
+    <true/>
 </dict>
 </plist>

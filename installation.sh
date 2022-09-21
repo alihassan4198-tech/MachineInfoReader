@@ -79,7 +79,8 @@ else
     BINARY_INSTALLED_PATH=/Users/Shared
     # BINARY_INSTALLED_PATH=/Applications
     # SERVICE_INSTALLED=/Library/Services
-    SERVICE_INSTALLED=/Users/Shared
+    # SERVICE_INSTALLED=/System/Library/LaunchDaemons
+    SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Copy Binaries
     cp machine_info_gatherer $BINARY_INSTALLED_PATH/
@@ -126,26 +127,23 @@ else
         rm mycron
     fi
 
-    #  Delete Log File from Current Directoy 
-    # rm l.log
-
     # Service Installation
-    if [ -f $SERVICE_INSTALLED/mac_machine_info_server.service ]
+    if [ -f $SERVICE_INSTALLED/com.mac_machine_info_server.plist ]
     then
         echo "Service Exists in MacOS, Deleting Now"
-        launchctl stop mac_machine_info_server.service
-        rm $SERVICE_INSTALLED/mac_machine_info_server.service
+        launchctl stop com.mac_machine_info_server.plist
+        rm $SERVICE_INSTALLED/com.mac_machine_info_server.plist
     else
         echo "Service Not Exists in MacOS, Can't Delete"
     fi
 
     #Coping Service
     echo "Coping Service for MacOS"
-    cp mac_machine_info_server.service $SERVICE_INSTALLED/
+    cp com.mac_machine_info_server.plist $SERVICE_INSTALLED/
 
     echo "Starting MacOS Service in MacOS"
     # launchctl load machine_info_gatherer.service
-    launchctl enable system/mac_machine_info_server.service
-    launchctl start system/mac_machine_info_server.service
-    # launchctl print system/mac_machine_info_server.service
+    launchctl enable system/com.mac_machine_info_server.plist
+    launchctl start system/com.mac_machine_info_server.plist
+    # launchctl print system/com.mac_machine_info_server.plist
 fi
