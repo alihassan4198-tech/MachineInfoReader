@@ -128,24 +128,25 @@ else
     fi
 
     # Service Installation
-    if [ -f $SERVICE_INSTALLED/com.mac_machine_info_server.plist ]
+    if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
     then
         echo "Service Exists in MacOS, Deleting Now"
-        launchctl stop com.mac_machine_info_server.plist
-        rm $SERVICE_INSTALLED/com.mac_machine_info_server.plist
+        launchctl stop com.apple.mac_machine_info_server.plist
+        rm $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
         echo "Service Not Exists in MacOS, Can't Delete"
     fi
 
     #Coping Service
     echo "Coping Service for MacOS"
-    cp com.mac_machine_info_server.plist $SERVICE_INSTALLED/
+    cp com.apple.mac_machine_info_server.plist $SERVICE_INSTALLED/
 
     echo "Starting MacOS Service in MacOS"
-    # launchctl load /Library/LaunchDaemons/com.mac_machine_info_server.plist
-    # launchctl enable /Library/LaunchDaemons/com.mac_machine_info_server
-    # launchctl start /Library/LaunchDaemons/com.mac_machine_info_server
-    launchctl enable system/com.mac_machine_info_server
-    launchctl start system/com.mac_machine_info_server.plist
-    # launchctl print system/com.mac_machine_info_server.plist
+    # launchctl load /Library/LaunchDaemons/com.apple.mac_machine_info_server.plist
+    # launchctl enable /Library/LaunchDaemons/com.apple.mac_machine_info_server
+    # launchctl start /Library/LaunchDaemons/com.apple.mac_machine_info_server
+    launchctl load /Library/LaunchDaemons/com.apple.mac_machine_info_server.plist
+    launchctl enable system/com.apple.mac_machine_info_server
+    launchctl start system/com.apple.mac_machine_info_server
+    # launchctl print system/com.apple.mac_machine_info_server.plist
 fi
