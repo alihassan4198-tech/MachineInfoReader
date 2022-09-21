@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=5
 WorkingDirectory=/bin
-ExecStart=/bin/tc-uploader
+ExecStart=/bin/server
 
 PermissionsStartOnly=true
 StandardOutput=syslog

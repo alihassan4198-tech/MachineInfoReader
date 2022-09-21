@@ -12,7 +12,7 @@ then
 
     # Deleting Binaries
     rm $BINARY_INSTALLED_PATH/machine_info_gatherer
-    rm $BINARY_INSTALLED_PATH/tc-uploader
+    rm $BINARY_INSTALLED_PATH/server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
     # Deleting Installation
@@ -65,7 +65,7 @@ else
 
     # Deleting Binaries
     rm $BINARY_INSTALLED_PATH/machine_info_gatherer
-    rm $BINARY_INSTALLED_PATH/tc-uploader
+    rm $BINARY_INSTALLED_PATH/server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
     # Deleting Installation

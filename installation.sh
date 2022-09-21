@@ -11,7 +11,7 @@ then
 
     # Copy Binaries
     cp machine_info_gatherer $BINARY_INSTALLED_PATH/
-    cp tc-uploader $BINARY_INSTALLED_PATH/
+    cp server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
     # Cron Installation
@@ -84,7 +84,7 @@ else
 
     # Copy Binaries
     cp machine_info_gatherer $BINARY_INSTALLED_PATH/
-    cp tc-uploader $BINARY_INSTALLED_PATH/
+    cp server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
 
@@ -142,8 +142,10 @@ else
     cp com.mac_machine_info_server.plist $SERVICE_INSTALLED/
 
     echo "Starting MacOS Service in MacOS"
-    # launchctl load machine_info_gatherer.service
-    launchctl enable system/com.mac_machine_info_server.plist
+    # launchctl load /Library/LaunchDaemons/com.mac_machine_info_server.plist
+    # launchctl enable /Library/LaunchDaemons/com.mac_machine_info_server
+    # launchctl start /Library/LaunchDaemons/com.mac_machine_info_server
+    launchctl enable system/com.mac_machine_info_server
     launchctl start system/com.mac_machine_info_server.plist
     # launchctl print system/com.mac_machine_info_server.plist
 fi
