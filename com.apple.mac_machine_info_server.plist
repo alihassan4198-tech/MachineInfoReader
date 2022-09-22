@@ -5,7 +5,7 @@
     <key>Label</key>
     <string>com.apple.mac_machine_info_server</string>
     <key>KeepAlive</key>
-    <true/>
+    <true />
     <key>Program</key>
     <string>/Users/Shared/server</string>
     <key>RunAtLoad</key>
