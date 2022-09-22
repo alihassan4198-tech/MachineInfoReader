@@ -140,6 +140,8 @@ else
 
     #Coping Service
     echo "Coping Service for MacOS"
+    # chmod 777 com.apple.mac_machine_info_server.plist
+    chmod 777 com.apple.mac_machine_info_server.plist
     cp com.apple.mac_machine_info_server.plist $SERVICE_INSTALLED/
 
     echo "Starting MacOS Service in MacOS"
