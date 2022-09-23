@@ -13,8 +13,8 @@ then
     SERVICE_INSTALLED=/lib/systemd/system
 
     # Copy Binaries
-    cp machine_info_gatherer $BINARY_INSTALLED_PATH/
-    cp server $BINARY_INSTALLED_PATH/
+    cp linux_machine_info_gatherer $BINARY_INSTALLED_PATH/
+    cp linux_server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
     # Cron Installation
@@ -49,9 +49,6 @@ then
         crontab mycron
         rm mycron
     fi
-
-    # Delete Log File from Current Directoy 
-    # rm l.log
 
     # Service Installation
     if [ -f $SERVICE_INSTALLED/machine_info_server.service ]

@@ -13,8 +13,8 @@ then
     BINARY_INSTALLED_PATH=/bin
 
     # Deleting Binaries
-    rm $BINARY_INSTALLED_PATH/machine_info_gatherer
-    rm $BINARY_INSTALLED_PATH/server
+    rm $BINARY_INSTALLED_PATH/linux_machine_info_gatherer
+    rm $BINARY_INSTALLED_PATH/linux_server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
     # Deleting Installation
