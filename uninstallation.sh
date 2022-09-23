@@ -76,7 +76,6 @@ else
         rm -rf $MACHINE_INFO_OUTPUT
         rm -rf $MACHINE_INFO_SERVER
         rm -rf $MACHINE_INFO_LOG
-        rm -rf $SERVICE_INSTALLED
     else
         echo "Directory Doesn't Exist..., Can't Delete"
     fi
@@ -93,21 +92,29 @@ else
     fi
 
     #Deleting Service
+
+    echo "Deleting Service"
     if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
     then
-        echo "Deleting Service"
+        echo "Service Exists in MacOS, Deleting Now"
         launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
         launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
         launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
-        echo "Services not Present"
+        echo "Service Not Exists in MacOS, Can't Delete"
     fi
+    # launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
+    # launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+    # launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+    # launchctl stop com.apple.mac_machine_info_server
+    # launchctl remove com.apple.mac_machine_info_server
 
-    echo "Service Status"
-    if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
-    then
-        launchctl list | grep com.apple.mac_machine_info_server
-    else
+
+    # if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
+    # then
+    #     launchctl list | grep com.apple.mac_machine_info_server
+    # else
         echo "Service Status : Service Already Deleted"
-    fi
+        launchctl list | grep com.apple.mac_machine_info_server
+    # fi
 fi
