@@ -98,7 +98,7 @@ else
         echo "Deleting Service"
         launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
         launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
-        rm $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+        launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
         echo "Services not Present"
     fi
