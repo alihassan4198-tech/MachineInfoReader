@@ -77,9 +77,6 @@ else
     MACHINE_INFO_LOG=/Users/Shared/machineinfolog
     CRON_FLAG=/Users/Shared/cron.txt
     BINARY_INSTALLED_PATH=/Users/Shared
-    # BINARY_INSTALLED_PATH=/Applications
-    # SERVICE_INSTALLED=/Library/Services
-    # SERVICE_INSTALLED=/System/Library/LaunchDaemons
     SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Copy Binaries
@@ -132,7 +129,7 @@ else
     then
         echo "Service Exists in MacOS, Deleting Now"
         launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
-        launchctl unload /$SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+        launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
         rm $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
         echo "Service Not Exists in MacOS, Can't Delete"

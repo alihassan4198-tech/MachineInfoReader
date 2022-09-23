@@ -46,11 +46,12 @@ then
         systemctl stop machine_info_server.service
         rm $SERVICE_INSTALLED/machine_info_server.service
     else
-        echo "Services Already Deleted"
+        echo "Services not Present"
     fi
 
     echo "Service Status"
     systemctl status machine_info_server.service
+
 else
     # ----------------------------- FOR MACOS -------------------------------------
     
@@ -60,8 +61,7 @@ else
     MACHINE_INFO_LOG=/Users/Shared/machineinfolog
     CRON_FLAG=/Users/Shared/cron.txt
     BINARY_INSTALLED_PATH=/Users/Shared
-    # SERVICE_INSTALLED=/System/Library/Services
-    SERVICE_INSTALLED=/Users/Shared
+    SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Deleting Binaries
     rm $BINARY_INSTALLED_PATH/machine_info_gatherer
@@ -93,15 +93,16 @@ else
     fi
 
     #Deleting Service
-    if [ -f $SERVICE_INSTALLED/mac_machine_info_server.service ]
+    if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
     then
         echo "Deleting Service"
-        systemctl stop mac_machine_info_server.service
-        rm $SERVICE_INSTALLED/mac_machine_info_server.service
+        launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
+        launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+        rm $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
-        echo "Services Already Deleted"
+        echo "Services not Present"
     fi
 
     echo "Service Status"
-    systemctl status mac_machine_info_server.service
+    launchctl list | grep com.apple.mac_machine_info_server
 fi
