@@ -1,4 +1,6 @@
-if [[ "$OSTYPE" == "Linux"* ]];
+#!/bin/bash
+
+if [[ $OSTYPE == *"linux-gnu"* ]]
 then
     # ------------------------- FOR LINUX --------------------------------
     
