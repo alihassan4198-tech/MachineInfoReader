@@ -104,5 +104,10 @@ else
     fi
 
     echo "Service Status"
-    launchctl list | grep com.apple.mac_machine_info_server
+    if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
+    then
+        launchctl list | grep com.apple.mac_machine_info_server
+    else
+        echo "Service Status : Service Already Deleted"
+    fi
 fi

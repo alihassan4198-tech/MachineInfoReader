@@ -130,7 +130,7 @@ else
         echo "Service Exists in MacOS, Deleting Now"
         launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
         launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
-        rm $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
+        launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
         echo "Service Not Exists in MacOS, Can't Delete"
     fi
