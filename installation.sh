@@ -83,7 +83,7 @@ else
     SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Copy Binaries
-    cp machine_info_gatherer $BINARY_INSTALLED_PATH/
+    cp mac_machine_info_gatherer $BINARY_INSTALLED_PATH/
     cp server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
@@ -140,16 +140,11 @@ else
 
     #Coping Service
     echo "Coping Service for MacOS"
-    # chmod 777 com.apple.mac_machine_info_server.plist
     chmod 777 com.apple.mac_machine_info_server.plist
     cp com.apple.mac_machine_info_server.plist $SERVICE_INSTALLED/
 
     echo "Starting MacOS Service in MacOS"
-    # launchctl load /Library/LaunchDaemons/com.apple.mac_machine_info_server.plist
-    # launchctl enable /Library/LaunchDaemons/com.apple.mac_machine_info_server
-    # launchctl start /Library/LaunchDaemons/com.apple.mac_machine_info_server
     launchctl load $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     launchctl enable system/com.apple.mac_machine_info_server
     launchctl start system/com.apple.mac_machine_info_server
-    # launchctl print system/com.apple.mac_machine_info_server.plist
 fi

@@ -66,7 +66,7 @@ else
     SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Deleting Binaries
-    rm $BINARY_INSTALLED_PATH/machine_info_gatherer
+    rm $BINARY_INSTALLED_PATH/mac_machine_info_gatherer
     rm $BINARY_INSTALLED_PATH/server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
@@ -99,7 +99,7 @@ else
     if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
     then
         echo "Service Exists in MacOS, Deleting Now"
-        launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
+        # launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
         launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
         launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
     else
