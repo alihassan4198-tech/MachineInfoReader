@@ -103,18 +103,7 @@ else
     else
         echo "Service Not Exists in MacOS, Can't Delete"
     fi
-    # launchctl stop $SERVICE_INSTALLED/com.apple.mac_machine_info_server
-    # launchctl unload $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
-    # launchctl remove $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist
-    # launchctl stop com.apple.mac_machine_info_server
-    # launchctl remove com.apple.mac_machine_info_server
 
-
-    # if [ -f $SERVICE_INSTALLED/com.apple.mac_machine_info_server.plist ]
-    # then
-    #     launchctl list | grep com.apple.mac_machine_info_server
-    # else
         echo "Service Status : Service Already Deleted"
         launchctl list | grep com.apple.mac_machine_info_server
-    # fi
 fi
