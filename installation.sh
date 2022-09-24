@@ -165,3 +165,5 @@ else
     launchctl enable system/com.apple.mac_machine_info_server
     launchctl start system/com.apple.mac_machine_info_server
 fi
+
+echo "Your data will be saved at this path '$MACHINE_INFO_SERVER'"
