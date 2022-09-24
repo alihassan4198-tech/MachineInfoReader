@@ -13,8 +13,8 @@ then
     BINARY_INSTALLED_PATH=/bin
 
     # Deleting Binaries
-    rm $BINARY_INSTALLED_PATH/linux_machine_info_gatherer
-    rm $BINARY_INSTALLED_PATH/linux_server
+    rm $BINARY_INSTALLED_PATH/machine_info_gatherer
+    rm $BINARY_INSTALLED_PATH/server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
     # Deleting Installation
@@ -66,7 +66,7 @@ else
     SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Deleting Binaries
-    rm $BINARY_INSTALLED_PATH/mac_machine_info_gatherer
+    rm $BINARY_INSTALLED_PATH/machine_info_gatherer
     rm $BINARY_INSTALLED_PATH/server
     rm $BINARY_INSTALLED_PATH/trigger.sh
 
@@ -109,3 +109,9 @@ else
         echo "Service Status : Service Already Deleted"
         launchctl list | grep com.apple.mac_machine_info_server
 fi
+
+
+echo "Deleting old files..."
+
+rm ./machine_info_gatherer
+rm ./server

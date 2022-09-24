@@ -1,5 +1,25 @@
 #!/bin/bash
 
+if [ -f ./machine_info_gatherer ];
+then 
+    echo "machine_info_gatherer file exist"
+else 
+    echo "machine_info_gatherer file not exist"
+    echo "Please user 'build-binaries.sh' to generate binary"
+    exit 1
+fi
+
+
+if [ -f ./server ];
+then 
+    echo "server file exist"
+else 
+    echo "server file not exist"
+    echo "Please user 'build-binaries.sh' to generate binary"
+    exit 1
+fi
+
+
 if [[ $OSTYPE == *"linux-gnu"* ]];
 then
     # --------------------FOR LINUX----------------------
@@ -13,8 +33,8 @@ then
     SERVICE_INSTALLED=/lib/systemd/system
 
     # Copy Binaries
-    cp linux_machine_info_gatherer $BINARY_INSTALLED_PATH/
-    cp linux_server $BINARY_INSTALLED_PATH/
+    cp machine_info_gatherer $BINARY_INSTALLED_PATH/
+    cp server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
     # Cron Installation
@@ -80,7 +100,7 @@ else
     SERVICE_INSTALLED=/Library/LaunchDaemons
 
     # Copy Binaries
-    cp mac_machine_info_gatherer $BINARY_INSTALLED_PATH/
+    cp machine_info_gatherer $BINARY_INSTALLED_PATH/
     cp server $BINARY_INSTALLED_PATH/
     cp trigger.sh $BINARY_INSTALLED_PATH/
 
