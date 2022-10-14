@@ -9,8 +9,8 @@ Download Go 1.18 w.r.t your Machine [Downlod Here](https://go.dev/dl/)
 
 
 ### Step 2) 
-Insllation Instruction (Linux) 
 #### for other OS ([Installation Instructions](https://go.dev/doc/install))
+Insllation Instruction (Linux) 
 ```
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.18.<MACHINE-TYPE>.tar.gz
 ```
