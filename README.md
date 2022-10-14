@@ -53,7 +53,7 @@ sudo ./uninstallation.sh
 
 
 
-### Note : Linux CSV Output Path = "/home/machineinfocsv"
+### Note : Linux CSV Output Path = "/home/machineinfoserver"
 
-### Note : Mac CSV Output Path = "/Users/Shared/machineinfocsv"
+### Note : Mac CSV Output Path = "/Users/Shared/machineinfoserver"
 
