@@ -50,3 +50,10 @@ sudo ./installation.sh
 ```
 sudo ./uninstallation.sh
 ```
+
+
+
+### Note : Linux CSV Output Path = "/home/machineinfocsv"
+
+### Note : Mac CSV Output Path = "/Users/Shared/machineinfocsv"
+
