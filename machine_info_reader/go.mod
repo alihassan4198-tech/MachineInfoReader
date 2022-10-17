@@ -3,7 +3,7 @@ module machine_info_gatherer
 go 1.18
 
 require (
-	github.com/alihassan4198-tech/ghw v1.0.4
+	github.com/alihassan4198-tech/ghw v1.0.5
 	github.com/coreos/go-iptables v0.6.0
 	github.com/quay/claircore v1.4.2
 )

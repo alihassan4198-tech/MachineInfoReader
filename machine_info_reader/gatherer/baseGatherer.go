@@ -2,6 +2,7 @@ package gatherer
 
 import (
 	"fmt"
+	"machine_info_gatherer/debug"
 	"machine_info_gatherer/distro"
 	"machine_info_gatherer/model"
 	"reflect"
@@ -125,24 +126,63 @@ func (bg *BaseGatherer) GetComputerPatches() *model.ComputerPatchesType {
 	return comPatch
 }
 
-//  All Info
+// All Info
 func (bg *BaseGatherer) GatherInfo() *model.ComputerInfoType {
 
 	m := model.ComputerInfoType{}
 	currentDistro := distro.GetInstance()
+	if debug.Debug() {
+		fmt.Println("currentDistro := distro.GetInstance()")
+	}
 	if strings.Contains(reflect.TypeOf(currentDistro).String(), "MacBased") {
+		if debug.Debug() {
+			fmt.Println("strings.Contains(reflect.TypeOf(currentDistro).String(), MacBased)")
+		}
 		distro.MacGetAllInfoInMap()
 	}
 	m.ComputerBaseboard = *(bg.GetComputerBaseboard())
+	if debug.Debug() {
+		fmt.Println("m.ComputerBaseboard = *(bg.GetComputerBaseboard())")
+	}
 	m.ComputerBios = *(bg.GetComputerBios())
+	if debug.Debug() {
+		fmt.Println("m.ComputerBios = *(bg.GetComputerBios())")
+	}
 	m.ComputerCPU = *(bg.GetComputerCPU())
+	if debug.Debug() {
+		fmt.Println("m.ComputerCPU = *(bg.GetComputerCPU())")
+	}
 	m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())
+	if debug.Debug() {
+		fmt.Println("m.ComputerEndpointProtection = *(bg.GetComputerEndpointProtectionSoftwares())")
+	}
 	m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())
+	if debug.Debug() {
+		fmt.Println("m.ComputerFirewallRules = *(bg.GetComputerFirewallRules())")
+	}
 	m.ComputerNICS = *(bg.GetComputerNIC())
+	if debug.Debug() {
+		fmt.Println("m.ComputerNICS = *(bg.GetComputerNIC())")
+	}
 	m.ComputerOS = *(bg.GetComputerOS())
+	if debug.Debug() {
+		fmt.Println("m.ComputerOS = *(bg.GetComputerOS())")
+	}
 	m.ComputerServices = *(bg.GetComputerServices())
+	if debug.Debug() {
+		fmt.Println("m.ComputerServices = *(bg.GetComputerServices())")
+	}
 	m.ComputerSoftwaresInstalled = *(bg.GetComputerSoftwaresInstalled())
+	if debug.Debug() {
+		fmt.Println("m.ComputerSoftwaresInstalled = *(bg.GetComputerSoftwaresInstalled())")
+	}
 	m.ComputerSystem = *(bg.GetComputerSystem())
+	if debug.Debug() {
+		fmt.Println("m.ComputerSystem = *(bg.GetComputerSystem())")
+	}
 	m.ComputerPatches = *(bg.GetComputerPatches())
+	if debug.Debug() {
+		fmt.Println("m.ComputerPatches = *(bg.GetComputerPatches())")
+	}
 	return &m
 }

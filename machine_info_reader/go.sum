@@ -1,7 +1,7 @@
 github.com/StackExchange/wmi v1.2.1 h1:VIkavFPXSjcnS+O8yTq7NI32k0R5Aj+v39y29VYDOSA=
 github.com/StackExchange/wmi v1.2.1/go.mod h1:rcmrprowKIVzvc+NUiLncP2uuArMWLCbu9SBzvHz7e8=
-github.com/alihassan4198-tech/ghw v1.0.4 h1:SBee4GlHR1CZF/PdghaFXcnvQWW42iWV+DyFwkoCi8A=
-github.com/alihassan4198-tech/ghw v1.0.4/go.mod h1:gu+eZweWjyO/+z5V4gsxcCjBoY0BCloWjW0phX9kFeE=
+github.com/alihassan4198-tech/ghw v1.0.5 h1:a0Sd+GhXW3QhLkk7XEuMq98CDK6y9cNosvBjC4Ao7Ec=
+github.com/alihassan4198-tech/ghw v1.0.5/go.mod h1:gu+eZweWjyO/+z5V4gsxcCjBoY0BCloWjW0phX9kFeE=
 github.com/coreos/go-iptables v0.6.0 h1:is9qnZMPYjLd8LYqmm/qlE+wwEgJIkTYdhV3rfZo4jk=
 github.com/coreos/go-iptables v0.6.0/go.mod h1:Qe8Bv2Xik5FyTXwgIbLAnv2sWSBmvWdFETJConOQ//Q=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=

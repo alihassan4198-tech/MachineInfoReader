@@ -24,7 +24,7 @@ const (
 
 // Debug
 func Debug() bool {
-	debug := false
+	debug := true
 	return debug
 }
 
