@@ -1,6 +1,6 @@
 module machine_info_gatherer
 
-go 1.18
+go 1.22
 
 require (
 	github.com/alihassan4198-tech/ghw v1.0.5
