@@ -10,7 +10,7 @@
       "request": "launch",
       "mode": "debug",
       "program": "${workspaceFolder}/machine_info_reader/main.go",
-      "args": ["/tmp/machineinfocsv/"]
+      "args": ["/home/fsociety/machinedataJsonInfo/"]
     },
     {
       "type": "bashdb",

@@ -8,6 +8,8 @@ import (
 	"log"
 	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
+	"os/user"
+	"path/filepath"
 
 	// "machine_info_gatherer/distro/systemprofiler"
 
@@ -40,16 +42,31 @@ func (cw *CSVWriter) WriteStructInJson(info interface{}) string {
 }
 
 func CreateJsonFile(info interface{}, fileName string) {
-
-	jsonFile, err := os.Create(common.PathGetter() + fileName + ".json")
+	jsonString, err := json.Marshal(info)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error marshalling JSON:", err)
+		return
 	}
-	cw := CSVWriter{}
-	cw.Writer = csv.NewWriter(jsonFile)
-	j := cw.WriteStructInJson(info)
-	jsonFile.WriteString(j)
+	currentUser, err := user.Current()
+	if err != nil {
+		fmt.Println("Error getting current user:", err)
+		return
+	}
+	homeDir := currentUser.HomeDir
+	dir := filepath.Join(homeDir, "machinedataJsonInfo")
+	err = os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		fmt.Println("Error creating directory:", err)
+		return
+	}
+	filePath := filepath.Join(dir, fileName+".json")
+	err = os.WriteFile(filePath, jsonString, os.ModePerm)
+	if err != nil {
+		fmt.Println("Error writing JSON file:", err)
+		return
+	}
 
+	fmt.Printf("JSON data written to %s\n", filePath)
 }
 
 func ReadJSONFile(filename string) (interface{}, error) {

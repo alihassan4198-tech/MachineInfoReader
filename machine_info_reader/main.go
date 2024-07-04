@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"machine_info_gatherer/common"
-	"machine_info_gatherer/csvfilecreator"
-	"machine_info_gatherer/csvfileuploader"
 	"machine_info_gatherer/debug"
 	"machine_info_gatherer/gatherer"
 	"machine_info_gatherer/jsoncreator"
@@ -31,12 +29,12 @@ func main() {
 	if debug.Debug() {
 		fmt.Println("jsoncreator.JsonFilesCreator(info)")
 	}
-	csvfilecreator.CsvFilesCreator(info)
-	if debug.Debug() {
-		fmt.Println("csvfilecreator.CsvFilesCreator(info)")
-	}
-	csvfileuploader.CsvFilesUploader(info)
-	if debug.Debug() {
-		fmt.Println("csvfileuploader.CsvFilesUploader(info)")
-	}
+	// csvfilecreator.CsvFilesCreator(info)
+	// if debug.Debug() {
+	// 	fmt.Println("csvfilecreator.CsvFilesCreator(info)")
+	// }
+	// csvfileuploader.CsvFilesUploader(info)
+	// if debug.Debug() {
+	// 	fmt.Println("csvfileuploader.CsvFilesUploader(info)")
+	// }
 }
