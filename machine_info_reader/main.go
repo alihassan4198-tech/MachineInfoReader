@@ -5,7 +5,7 @@ import (
 	"machine_info_gatherer/common"
 	"machine_info_gatherer/debug"
 	"machine_info_gatherer/gatherer"
-	"machine_info_gatherer/jsoncreator"
+	"machine_info_gatherer/uploader"
 	"os"
 )
 
@@ -25,16 +25,8 @@ func main() {
 	if debug.Debug() {
 		fmt.Println("info := i.GatherInfo()")
 	}
-	jsoncreator.JsonFilesCreator(info)
+	uploader.JsonDataUploader(info)
 	if debug.Debug() {
-		fmt.Println("jsoncreator.JsonFilesCreator(info)")
+		fmt.Println("uploader.JsonDataUploader(info)")
 	}
-	// csvfilecreator.CsvFilesCreator(info)
-	// if debug.Debug() {
-	// 	fmt.Println("csvfilecreator.CsvFilesCreator(info)")
-	// }
-	// csvfileuploader.CsvFilesUploader(info)
-	// if debug.Debug() {
-	// 	fmt.Println("csvfileuploader.CsvFilesUploader(info)")
-	// }
 }
