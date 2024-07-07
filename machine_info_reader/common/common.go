@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
-	"machine_info_gatherer/errorslist"
 	"machine_info_gatherer/model"
 	"os"
 	"os/exec"
@@ -18,20 +17,11 @@ import (
 
 var (
 	SudoUserPassword = ""
-	path             = ""
 )
 
 const (
 	rootAccessNeeded = " (need root previliges)"
 )
-
-func PathSetter(argPath string) {
-	path = argPath
-}
-
-func PathGetter() string {
-	return path
-}
 
 func SetSudoPassword(pass string) {
 	SudoUserPassword = pass
@@ -59,12 +49,6 @@ func IsServiceRunning(svc string) bool {
 	} else {
 		return false
 	}
-}
-
-func RunFullCommandNoTimeOut(command string) (string, error) {
-	result, err := exec.Command(SudoUserPassword, "&", "sudo", "-S", command).CombinedOutput()
-
-	return string(result), err
 }
 
 func RunFullCommand(command string) (string, error) {
@@ -102,18 +86,6 @@ func RunFullCommand(command string) (string, error) {
 
 	res := buf.String()
 	return res, err
-}
-
-func NeedSudoPreviliges(err error) string {
-	if err.Error() == errorslist.ErrCommandTimeOut {
-		return err.Error() + rootAccessNeeded
-	}
-	return err.Error()
-}
-
-func RunFullCommandWithSudo(cmd string) (string, error) {
-	// 786 | sudo -S  dmidecode -s baseboard-manufacturer
-	return RunFullCommandNoTimeOut(cmd)
 }
 
 func ParseService(svc string) *model.Service {
@@ -165,72 +137,4 @@ func ReadOSRelease() *map[string]string {
 	}
 
 	return &m
-}
-
-func LinesToArray(linesInString string, skipFirstLines int) []string {
-
-	lines := strings.Split(linesInString, "\n")
-
-	lines = lines[skipFirstLines : len(lines)-1]
-
-	return lines
-}
-
-func MakeMapOfLines(m map[string]string, input string) map[string]string {
-	lines := strings.Split(input, "\n")
-
-	// var infoMap = make(map[string]string)
-
-	for _, line := range lines {
-		if strings.Contains(line, ":") {
-			mapKeyVal := strings.Split(line, ":")
-			m[strings.TrimSpace(mapKeyVal[0])] = strings.TrimSpace(mapKeyVal[1])
-		}
-	}
-
-	return m
-}
-
-func RemoveCSVExtras(s string) string {
-	s = strings.ReplaceAll(s, "[", "")
-	s = strings.ReplaceAll(s, "]", "")
-	s = strings.ReplaceAll(s, "\"", "")
-	s = strings.ReplaceAll(s, ",", "")
-	// s = strings.TrimSpace(s)
-	return s
-}
-
-func RemoveCurlyBraces(s string) string {
-	s = strings.ReplaceAll(s, "{", "")
-	// s = strings.ReplaceAll(s, "}", "")
-	// s = strings.ReplaceAll(s, ",", "")
-	return s
-}
-
-func SkipThisStr(s string) bool {
-	if strings.Contains(s, "}") {
-		return true
-	} else {
-		return false
-	}
-}
-
-func DoesStringContainAlphaNumeric(str string) bool {
-	for _, charVariable := range str {
-		if charVariable == '*' || (charVariable >= 'a' && charVariable <= 'z') || (charVariable >= 'A' && charVariable <= 'Z') || (charVariable >= '0' && '9' >= charVariable) {
-			return true
-		}
-	}
-	return false
-}
-
-func IsStringInSlice(ss *[]string, substr string) (int, string) {
-
-	for i, s := range *ss {
-		if strings.Contains(s, substr) {
-			return i, s
-		}
-	}
-
-	return -1, ""
 }
