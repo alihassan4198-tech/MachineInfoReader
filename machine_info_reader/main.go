@@ -5,6 +5,7 @@ import (
 	"machine_info_gatherer/debug"
 	"machine_info_gatherer/gatherer"
 	"machine_info_gatherer/uploader"
+
 )
 
 func main() {
