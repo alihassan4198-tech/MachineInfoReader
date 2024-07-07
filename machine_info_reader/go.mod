@@ -1,12 +1,14 @@
 module machine_info_gatherer
 
-go 1.18
+go 1.22
 
 require (
 	github.com/alihassan4198-tech/ghw v1.0.5
 	github.com/coreos/go-iptables v0.6.0
 	github.com/quay/claircore v1.4.2
 )
+
+require github.com/joho/godotenv v1.5.1
 
 require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
@@ -19,8 +21,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/quay/zlog v1.1.0 // indirect
 	github.com/rs/zerolog v1.26.0 // indirect
-	github.com/tidwall/pretty v1.2.0
-	github.com/yukithm/json2csv v0.1.2
 	github.com/zcalusic/sysinfo v0.9.5
 	go.opentelemetry.io/otel v1.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20211108221036-ceb1ce70b4fa // indirect
