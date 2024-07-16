@@ -15,4 +15,5 @@ type IDistro interface {
 	DistroGetComputerSoftwaresInstalled() (*model.ComputerSoftwaresInstalledType, error)
 	DistroGetComputerSystem() (*model.ComputerSystemType, error)
 	DistroGetComputerPatches() (*model.ComputerPatchesType, error)
+	DistroGetComputerOwner() (*model.ComputerOwnerType, error)
 }

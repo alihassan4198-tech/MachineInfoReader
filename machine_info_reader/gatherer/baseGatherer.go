@@ -17,12 +17,21 @@ type BaseGatherer struct {
 //--------------------------
 
 func (bg *BaseGatherer) GetComputerBaseboard() *model.ComputerBaseboardType {
-
 	currentDistro := distro.GetInstance()
+
 	comBaseBoard, err := currentDistro.DistroGetComputerBaseboard()
 	if err != nil {
 		fmt.Println(err)
+		return nil
 	}
+
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comBaseBoard.OwnerInfo = *ownerInfo
+
 	return comBaseBoard
 }
 
@@ -33,6 +42,13 @@ func (bg *BaseGatherer) GetComputerBios() *model.ComputerBiosType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	cbios.OwnerInfo = *ownerInfo
+
 	return cbios
 }
 
@@ -43,6 +59,13 @@ func (bg *BaseGatherer) GetComputerCPU() *model.ComputerCPUType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	compCpu.OwnerInfo = *ownerInfo
+
 	return compCpu
 }
 
@@ -53,6 +76,12 @@ func (bg *BaseGatherer) GetComputerEndpointProtectionSoftwares() *model.Computer
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	epsoft.OwnerInfo = *ownerInfo
 	return epsoft
 }
 
@@ -63,17 +92,34 @@ func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesT
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	cfwRules.OwnerInfo = *ownerInfo
 	return cfwRules
 }
 
 func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 
 	currentDistro := distro.GetInstance()
-	comNic, err := currentDistro.DistroGetComputerNIC()
+
+	comNicList, err := currentDistro.DistroGetComputerNIC()
 	if err != nil {
 		fmt.Println(err)
+		return nil
 	}
-	return comNic
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	for i := range *comNicList {
+		(*comNicList)[i].OwnerInfo = *ownerInfo
+	}
+
+	return comNicList
 }
 
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
@@ -83,6 +129,12 @@ func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comOS.OwnerInfo = *ownerInfo
 	return comOS
 }
 
@@ -93,6 +145,12 @@ func (bg *BaseGatherer) GetComputerServices() *model.ComputerServicesType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comServ.OwnerInfo = *ownerInfo
 	return comServ
 }
 
@@ -103,9 +161,22 @@ func (bg *BaseGatherer) GetComputerSoftwaresInstalled() *model.ComputerSoftwares
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comInsSoft.OwnerInfo = *ownerInfo
 	return comInsSoft
 }
-
+func (bg *BaseGatherer) GetComputerOwner() *model.ComputerOwnerType {
+	currentDistro := distro.GetInstance()
+	ownerDetails, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return ownerDetails
+}
 func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystemType {
 
 	currentDistro := distro.GetInstance()
@@ -113,6 +184,12 @@ func (bg *BaseGatherer) GetComputerSystem() *model.ComputerSystemType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comSys.OwnerInfo = *ownerInfo
 	return comSys
 }
 
@@ -123,6 +200,12 @@ func (bg *BaseGatherer) GetComputerPatches() *model.ComputerPatchesType {
 	if err != nil {
 		fmt.Println(err)
 	}
+	ownerInfo, err := currentDistro.DistroGetComputerOwner()
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	comPatch.OwnerInfo = *ownerInfo
 	return comPatch
 }
 
