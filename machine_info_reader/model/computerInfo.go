@@ -125,9 +125,11 @@ type ComputerNICType struct {
 	Ip_subnet               []string
 	Mac_address             string
 	Ip_enabled              bool
-	OwnerInfo               ComputerOwnerType
 }
-
+type ComputerNICFullType struct {
+	ComputerNICType []*ComputerNICType
+	OwnerInfo       ComputerOwnerType
+}
 type ComputerOSType struct {
 	Computer_name   string
 	Os_name         string
@@ -203,7 +205,7 @@ type ComputerInfoType struct {
 	ComputerCPU                ComputerCPUType
 	ComputerEndpointProtection ComputerEndpointProtectionType
 	ComputerFirewallRules      ComputerFirewallRulesType
-	ComputerNICS               []ComputerNICType
+	ComputerNICS               ComputerNICFullType
 	ComputerOS                 ComputerOSType
 	ComputerServices           ComputerServicesType
 	ComputerSoftwaresInstalled ComputerSoftwaresInstalledType

@@ -168,6 +168,7 @@ func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.Co
 		"forticlient",
 		"avast",
 	}
+
 	for _, softwareName := range protectionSoftwareNames {
 		cmd := exec.Command("dpkg", "-l", softwareName)
 		output, err := cmd.Output()
@@ -175,18 +176,30 @@ func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.Co
 			continue
 		}
 		if strings.Contains(string(output), "ii ") {
+			active := db.isServiceActive(softwareName)
+			state := "Installed but inactive"
+			if active {
+				state = "Active"
+			}
+
 			epsoft.Softwares = append(epsoft.Softwares, model.EndpointProtectionSoftwareType{
 				Type:       "Endpoint Protection",
 				Name:       softwareName,
-				State:      "Active",
+				State:      state,
 				Db_status:  "Installed",
 				Time_stamp: 0,
-				Is_default: "Yes"})
+				Is_default: "Yes",
+			})
 		}
 	}
+
 	return &epsoft, nil
 }
-
+func (db *DebianBased) isServiceActive(serviceName string) bool {
+	cmd := exec.Command("systemctl", "is-active", "--quiet", serviceName)
+	err := cmd.Run()
+	return err == nil
+}
 func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRulesType, error) {
 
 	cfwRules := model.ComputerFirewallRulesType{}
@@ -237,24 +250,23 @@ func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewall
 	return &cfwRules, nil
 }
 
-func (db *DebianBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
-
-	comNic := []model.ComputerNICType{}
+func (db *DebianBased) DistroGetComputerNIC() ([]*model.ComputerNICType, error) {
+	var comNic []*model.ComputerNICType
 	net, err := ghw.Network()
 	if err != nil {
 		fmt.Printf("Error getting network info: %v", err)
+		return nil, err
 	}
 
 	for _, nic := range net.NICs {
-
-		comNic = append(comNic, model.ComputerNICType{
+		nicPointer := &model.ComputerNICType{
 			Caption:     nic.Name,
 			Mac_address: nic.MacAddress,
-		})
-
+		}
+		comNic = append(comNic, nicPointer)
 	}
 
-	return &comNic, nil
+	return comNic, nil
 }
 
 func (db *DebianBased) DistroGetComputerOS() (*model.ComputerOSType, error) {

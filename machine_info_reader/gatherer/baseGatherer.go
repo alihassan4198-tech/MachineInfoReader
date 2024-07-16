@@ -101,7 +101,7 @@ func (bg *BaseGatherer) GetComputerFirewallRules() *model.ComputerFirewallRulesT
 	return cfwRules
 }
 
-func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
+func (bg *BaseGatherer) GetComputerNIC() *model.ComputerNICFullType {
 
 	currentDistro := distro.GetInstance()
 
@@ -110,16 +110,16 @@ func (bg *BaseGatherer) GetComputerNIC() *[]model.ComputerNICType {
 		fmt.Println(err)
 		return nil
 	}
+	comNic := model.ComputerNICFullType{}
 	ownerInfo, err := currentDistro.DistroGetComputerOwner()
 	if err != nil {
 		fmt.Println(err)
 		return nil
 	}
-	for i := range *comNicList {
-		(*comNicList)[i].OwnerInfo = *ownerInfo
-	}
 
-	return comNicList
+	comNic.ComputerNICType = comNicList
+	comNic.OwnerInfo = *ownerInfo
+	return &comNic
 }
 
 func (bg *BaseGatherer) GetComputerOS() *model.ComputerOSType {
