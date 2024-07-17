@@ -1,5 +1,10 @@
 package model
 
+type ComputerOwnerType struct {
+	BussinessName    string `json:"bus"`
+	CustomerNumber   string `json:"num"`
+	ComputerHostName string `json:"installid"`
+}
 type ComputerBaseboardType struct {
 	Computer_name     string
 	Caption           string
@@ -18,6 +23,7 @@ type ComputerBaseboardType struct {
 	Status            string
 	Tag               string
 	Version           string
+	OwnerInfo         ComputerOwnerType
 }
 
 type ComputerBiosType struct {
@@ -44,6 +50,7 @@ type ComputerBiosType struct {
 	Systembiosmajorversion int
 	Systembiosminorversion int
 	Targetoperatingsystem  int
+	OwnerInfo              ComputerOwnerType
 }
 
 // ComputerCPU SUB TYPE
@@ -54,12 +61,14 @@ type ComputerCPU struct {
 	Name                          string
 	Socket_designation            string
 	Virtualizationfirmwareenabled bool
+	OwnerInfo                     ComputerOwnerType
 }
 
 type ComputerCPUType struct {
 	Caption     string
 	No_of_cores int
 	CPUCores    []ComputerCPU
+	OwnerInfo   ComputerOwnerType
 }
 
 // EndpointProtection SUB TYPE
@@ -76,6 +85,7 @@ type EndpointProtectionSoftwareType struct {
 
 type ComputerEndpointProtectionType struct {
 	Softwares []EndpointProtectionSoftwareType
+	OwnerInfo ComputerOwnerType
 }
 
 // FirewallRules SUB TYPE
@@ -93,6 +103,7 @@ type FirewallRule struct {
 	Remote_port    string
 	Edge_traversal string
 	Action         string
+	OwnerInfo      ComputerOwnerType
 }
 
 // SUB TYPE
@@ -101,6 +112,7 @@ type ComputerFirewallRulesType struct {
 	Total_rules  int
 	Active_state string
 	FW_rules     []FirewallRule
+	OwnerInfo    ComputerOwnerType
 }
 
 type ComputerNICType struct {
@@ -114,7 +126,10 @@ type ComputerNICType struct {
 	Mac_address             string
 	Ip_enabled              bool
 }
-
+type ComputerNICFullType struct {
+	ComputerNICType []*ComputerNICType
+	OwnerInfo       ComputerOwnerType
+}
 type ComputerOSType struct {
 	Computer_name   string
 	Os_name         string
@@ -125,6 +140,7 @@ type ComputerOSType struct {
 	Release         string
 	Lastbootuptime  string
 	Lts             bool
+	OwnerInfo       ComputerOwnerType
 }
 
 // Services SUB TYPE
@@ -142,6 +158,7 @@ type Service struct {
 type ComputerServicesType struct {
 	TotalServciesRunning int
 	Services             []Service
+	OwnerInfo            ComputerOwnerType
 }
 
 // Software Installed SUB TYPE
@@ -156,6 +173,7 @@ type SoftwareInstalledType struct {
 type ComputerSoftwaresInstalledType struct {
 	Total_software     int
 	SoftwaresInstalled []SoftwareInstalledType
+	OwnerInfo          ComputerOwnerType
 }
 
 type ComputerSystemType struct {
@@ -169,6 +187,7 @@ type ComputerSystemType struct {
 	System_type          string
 	Primary_owner_name   string
 	Total_phsical_memory string
+	OwnerInfo            ComputerOwnerType
 }
 
 type ComputerPatchesType struct {
@@ -177,6 +196,7 @@ type ComputerPatchesType struct {
 	Patches                 []string
 	Patch_name              string
 	Patch_version           string
+	OwnerInfo               ComputerOwnerType
 }
 
 type ComputerInfoType struct {
@@ -185,7 +205,7 @@ type ComputerInfoType struct {
 	ComputerCPU                ComputerCPUType
 	ComputerEndpointProtection ComputerEndpointProtectionType
 	ComputerFirewallRules      ComputerFirewallRulesType
-	ComputerNICS               []ComputerNICType
+	ComputerNICS               ComputerNICFullType
 	ComputerOS                 ComputerOSType
 	ComputerServices           ComputerServicesType
 	ComputerSoftwaresInstalled ComputerSoftwaresInstalledType

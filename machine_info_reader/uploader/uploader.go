@@ -48,57 +48,57 @@ func HttpRequest(data interface{}, path string) error {
 }
 
 func UploadJsonServer(info *model.ComputerInfoType, apiPath string) {
-	if strings.Contains(apiPath, "baseboard") {
+	if strings.EqualFold(apiPath, "baseboard") {
 		if err := HttpRequest(info.ComputerBaseboard, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "bios") {
+	if strings.EqualFold(apiPath, "bios") {
 		if err := HttpRequest(info.ComputerBios, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "cpu") {
+	if strings.EqualFold(apiPath, "cpu") {
 		if err := HttpRequest(info.ComputerCPU.CPUCores, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "endpoint-protection") {
+	if strings.EqualFold(apiPath, "endpoint-protection") {
 		if err := HttpRequest(info.ComputerEndpointProtection, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "fw-rules") {
+	if strings.EqualFold(apiPath, "fw-rules") {
 		if err := HttpRequest(info.ComputerFirewallRules.FW_rules, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "nics") {
+	if strings.EqualFold(apiPath, "nics") {
 		if err := HttpRequest(info.ComputerNICS, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "os") {
+	if strings.EqualFold(apiPath, "os") {
 		if err := HttpRequest(info.ComputerOS, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "patches") {
+	if strings.EqualFold(apiPath, "patches") {
 		if err := HttpRequest(info.ComputerPatches.Patches, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "services") {
+	if strings.EqualFold(apiPath, "services") {
 		if err := HttpRequest(info.ComputerServices, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "software") {
+	if strings.EqualFold(apiPath, "software") {
 		if err := HttpRequest(info.ComputerSoftwaresInstalled, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}
 	}
-	if strings.Contains(apiPath, "system") {
+	if strings.EqualFold(apiPath, "system") {
 		if err := HttpRequest(info.ComputerSystem, apiPath); err != nil {
 			log.Printf("Error uploading JSON data to %s: %v\n", apiPath, err)
 		}

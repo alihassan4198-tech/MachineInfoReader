@@ -4,13 +4,17 @@
 package distro
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"machine_info_gatherer/common"
 	"machine_info_gatherer/distro/systemprofiler"
 	"machine_info_gatherer/model"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type MacBased struct {
@@ -205,14 +209,12 @@ func (mb *MacBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRul
 	return &cfwRules, nil
 }
 
-func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
-
-	comNic := []model.ComputerNICType{}
-
+func (mb *MacBased) DistroGetComputerNIC() ([]*model.ComputerNICType, error) {
+	comNic := []*model.ComputerNICType{}
 	var networkNic model.ComputerNICType
 	networkNic.Caption = "NetworkNic"
 	networkNic.Model = infoMap.SPNetwork.SpNetworkDataType[0].Name
-	comNic = append(comNic, networkNic)
+	comNic = append(comNic, &networkNic)
 
 	var ipv4Nic model.ComputerNICType
 	ipv4Nic.Caption = "IPv4"
@@ -223,7 +225,7 @@ func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
 	if len(ipv4Nic.Ipaddress) > 0 {
 		ipv4Nic.Ip_enabled = true
 	}
-	comNic = append(comNic, ipv4Nic)
+	comNic = append(comNic, &ipv4Nic)
 
 	var dhcpNic model.ComputerNICType
 	dhcpNic.Caption = "Dhcp"
@@ -233,7 +235,7 @@ func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
 	if len(dhcpNic.Ipaddress) > 0 {
 		dhcpNic.Ip_enabled = true
 	}
-	comNic = append(comNic, dhcpNic)
+	comNic = append(comNic, &dhcpNic)
 
 	var dnsNic model.ComputerNICType
 	dnsNic.Caption = "DNS"
@@ -241,9 +243,8 @@ func (mb *MacBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
 	if len(dhcpNic.Ipaddress) > 0 {
 		dnsNic.Ip_enabled = true
 	}
-	comNic = append(comNic, dnsNic)
-
-	return &comNic, nil
+	comNic = append(comNic, &dnsNic)
+	return comNic, nil
 }
 
 func (mb *MacBased) DistroGetComputerOS() (*model.ComputerOSType, error) {
@@ -336,4 +337,30 @@ func (mb *MacBased) DistroGetComputerPatches() (*model.ComputerPatchesType, erro
 	comPatch.Patch_name = ""
 	comPatch.Patch_version = ""
 	return &comPatch, nil
+}
+func (mb *MacBased) DistroGetComputerOwner() (*model.ComputerOwnerType, error) {
+	err := godotenv.Load(".env") // Assuming you have godotenv imported and needed for environment variables
+	if err != nil {
+		return nil, fmt.Errorf("failed to load .env file: %v", err)
+	}
+	filePath := os.Getenv("CONFIG_FILE_PATH")
+	if filePath == "" {
+		return nil, fmt.Errorf("CONFIG_FILE_PATH not found in .env file")
+	}
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file %s: %v", filePath, err)
+	}
+	defer f.Close()
+	data, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file %s: %v", filePath, err)
+	}
+	var owner model.ComputerOwnerType
+	err = json.Unmarshal(data, &owner)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON from file %s: %v", filePath, err)
+	}
+
+	return &owner, nil
 }

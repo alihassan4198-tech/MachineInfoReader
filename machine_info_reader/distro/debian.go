@@ -4,7 +4,9 @@
 package distro
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"machine_info_gatherer/common"
 	"machine_info_gatherer/model"
 	"os"
@@ -13,6 +15,7 @@ import (
 
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
+	"github.com/joho/godotenv"
 	"github.com/zcalusic/sysinfo"
 )
 
@@ -142,17 +145,61 @@ func (db *DebianBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 
 func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
-	e := model.EndpointProtectionSoftwareType{}
-	e.Type = ""
-	e.Name = ""
-	e.State = ""
-	e.Db_status = ""
-	e.Time_stamp = 0
-	e.Is_default = ""
-	epsoft.Softwares = append(epsoft.Softwares, e)
+	protectionSoftwareNames := []string{
+		"symantec",
+		"crowdstrike",
+		"defender",
+		"bitdefender",
+		"kaspersky",
+		"threatdown",
+		"cisco",
+		"eset",
+		"sentinelone",
+		"trendmicro",
+		"carbonblack",
+		"threatlocker",
+		"trellix",
+		"webroot",
+		"cortex",
+		"heimdal",
+		"sophos",
+		"watchguard",
+		"cynet",
+		"forticlient",
+		"avast",
+	}
+
+	for _, softwareName := range protectionSoftwareNames {
+		cmd := exec.Command("dpkg", "-l", softwareName)
+		output, err := cmd.Output()
+		if err != nil {
+			continue
+		}
+		if strings.Contains(string(output), "ii ") {
+			active := db.isServiceActive(softwareName)
+			state := "Installed but inactive"
+			if active {
+				state = "Active"
+			}
+
+			epsoft.Softwares = append(epsoft.Softwares, model.EndpointProtectionSoftwareType{
+				Type:       "Endpoint Protection",
+				Name:       softwareName,
+				State:      state,
+				Db_status:  "Installed",
+				Time_stamp: 0,
+				Is_default: "Yes",
+			})
+		}
+	}
+
 	return &epsoft, nil
 }
-
+func (db *DebianBased) isServiceActive(serviceName string) bool {
+	cmd := exec.Command("systemctl", "is-active", "--quiet", serviceName)
+	err := cmd.Run()
+	return err == nil
+}
 func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewallRulesType, error) {
 
 	cfwRules := model.ComputerFirewallRulesType{}
@@ -203,24 +250,23 @@ func (db *DebianBased) DistroGetComputerFirewallRules() (*model.ComputerFirewall
 	return &cfwRules, nil
 }
 
-func (db *DebianBased) DistroGetComputerNIC() (*[]model.ComputerNICType, error) {
-
-	comNic := []model.ComputerNICType{}
+func (db *DebianBased) DistroGetComputerNIC() ([]*model.ComputerNICType, error) {
+	var comNic []*model.ComputerNICType
 	net, err := ghw.Network()
 	if err != nil {
 		fmt.Printf("Error getting network info: %v", err)
+		return nil, err
 	}
 
 	for _, nic := range net.NICs {
-
-		comNic = append(comNic, model.ComputerNICType{
+		nicPointer := &model.ComputerNICType{
 			Caption:     nic.Name,
 			Mac_address: nic.MacAddress,
-		})
-
+		}
+		comNic = append(comNic, nicPointer)
 	}
 
-	return &comNic, nil
+	return comNic, nil
 }
 
 func (db *DebianBased) DistroGetComputerOS() (*model.ComputerOSType, error) {
@@ -394,4 +440,30 @@ func (db *DebianBased) DistroGetComputerSoftwaresInstalled() (*model.ComputerSof
 	comSoftInst.Total_software = len(comSoftInst.SoftwaresInstalled)
 
 	return &comSoftInst, nil
+}
+func (db *DebianBased) DistroGetComputerOwner() (*model.ComputerOwnerType, error) {
+	err := godotenv.Load(".env")
+	if err != nil {
+		return nil, fmt.Errorf("failed to load .env file: %v", err)
+	}
+	filePath := os.Getenv("CONFIG_FILE_PATH")
+	if filePath == "" {
+		return nil, fmt.Errorf("CONFIG_FILE_PATH not found in .env file")
+	}
+	f, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file %s: %v", filePath, err)
+	}
+	defer f.Close()
+	data, err := ioutil.ReadAll(f)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file %s: %v", filePath, err)
+	}
+	var owner model.ComputerOwnerType
+	err = json.Unmarshal(data, &owner)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON from file %s: %v", filePath, err)
+	}
+
+	return &owner, nil
 }
