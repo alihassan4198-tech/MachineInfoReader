@@ -101,7 +101,6 @@ func (db *DebianBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 
 func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
-
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("config")
