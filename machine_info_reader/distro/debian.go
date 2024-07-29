@@ -16,6 +16,7 @@ import (
 	"github.com/alihassan4198-tech/ghw"
 	"github.com/coreos/go-iptables/iptables"
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 	"github.com/zcalusic/sysinfo"
 )
 
@@ -36,51 +37,6 @@ func MacGetAllInfoInMap() {
 }
 
 func (db *DebianBased) DistroGatherInfo() (*model.ComputerInfoType, error) {
-	// var info model.ComputerInfoType
-
-	// var err error
-
-	// info.ComputerBaseboard , err =  db.DistroGetComputerBaseboard()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerBios, err = db.DistroGetComputerBios()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerCPU, err = db.DistroGetComputerCPU()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerEndpointProtection, err = db.DistroGetComputerEndpointProtectionSoftwares()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerFirewallRules, err = db.DistroGetComputerFirewallRules()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerNICS, err = db.DistroGetComputerNIC()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerOS, err = db.DistroGetComputerOS()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerServices, err = db.DistroGetComputerServices()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerSoftwaresInstalled, err = db.DistroGetComputerSoftwaresInstalled()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// info.ComputerPatches, err = db.DistroGetComputerPatches()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
 	return &model.ComputerInfoType{}, nil
 }
 
@@ -145,29 +101,13 @@ func (db *DebianBased) DistroGetComputerCPU() (*model.ComputerCPUType, error) {
 
 func (db *DebianBased) DistroGetComputerEndpointProtectionSoftwares() (*model.ComputerEndpointProtectionType, error) {
 	epsoft := model.ComputerEndpointProtectionType{}
-	protectionSoftwareNames := []string{
-		"symantec",
-		"crowdstrike",
-		"defender",
-		"bitdefender",
-		"kaspersky",
-		"threatdown",
-		"cisco",
-		"eset",
-		"sentinelone",
-		"trendmicro",
-		"carbonblack",
-		"threatlocker",
-		"trellix",
-		"webroot",
-		"cortex",
-		"heimdal",
-		"sophos",
-		"watchguard",
-		"cynet",
-		"forticlient",
-		"avast",
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("config")
+	if err := viper.ReadInConfig(); err != nil {
+		return nil, fmt.Errorf("error reading config file: %w", err)
 	}
+	protectionSoftwareNames := viper.GetStringSlice("protection_software_names")
 
 	for _, softwareName := range protectionSoftwareNames {
 		cmd := exec.Command("dpkg", "-l", softwareName)

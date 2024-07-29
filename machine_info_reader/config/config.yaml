@@ -1,0 +1,22 @@
+protection_software_names:
+  - symantec
+  - crowdstrike
+  - defender
+  - bitdefender
+  - kaspersky
+  - threatdown
+  - cisco
+  - eset
+  - sentinelone
+  - trendmicro
+  - carbonblack
+  - threatlocker
+  - trellix
+  - webroot
+  - cortex
+  - heimdal
+  - sophos
+  - watchguard
+  - cynet
+  - forticlient
+  - avast
