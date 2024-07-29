@@ -5,7 +5,7 @@ This program will create CSV files and periodically upload them.
 ## To Run
 
 ### Step 1) 
-Download Go 1.18 w.r.t your Machine [Downlod Here](https://go.dev/dl/)
+Download Go 1.22 w.r.t your Machine [Downlod Here](https://go.dev/dl/)
 
 
 ### Step 2) 
